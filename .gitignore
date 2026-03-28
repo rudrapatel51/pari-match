@@ -1,0 +1,52 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+
+# Misc
+.DS_Store
+.env
+old-code/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+fast-mode-agent-promt.txt
+planning-mode.txt
+
+/claude
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+
+# =========================
+# GSD / Antigravity Files
+# =========================
+
+.agent/
+.gemini/
+.gsd/
+adapters/
+scripts/
+docs/
+projectdocs/
+
+GSD-STYLE.md
+PROJECT_RULES.md
+model_capabilities.yaml

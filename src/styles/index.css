@@ -1,0 +1,693 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Condensed:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   HOW ADMIN THEMING WORKS
+   ─────────────────────────────────────────────────────────────
+   All values below are the DEFAULT fallbacks.
+   When an admin saves a new primary/accent color, themeGenerator.js
+   overwrites every variable on <html style="…"> at runtime —
+   no rebuild needed. Everything derives from two inputs:
+     • --admin-primary   (brand color, e.g. #09467B)
+     • --admin-accent    (CTA/secondary color, e.g. #276A45)
+   The generator computes HSL math and writes all variables below
+   automatically to keep the full palette harmonious.
+   ============================================================ */
+
+/* ============================================================
+   LIGHT THEME — default (:root)
+   ============================================================ */
+:root {
+  /* ── Admin seed colors (overwritten by themeGenerator.js) ── */
+  --admin-primary: #0F1629;
+  --admin-accent:  #FFD700;
+
+  /* ── Always-dark surface — use for media players, code blocks, etc.
+     This value is the SAME in both light and dark mode (never inverts). ── */
+  --color-surface-dark: #0a0c0d;
+
+  /* Brand blue scale — kept for any legacy references */
+  --color-brand-blue:     #1a3a5c;
+  --color-brand-blue-50:  #1b3a52;
+  --color-brand-blue-100: #1e3d5a;
+  --color-brand-blue-200: #1e4976;
+  --color-brand-blue-300: #245a92;
+  --color-brand-blue-400: #2a6aad;
+  --color-brand-blue-500: #3080c8;
+  --color-brand-blue-600: #4090d8;
+  --color-brand-blue-700: #5aa8e8;
+  --color-brand-blue-800: #8ec8f0;
+  --color-brand-blue-900: #c4e4f8;
+
+  /* Brand primary — header, sidebar, nav bar */
+  --color-brand-primary:       #0D1117;
+  --color-brand-primary-light: #1E2A4A;
+  --color-brand-primary-dark:  #16213E;
+
+  /* Brand accent — CTA buttons, LIVE badge, active tabs */
+  --color-brand-accent:       #FFD700;
+  --color-brand-accent-light: #FFE44D;
+  --color-brand-accent-dark:  #E5C100;
+
+  /* Surface white & gradient seed points */
+  --color-brand-white:    #ffffff;
+  --color-gradient-start: #FFD700;
+  --color-gradient-end:   #0D1117;
+
+  /* ── Semantic text — white on dark backgrounds ── */
+  --color-brand-text: #ffffff;
+
+  /* ── Backgrounds ── */
+  --color-bg-primary:    #1A1A2E;           /* main page canvas */
+  --color-bg-secondary:  #16213E;           /* input fields, deeper bg */
+  --color-bg-white-rgb:  26 26 46;          /* #1A1A2E rgb channels */
+  --color-bg-card:       #1E2A4A;           /* cards, panels, match rows */
+  --color-bg-light-blue: #16213E;           /* row hover, tab hover */
+
+  /* ── Strokes / Borders ── */
+  --color-stroke-primary: #2D3748;
+  --color-stroke-light:   #2D3748;
+
+  /* ── Fixed accent colours ── */
+  --color-accent-orange:       #ff6b35;
+  --color-accent-orange-light: #ff8c5a;
+  --color-accent-orange-dark:  #e85a2a;
+
+  --color-accent-yellow:       #FFD700;
+  --color-accent-yellow-light: #FFE44D;
+  --color-accent-yellow-dark:  #E5C100;
+
+  /* Green — matches CTA / LIVE badge color */
+  --color-accent-green:       #48BB78;
+  --color-accent-green-light: #68D391;
+  --color-accent-green-dark:  #38A169;
+
+  --color-accent-red:       #FF4757;
+  --color-accent-red-light: #FF6B7A;
+  --color-accent-red-dark:  #E02436;
+
+  /* ── Neutral gray scale (dark → light, for dark bg) ── */
+  --color-neutral-50:  #2D3748;
+  --color-neutral-100: #4A5568;
+  --color-neutral-200: #718096;
+  --color-neutral-300: #A0AEC0;
+  --color-neutral-400: #CBD5E0;
+  --color-neutral-500: #E2E8F0;
+  --color-neutral-600: #EDF2F7;
+  --color-neutral-700: #F7FAFC;
+  --color-neutral-800: #FFFFFF;
+  --color-neutral-900: #FFFFFF;
+
+  /* ── Betting odds ── */
+  --color-odds-back:     #1E2A4A;   /* Parimatch odd button */
+  --color-odds-lay:      #1E2A4A;   /* Parimatch odd button */
+  --color-odds-positive: #48BB78;
+  --color-odds-negative: #FF4757;
+
+  /* ── Shadows ── */
+  --shadow-betting-card: 0 2px 8px rgba(0, 0, 0, 0.85);
+  --shadow-odds-hover:   0 4px 12px rgba(255, 215, 0, 0.2);
+  --shadow-elevated:     0 8px 24px rgba(0, 0, 0, 0.92);
+  --shadow-sidebar-top:  0 -2px 8px 0 rgba(0, 0, 0, 0.55);
+
+  /* ── Gradients ── */
+  --gradient-hero: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F1629 100%);
+  --gradient-cta:  linear-gradient(90deg, #FFD700 0%, #E5C100 100%);
+  --gradient-card: linear-gradient(180deg, #1E2A4A 0%, #16213E 100%);
+  --gradient-odds: linear-gradient(90deg, #1A1A2E 0%, #FFD700 100%);
+}
+
+/*
+  DARK MODE OVERRIDES
+  ═══════════════════════════════════════════════════════════════════════════
+  IMPORTANT: Do NOT hardcode any color values here.
+  All colors are written to CSS variables by applyTheme.ts at runtime.
+  These rules only fix component-level contrast issues that Tailwind classes
+  alone cannot solve — e.g. when a class maps to a CSS variable that is
+  semantically correct in light mode but broken in dark mode.
+
+  The neutral-gray scale is auto-generated by applyTheme.ts so that:
+    - neutral-gray-800 is ALWAYS readable body text
+    - neutral-gray-500 is ALWAYS muted/secondary text
+    - neutral-gray-200 is ALWAYS a subtle background tint
+  regardless of whether the theme is light or dark.
+  ═══════════════════════════════════════════════════════════════════════════
+*/
+
+/* ── Game card title text fix ───────────────────────────────────────────────
+   In dark themes, bg-bg-card is very dark (e.g. #1c1500).
+   Text inside cards must use --color-brand-text (set to textColor from API)
+   which in dark themes is light (e.g. #fef3c7).
+   The RecommendedGameSection card title uses text-brand-primary which in dark
+   themes is also dark — override it to use brand-text instead.             */
+html.dark .game-card-title {
+  color: var(--color-brand-text) !important;
+}
+
+/* ── Filter pills ────────────────────────────────────────────────────────── */
+html.dark .filter-pill {
+  color: var(--color-neutral-700);
+  background: var(--color-bg-light-blue);
+}
+html.dark .filter-pill:hover {
+  background: color-mix(in srgb, var(--color-brand-text) 12%, var(--color-bg-card));
+  color: var(--color-neutral-900);
+}
+html.dark .filter-pill-active {
+  background: color-mix(in srgb, var(--color-brand-text) 20%, var(--color-bg-card));
+  color: var(--color-neutral-900);
+  border-color: color-mix(in srgb, var(--color-brand-text) 40%, transparent);
+}
+
+/* ── Nav tabs ────────────────────────────────────────────────────────────── */
+html.dark .nav-tab {
+  color: var(--color-neutral-700);
+}
+html.dark .nav-tab:hover:not(.nav-tab-active) {
+  background: var(--color-bg-light-blue);
+  color: var(--color-neutral-800);
+}
+html.dark .nav-tab-active {
+  border-bottom-color: var(--color-brand-text);
+  color: var(--color-neutral-900);
+  background: color-mix(in srgb, var(--color-brand-text) 8%, transparent);
+}
+
+/* ── Tab items ───────────────────────────────────────────────────────────── */
+html.dark .tab-item-active {
+  border-bottom-color: var(--color-brand-text);
+  color: var(--color-neutral-900);
+}
+
+/* ── Sidebar active item ─────────────────────────────────────────────────── */
+html.dark .sidebar-menu-item.active {
+  border-left-color: var(--color-brand-text);
+  background: color-mix(in srgb, var(--color-brand-text) 10%, transparent);
+  color: var(--color-neutral-900);
+}
+html.dark .bg-sidebar-active {
+  background-color: color-mix(in srgb, var(--color-brand-text) 10%, transparent);
+}
+
+/* ── Amount selector ─────────────────────────────────────────────────────── */
+html.dark .amount-btn:hover {
+  color: var(--color-brand-text);
+  border-color: var(--color-brand-text);
+}
+html.dark .amount-btn.selected {
+  background: color-mix(in srgb, var(--color-brand-text) 20%, transparent);
+  border-color: var(--color-brand-text);
+  color: var(--color-neutral-900);
+}
+
+/* ── Scrollbar thumb ─────────────────────────────────────────────────────── */
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-stroke-primary);
+}
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-500);
+}
+
+/* ── Swiper buttons ──────────────────────────────────────────────────────── */
+html.dark .swiper-button-next,
+html.dark .swiper-button-prev {
+  color: var(--color-neutral-700) !important;
+  background-color: var(--color-bg-card) !important;
+  border: 1px solid var(--color-stroke-light);
+}
+html.dark .swiper-button-next:hover,
+html.dark .swiper-button-prev:hover {
+  background-color: var(--color-bg-light-blue) !important;
+  transform: scale(1.05);
+}
+
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+@layer base {
+  html {
+    @apply scroll-smooth;
+    height: 100%;
+  }
+
+  body {
+    @apply bg-bg-primary text-neutral-gray-800 font-sans;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* Smooth transition when admin swaps theme live */
+    transition:
+      background-color 250ms ease,
+      color 250ms ease;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  * {
+    @apply box-border;
+  }
+}
+
+/* ============================================================
+   COMPONENT CLASSES
+   ============================================================ */
+@layer components {
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply bg-brand-primary hover:bg-brand-primary-light text-white font-medium px-6 py-2.5 rounded transition-all duration-200 hover:shadow-odds-hover;
+  }
+
+  .btn-secondary {
+    @apply bg-brand-accent hover:bg-brand-accent-light text-white font-medium px-6 py-2.5 rounded transition-all duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-cta-gradient hover:opacity-90 text-white font-medium px-6 py-2.5 rounded transition-all duration-200;
+  }
+
+  /* ── Odds Buttons ── */
+  .odds-button {
+    @apply bg-odds-back text-neutral-gray-900 font-mono text-sm px-3 py-2 rounded cursor-pointer transition-all duration-150 hover:shadow-odds-hover;
+  }
+
+  .odds-button:hover {
+    filter: brightness(1.12);
+  }
+
+  .odds-button-lay {
+    @apply bg-odds-lay text-neutral-gray-900 font-mono text-sm px-3 py-2 rounded cursor-pointer transition-all duration-150;
+  }
+
+  .odds-button-lay:hover {
+    filter: brightness(1.12);
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-bg-card rounded-lg shadow-betting-card p-4;
+    /* Cards transition smoothly when admin changes theme live */
+    transition: background-color 250ms ease, box-shadow 250ms ease;
+  }
+
+  .card-dark {
+    @apply bg-brand-primary text-white rounded-lg shadow-betting-card p-4;
+    transition: background-color 250ms ease;
+  }
+
+  /* ── Input field ── */
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-bg-card text-neutral-gray-900 border border-stroke-primary rounded focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-stroke-primary transition-all placeholder:text-neutral-gray-500;
+  }
+
+  /* ── Form labels ── */
+  .label-text {
+    @apply block text-xs font-semibold text-neutral-gray-600 uppercase tracking-wider mb-2;
+  }
+
+  /* ── Amount selector buttons (deposit/withdraw quick-select) ── */
+  .amount-btn {
+    @apply py-2.5 rounded-lg text-sm font-semibold border transition-all duration-150 text-center;
+    background: var(--color-bg-light-blue);
+    border-color: var(--color-stroke-light);
+    color: var(--color-brand-text);
+  }
+  .amount-btn:hover {
+    border-color: var(--color-brand-accent);
+    color: var(--color-brand-accent);
+    background: var(--color-bg-card);
+  }
+  .amount-btn.selected {
+    background: var(--color-brand-accent);
+    border-color: var(--color-brand-accent);
+    color: #000000;
+    font-weight: 700;
+  }
+
+  /* ── Tab items (Deposit/Withdraw/History style tabs) ── */
+  .tab-item {
+    @apply flex-1 py-3 px-2 text-sm font-semibold transition-all flex justify-center items-center gap-2;
+    border-bottom: 2px solid transparent;
+    color: var(--color-neutral-500);
+    background: transparent;
+  }
+  .tab-item:hover:not(.tab-item-active) {
+    background: var(--color-bg-light-blue);
+    color: var(--color-neutral-700);
+  }
+  .tab-item-active {
+    border-bottom-color: var(--color-brand-accent);
+    color: var(--color-brand-accent);
+    background: var(--color-bg-light-blue);
+    font-weight: 700;
+  }
+
+  /* ── Sidebar menu items ── */
+  .sidebar-menu-item {
+    color: var(--color-neutral-700);
+    background: transparent;
+    border-left: 3px solid transparent;
+    transition: background 0.15s ease;
+  }
+  .sidebar-menu-item:hover {
+    background: var(--color-bg-light-blue);
+    /* text stays the same color — no text color change on hover */
+  }
+  .sidebar-menu-item.active {
+    color: var(--color-brand-accent);
+    background: color-mix(in srgb, var(--color-brand-accent) 10%, transparent);
+    border-left-color: var(--color-brand-accent);
+    font-weight: 600;
+  }
+
+  /* ── Filter pill buttons (category / provider / series selectors) ──
+     bg-brand-primary is a dark container in dark mode, so active state
+     uses brand-text tint instead, and hover uses brand-text colour.       */
+  .filter-pill {
+    color: var(--color-neutral-600);
+    background: var(--color-bg-light-blue);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .filter-pill:hover {
+    background: color-mix(in srgb, var(--color-brand-primary) 10%, var(--color-bg-card));
+    color: var(--color-neutral-700);
+  }
+  .filter-pill-active {
+    background: var(--color-brand-accent);
+    color: #000000;
+    font-weight: 600;
+  }
+
+  /* ── Underline-style nav tabs ── */
+  .nav-tab {
+    border-bottom: 2px solid transparent;
+    color: var(--color-neutral-600);
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .nav-tab:hover:not(.nav-tab-active) {
+    background: var(--color-bg-light-blue);
+    color: var(--color-neutral-700);
+  }
+  .nav-tab-active {
+    border-bottom-color: var(--color-brand-accent);
+    color: var(--color-brand-accent);
+    background: transparent;
+    font-weight: 600;
+  }
+
+  /* ── Clickable rows (table rows, list rows) ── */
+  .clickable-row {
+    @apply cursor-pointer transition-colors duration-150;
+  }
+  .clickable-row:hover {
+    background: var(--color-bg-light-blue) !important;
+  }
+
+  /* ── Badges ── */
+  .badge-live {
+    @apply bg-accent-green text-white text-xs font-bold px-2 py-1 rounded uppercase animate-pulse;
+  }
+
+  .badge-upcoming {
+    @apply bg-accent-yellow text-neutral-gray-900 text-xs font-bold px-2 py-1 rounded uppercase;
+  }
+}
+
+/* ============================================================
+   DARK MODE — COMPONENT OVERRIDES
+   In dark mode, --color-brand-primary is a dark container bg
+   (~l=15%), so it cannot serve as an accent/indicator colour.
+   These overrides use --color-brand-text (light in dark mode)
+   for all active-state borders, dots, and highlights.
+   ============================================================ */
+
+/* Filter pills — brand-primary is near-black in dark mode, use brand-text tint */
+html.dark .filter-pill {
+  color: var(--color-neutral-700);
+  background: var(--color-bg-light-blue);
+}
+html.dark .filter-pill:hover {
+  background: color-mix(in srgb, var(--color-brand-text) 12%, var(--color-bg-card));
+  color: var(--color-neutral-900);
+}
+html.dark .filter-pill-active {
+  background: color-mix(in srgb, var(--color-brand-text) 20%, var(--color-bg-card));
+  color: var(--color-neutral-900);
+  border-color: color-mix(in srgb, var(--color-brand-text) 40%, transparent);
+}
+
+/* Nav tabs — brand-primary underline is invisible in dark mode */
+html.dark .nav-tab {
+  color: var(--color-neutral-700);
+}
+html.dark .nav-tab:hover:not(.nav-tab-active) {
+  background: var(--color-bg-light-blue);
+  color: var(--color-neutral-800);
+}
+html.dark .nav-tab-active {
+  border-bottom-color: var(--color-brand-text);
+  color: var(--color-neutral-900);
+  background: color-mix(in srgb, var(--color-brand-text) 8%, transparent);
+}
+
+/* Active tab indicator line */
+html.dark .tab-item-active {
+  border-bottom-color: var(--color-brand-text);
+  color: var(--color-neutral-900);
+}
+
+/* Sidebar active item — accent border + subtle background */
+html.dark .sidebar-menu-item.active {
+  border-left-color: var(--color-brand-text);
+  background: color-mix(in srgb, var(--color-brand-text) 10%, transparent);
+  color: var(--color-neutral-900);
+}
+
+/* AccountSidebar active background utility */
+html.dark .bg-sidebar-active {
+  background-color: color-mix(in srgb, var(--color-brand-text) 10%, transparent);
+}
+
+/* Amount selector hover — brand-primary text is invisible in dark mode */
+html.dark .amount-btn:hover {
+  color: var(--color-brand-text);
+  border-color: var(--color-brand-text);
+}
+
+/* Amount selector selected — brand-primary bg is too dark in dark mode */
+html.dark .amount-btn.selected {
+  background: color-mix(in srgb, var(--color-brand-text) 20%, transparent);
+  border-color: var(--color-brand-text);
+  color: var(--color-neutral-900);
+}
+
+/* Custom scrollbar thumb — brand-primary is near-black in dark mode */
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-stroke-primary);
+}
+
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-500);
+}
+
+/* ============================================================
+   SWIPER CUSTOMIZATION
+   ============================================================ */
+.swiper-button-next,
+.swiper-button-prev {
+  @apply rounded-full shadow-md transition-all duration-200;
+  color: var(--color-brand-primary) !important;
+  width: 40px !important;
+  background-color: var(--color-brand-white) !important;
+  height: 40px !important;
+  margin-top: -20px !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 1.25rem !important;
+  font-weight: bold;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  @apply bg-neutral-100;
+  transform: scale(1.05);
+}
+
+/* Dark mode swiper fix — brand-primary and brand-white are both near-black in dark mode,
+   so override arrow colour and button bg to remain visible */
+html.dark .swiper-button-next,
+html.dark .swiper-button-prev {
+  color: var(--color-neutral-700) !important;    /* light tinted hue */
+  background-color: var(--color-bg-card) !important;
+  border: 1px solid var(--color-stroke-light);
+}
+
+html.dark .swiper-button-next:hover,
+html.dark .swiper-button-prev:hover {
+  background-color: var(--color-bg-light-blue) !important;
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@layer utilities {
+
+  /* Thin scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-neutral-gray-400 rounded hover:bg-neutral-gray-500;
+  }
+
+  .scrollbar-thumb-white\/20::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-bg-white-rgb) / 0.2);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-thumb-white\/20::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--color-bg-white-rgb) / 0.3);
+  }
+
+  .scrollbar-thumb-neutral-gray-300::-webkit-scrollbar-thumb {
+    @apply bg-neutral-gray-300 rounded hover:bg-neutral-gray-400;
+  }
+
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* Animation utilities */
+  .animate-odds-change {
+    animation: pulse-odds 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+  }
+
+  /* Vertical text */
+  .writing-mode-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  /* Hide scrollbar but keep scroll */
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Safe area for fixed bottom nav on notched devices */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Live theme transition — apply to elements that need smooth color swaps */
+  .theme-transition {
+    transition:
+      background-color 250ms ease,
+      border-color     250ms ease,
+      color            250ms ease,
+      box-shadow       250ms ease;
+  }
+}
+
+/* ============================================================
+   CUSTOM ANIMATIONS
+   ============================================================ */
+@keyframes pulse-odds {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; transform: scale(1.05); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+.container-custom {
+  @apply max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6;
+}
+
+/* ============================================================
+   GLOBAL SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A1A2E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2D3748;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A0AEC0;
+}
+
+/* ============================================================
+   SIDEBAR SCROLLBAR
+   ============================================================ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-brand-primary);
+  border-radius: 10px;
+  opacity: 0.4;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-primary-light);
+  opacity: 0.8;
+}
+
+/* Sidebar logout shadow */
+.shadow-sidebar-top {
+  box-shadow: var(--shadow-sidebar-top);
+}
+
+/* Sidebar active item — brand-primary at ~8% opacity */
+.bg-sidebar-active {
+  background-color: color-mix(in srgb, var(--color-brand-primary) 8%, transparent);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse {
+    animation: none;
+  }
+}

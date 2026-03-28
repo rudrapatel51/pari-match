@@ -1,0 +1,1 @@
+import{au as i}from"./index-DgW5EV3o.js";const e={betHistory:[],unsettledBets:[],profitLoss:[],totalPages:1,isLoading:!1},a=i(s=>({...e,setBetHistory:(t,o=1)=>s({betHistory:t,totalPages:o}),setUnsettledBets:t=>s({unsettledBets:t}),setProfitLoss:t=>s({profitLoss:t}),setLoading:t=>s({isLoading:t}),reset:()=>s(e)}));export{a as useBetStore};
