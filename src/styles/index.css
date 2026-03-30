@@ -22,7 +22,7 @@
    ============================================================ */
 :root {
   /* ── Admin seed colors (overwritten by themeGenerator.js) ── */
-  --admin-primary: #0F1629;
+  --admin-primary: #262626;
   --admin-accent:  #FFD700;
 
   /* ── Always-dark surface — use for media players, code blocks, etc.
@@ -30,23 +30,22 @@
   --color-surface-dark: #0a0c0d;
 
   /* Brand blue scale — kept for any legacy references */
-  --color-brand-blue:     #1a3a5c;
-  --color-brand-blue-50:  #1b3a52;
-  --color-brand-blue-100: #1e3d5a;
-  --color-brand-blue-200: #1e4976;
-  --color-brand-blue-300: #245a92;
-  --color-brand-blue-400: #2a6aad;
-  --color-brand-blue-500: #3080c8;
-  --color-brand-blue-600: #4090d8;
-  --color-brand-blue-700: #5aa8e8;
-  --color-brand-blue-800: #8ec8f0;
-  --color-brand-blue-900: #c4e4f8;
+  --color-brand-blue:     #1a1a1a;
+  --color-brand-blue-50:  #1a1a1a;
+  --color-brand-blue-100: #1a1a1a;
+  --color-brand-blue-200: #252525;
+  --color-brand-blue-300: #333333;
+  --color-brand-blue-400: #404040;
+  --color-brand-blue-500: #4d4d4d;
+  --color-brand-blue-600: #5a5a5a;
+  --color-brand-blue-700: #737373;
+  --color-brand-blue-800: #8c8c8c;
+  --color-brand-blue-900: #a6a6a6;
 
   /* Brand primary — header, sidebar, nav bar */
-  --color-brand-primary:       #0D1117;
-  --color-brand-primary-light: #1E2A4A;
-  --color-brand-primary-dark:  #16213E;
-
+  --color-brand-primary:       #1a1a1a;
+  --color-brand-primary-light: #252525;
+  --color-brand-primary-dark:  #000000;
   /* Brand accent — CTA buttons, LIVE badge, active tabs */
   --color-brand-accent:       #FFD700;
   --color-brand-accent-light: #FFE44D;
@@ -55,57 +54,60 @@
   /* Surface white & gradient seed points */
   --color-brand-white:    #ffffff;
   --color-gradient-start: #FFD700;
-  --color-gradient-end:   #0D1117;
+  --color-gradient-end:   #000000;
 
   /* ── Semantic text — white on dark backgrounds ── */
   --color-brand-text: #ffffff;
 
   /* ── Backgrounds ── */
-  --color-bg-primary:    #1A1A2E;           /* main page canvas */
-  --color-bg-secondary:  #16213E;           /* input fields, deeper bg */
-  --color-bg-white-rgb:  26 26 46;          /* #1A1A2E rgb channels */
-  --color-bg-card:       #1E2A4A;           /* cards, panels, match rows */
-  --color-bg-light-blue: #16213E;           /* row hover, tab hover */
+  --color-bg-primary:    #000000;           /* main page canvas */
+  --color-bg-secondary:  #1a1a1a;           /* input fields, deeper bg */
+  --color-bg-white-rgb:  0 0 0;             /* #000000 rgb channels */
+  --color-bg-card:       #1a1a1a;           /* cards, panels, match rows */
+  --color-bg-light-blue: #252525;           /* row hover, tab hover */
+ 
 
   /* ── Strokes / Borders ── */
-  --color-stroke-primary: #2D3748;
-  --color-stroke-light:   #2D3748;
+  --color-stroke-primary: #333333;
+  --color-stroke-light:   #333333;
+
 
   /* ── Fixed accent colours ── */
   --color-accent-orange:       #ff6b35;
   --color-accent-orange-light: #ff8c5a;
   --color-accent-orange-dark:  #e85a2a;
-
+ 
   --color-accent-yellow:       #FFD700;
   --color-accent-yellow-light: #FFE44D;
   --color-accent-yellow-dark:  #E5C100;
 
   /* Green — matches CTA / LIVE badge color */
-  --color-accent-green:       #48BB78;
+ --color-accent-green:       #48BB78;
   --color-accent-green-light: #68D391;
   --color-accent-green-dark:  #38A169;
-
+ 
   --color-accent-red:       #FF4757;
   --color-accent-red-light: #FF6B7A;
   --color-accent-red-dark:  #E02436;
 
   /* ── Neutral gray scale (dark → light, for dark bg) ── */
-  --color-neutral-50:  #2D3748;
-  --color-neutral-100: #4A5568;
-  --color-neutral-200: #718096;
-  --color-neutral-300: #A0AEC0;
-  --color-neutral-400: #CBD5E0;
-  --color-neutral-500: #E2E8F0;
-  --color-neutral-600: #EDF2F7;
-  --color-neutral-700: #F7FAFC;
+  --color-neutral-50:  #333333;
+  --color-neutral-100: #4d4d4d;
+  --color-neutral-200: #666666;
+  --color-neutral-300: #808080;
+  --color-neutral-400: #999999;
+  --color-neutral-500: #b3b3b3;
+  --color-neutral-600: #cccccc;
+  --color-neutral-700: #e6e6e6;
   --color-neutral-800: #FFFFFF;
   --color-neutral-900: #FFFFFF;
 
   /* ── Betting odds ── */
-  --color-odds-back:     #1E2A4A;   /* Parimatch odd button */
-  --color-odds-lay:      #1E2A4A;   /* Parimatch odd button */
+ --color-odds-back:     #1a1a1a;   /* Parimatch odd button */
+  --color-odds-lay:      #1a1a1a;   /* Parimatch odd button */
   --color-odds-positive: #48BB78;
   --color-odds-negative: #FF4757;
+ 
 
   /* ── Shadows ── */
   --shadow-betting-card: 0 2px 8px rgba(0, 0, 0, 0.85);
@@ -114,12 +116,11 @@
   --shadow-sidebar-top:  0 -2px 8px 0 rgba(0, 0, 0, 0.55);
 
   /* ── Gradients ── */
-  --gradient-hero: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F1629 100%);
+  --gradient-hero: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #0a0a0a 100%);
   --gradient-cta:  linear-gradient(90deg, #FFD700 0%, #E5C100 100%);
-  --gradient-card: linear-gradient(180deg, #1E2A4A 0%, #16213E 100%);
-  --gradient-odds: linear-gradient(90deg, #1A1A2E 0%, #FFD700 100%);
+  --gradient-card: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  --gradient-odds: linear-gradient(90deg, #000000 0%, #FFD700 100%);
 }
-
 /*
   DARK MODE OVERRIDES
   ═══════════════════════════════════════════════════════════════════════════

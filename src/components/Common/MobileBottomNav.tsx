@@ -65,9 +65,9 @@ const MobileBottomNav: React.FC = () => {
     return (
         <>
             {/* Spacer to push body content above the fixed navigation */}
-            <div className="h-14 md:hidden w-full shrink-0 select-none pointer-events-none" aria-hidden="true" />
+            <div className="h-14 lg:hidden w-full shrink-0 select-none pointer-events-none" aria-hidden="true" />
             <nav
-                className="fixed bottom-0 left-0 right-0 z-40 bg-brand-primary border-t border-stroke-light md:hidden shadow-elevated safe-area-bottom"
+                className="fixed bottom-0 left-0 right-0 z-40 bg-brand-primary border-t border-stroke-light lg:hidden shadow-elevated safe-area-bottom"
                 aria-label="Mobile navigation"
             >
                 <div className="flex items-center justify-around py-2" style={{ paddingBottom: 'calc(8px + env(safe-area-inset-bottom))' }}>

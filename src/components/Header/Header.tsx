@@ -39,7 +39,6 @@ const Header: React.FC<HeaderProps> = ({
     return (
         <>
             <header className="fixed top-0 left-0 right-0 z-header bg-brand-primary shadow-betting-card">
-
                 {/* ── Top bar ── */}
                 <div className="bg-brand-primary border-b border-stroke-light">
                     <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6">
@@ -53,10 +52,16 @@ const Header: React.FC<HeaderProps> = ({
                                     aria-label={isMobileNavOpen ? 'Close navigation' : 'Open navigation'}
                                     aria-expanded={isMobileNavOpen}
                                 >
-                                    {isMobileNavOpen
-                                        ? <FiX className="w-5 h-5" />
-                                        : <FiMenu className="w-5 h-5" />
-                                    }
+                                    {isMobileNavOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
+                                </button>
+
+                                {/* Desktop empty hamburger menu directly to left of logo */}
+                                <button
+                                    className="hidden md:flex items-center justify-center w-9 h-9 mr-1 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors"
+                                    onClick={() => console.log('Desktop sidebar menu action pending')}
+                                    aria-label="Open desktop menu"
+                                >
+                                    <FiMenu className="w-5 h-5" />
                                 </button>
 
                                 <div
@@ -73,21 +78,60 @@ const Header: React.FC<HeaderProps> = ({
                                 </div>
                             </div>
 
+                            {/* CENTER: Desktop Nav Links */}
+                            <div className="hidden md:flex items-center flex-1 justify-center px-4 overflow-x-auto scrollbar-hide">
+                                <ul className="flex items-center">
+                                    {[
+                                        { label: "Live Events", href: "/betting", icon: "🔴" },
+                                        { label: "Live Casino", href: "/casino", icon: "🎰" }
+                                    ].map((item, index) => {
+                                        const isActive =
+                                            location.pathname === item.href ||
+                                            location.pathname.startsWith(item.href + '/');
+                                        return (
+                                            <li key={index}>
+                                                <a
+                                                    href={item.href}
+                                                    className={[
+                                                        'group relative flex items-center justify-center gap-2',
+                                                        'px-4 lg:px-5 py-3',
+                                                        'text-sm font-semibold whitespace-nowrap',
+                                                        'transition-all touch-manipulation',
+                                                            isActive
+                                                            ? 'bg-transparent text-brand-accent font-bold'
+                                                            : 'text-white hover:text-brand-accent',
+                                                    ].join(' ')}
+                                                >
+                                                    <span className="text-base">{item.icon}</span>
+                                                    <span>{item.label}</span>
+                                                    {isActive && (
+                                                        <span className="absolute bottom-0 left-0 w-full h-[3px] bg-brand-accent" />
+                                                    )}
+                                                    {!isActive && (
+                                                        <span className="absolute bottom-0 left-0 w-full h-[3px] bg-white/40 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
+                                                    )}
+                                                </a>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
+
                             {/* RIGHT: Auth + Language + Time */}
-                            <div className="flex items-center gap-2 sm:gap-3 ml-auto shrink-0">
+                            <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
                                 {!isAuthenticated ? (
                                     <>
                                         <button
                                             onClick={() => openModal('login')}
-                                            className="flex items-center justify-center bg-transparent border border-stroke-light hover:border-brand-accent hover:text-brand-accent text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-semibold text-xs sm:text-sm touch-manipulation min-w-[64px]"
+                                            className="flex items-center justify-center bg-transparent hover:text-brand-accent text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-semibold text-xs sm:text-sm touch-manipulation"
                                         >
                                             Log in
                                         </button>
                                         <button
                                             onClick={() => openModal('register')}
-                                            className="flex items-center justify-center bg-brand-accent hover:opacity-90 text-black px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-bold text-xs sm:text-sm touch-manipulation min-w-[80px]"
+                                            className="flex items-center justify-center bg-brand-accent hover:opacity-90 text-black px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-bold text-xs sm:text-sm touch-manipulation"
                                         >
-                                            Registration
+                                            Sign up
                                         </button>
                                     </>
                                 ) : (
@@ -109,13 +153,6 @@ const Header: React.FC<HeaderProps> = ({
                                             <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-yellow-400">
                                                 <span className="absolute inset-0 rounded-full bg-yellow-400 animate-ping opacity-75" />
                                             </span>
-                                            <style>{`
-                                                @keyframes sw-header-blink {
-                                                    0%,100% { transform: scale(1)    rotate(0deg);  filter: drop-shadow(0 0 0 transparent); }
-                                                    30%     { transform: scale(1.25)  rotate(-8deg); filter: drop-shadow(0 0 6px #FFD700); }
-                                                    60%     { transform: scale(1.15)  rotate(8deg);  filter: drop-shadow(0 0 10px #FF8C00); }
-                                                }
-                                            `}</style>
                                         </button>
 
                                         {/* Notification bell */}
@@ -136,63 +173,16 @@ const Header: React.FC<HeaderProps> = ({
                                 )}
 
                                 {/* Language — desktop only */}
-                                <button className="hidden md:flex items-center gap-1 text-brand-text hover:text-brand-accent transition-colors">
-                                    <FiGlobe className="w-3.5 h-3.5" />
-                                    <span className="font-medium">ENGLISH</span>
-                                    <FiChevronDown className="w-3 h-3" />
+                                <button className="hidden md:flex flex-col items-center justify-center text-brand-text hover:text-brand-accent transition-colors ml-1 w-8">
+                                    <div className="flex items-center gap-1">
+                                        <img src="https://flagcdn.com/w20/gb.png" alt="EN" className="w-5 h-auto rounded-[2px]" />
+                                    </div>
+                                    <span className="font-semibold text-[10px] mt-[1px]">EN</span>
                                 </button>
-
-                                {/* Clock — desktop only */}
-                                <div className="hidden md:flex items-center gap-1 text-brand-text">
-                                    <FiClock className="w-3.5 h-3.5" />
-                                    <span className="font-medium tabular-nums">{currentTime}</span>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                {/* ── Desktop nav bar ── */}
-                <nav
-                    className="bg-brand-primary hidden md:block border-t border-white/10"
-                    aria-label="Main navigation"
-                >
-                    <div className="w-full max-w-[1920px] mx-auto px-4 lg:px-6">
-                        <div className="flex items-center overflow-x-auto scrollbar-hide">
-                            <ul className="flex items-center space-x-0 min-w-max">
-                                {navigationItems.slice(0, 8).map((item, index) => {
-                                    const isActive =
-                                        location.pathname === item.href ||
-                                        location.pathname.startsWith(item.href + '/');
-                                    return (
-                                        <li key={index}>
-                                            <a
-                                                href={item.href}
-                                                className={[
-                                                    'group relative flex items-center justify-center',
-                                                    'px-4 lg:px-5 xl:px-6 py-3',
-                                                    'text-xs lg:text-sm font-semibold whitespace-nowrap uppercase',
-                                                    'transition-all touch-manipulation',
-                                                        isActive
-                                                        /*
-                                                          Active: Parimatch uses transparent bg + yellow text + yellow underline
-                                                        */
-                                                        ? 'bg-transparent text-brand-accent border-b-2 border-brand-accent font-bold'
-                                                        : 'text-white hover:text-brand-accent',
-                                                ].join(' ')}
-                                            >
-                                                <span>{item.label}</span>
-                                                {!isActive && (
-                                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-white/40 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
-                                                )}
-                                            </a>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
             </header>
 
             {/* Mobile drawer — rendered outside header to overlay everything */}

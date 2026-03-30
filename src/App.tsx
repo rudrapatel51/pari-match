@@ -108,7 +108,7 @@ const Layout: React.FC = () => {
             />
 
             {/* Responsive layout: left sidebar (desktop) + main content; bottom padding for mobile nav */}
-            <div className="flex-1 flex pt-10  md:pt-24 w-full min-w-0">
+            <div className="flex-1 flex pt-[45px] sm:pt-[49px] w-full min-w-0">
 
                 {/* Left Sidebar (filter/sports nav) — hidden on account pages */}
                 {!isProfilePage && (
@@ -136,7 +136,7 @@ const Layout: React.FC = () => {
                     <>
                         {/* ── Desktop xl and above ── */}
                         <aside
-                            className={`hidden xl:block xl:sticky xl:top-20 xl:h-[calc(100vh-5rem)] transition-all duration-300 ease-in-out ${
+                            className={`hidden xl:block xl:sticky xl:top-[49px] xl:h-[calc(100vh-49px)] transition-all duration-300 ease-in-out ${
                                 isRightSidebarCollapsed ? 'xl:w-0 xl:overflow-hidden' : 'xl:w-80'
                             } flex-shrink-0`}
                         >
