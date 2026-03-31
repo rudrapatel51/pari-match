@@ -5,6 +5,7 @@ import Loader from '../components/Common/Loader';
 import NotFound from '../components/Common/NotFound';
 import MainContent from '../components/MainContent/MainContent';
 import Profile from '../components/Profile/Profile';
+import MyAccountPage from '../components/Profile/MyAccountPage';
 import KycPage from '../components/Profile/KycPage';
 import ChangePasswordForm from '../components/Profile/ChangePasswordForm';
 import AccountLayout from '../components/Profile/AccountLayout';
@@ -74,6 +75,11 @@ const AppRoutes: React.FC = () => {
                 <Route path="/page/:link" element={<CMSPage />} />
                 <Route path="/terms-conditions" element={<CMSPage />} />
                 <Route path="/about-us" element={<CMSPage />} />
+
+                {/* Protected My Account Route */}
+                <Route element={<PrivateRoute />}>
+                    <Route path="/my-account" element={<MyAccountPage />} />
+                </Route>
 
                 {/* Protected Account Routes — rendered inside AccountLayout */}
                 <Route element={<PrivateRoute />}>

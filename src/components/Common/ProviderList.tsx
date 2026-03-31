@@ -10,6 +10,16 @@ export interface ProviderItem {
     game_count?: number;
     games?: any[];
 }
+//COMMENT THIS OUT  REMOVE AFTER YOU HAVE BACKEND
+// const MOCK_PROVIDERS: ProviderItem[] = [
+//     { provider_id: '1', provider_name: 'Evolution', provider_image: 'https://picsum.photos/seed/evo/150/150' },
+//     { provider_id: '2', provider_name: 'Pragmatic', provider_image: 'https://picsum.photos/seed/pragmatic/150/150' },
+//     { provider_id: '3', provider_name: 'Ezugi', provider_image: 'https://picsum.photos/seed/ezugi/150/150' },
+//     { provider_id: '4', provider_name: 'NetEnt', provider_image: 'https://picsum.photos/seed/netent/150/150' },
+//     { provider_id: '5', provider_name: 'Spribe', provider_image: 'https://picsum.photos/seed/spribe/150/150' },
+//     { provider_id: '6', provider_name: 'Playtech', provider_image: 'https://picsum.photos/seed/playtech/150/150' },
+//     { provider_id: '7', provider_name: 'Red Tiger', provider_image: 'https://picsum.photos/seed/redtiger/150/150' },
+// ];
 
 const ProviderList: React.FC = () => {
     const navigate = useNavigate();
@@ -17,16 +27,24 @@ const ProviderList: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        casinoApi.getFranchiseProviders()
-            .then((res: any) => {
-                const data = res?.data?.data || res?.data || [];
-                const providerList = Array.isArray(data?.providers) ? data.providers : (Array.isArray(data) ? data : []);
-                if (providerList.length > 0) {
-                    setProviders(providerList.slice(0, 18));
-                }
-            })
-            .catch((err) => console.error('[ProviderList] fetch failed:', err))
-            .finally(() => setLoading(false));
+        // setLoading(true);
+        // MOCK DATA OVERRIDE
+        /*
+        // casinoApi.getFranchiseProviders()
+        //     .then((res: any) => {
+        //         const data = res?.data?.data || res?.data || [];
+        //         const providerList = Array.isArray(data?.providers) ? data.providers : (Array.isArray(data) ? data : []);
+        //         if (providerList.length > 0) {
+        //             setProviders(providerList.slice(0, 18));
+        //         }
+        //     })
+        //     .catch((err) => console.error('[ProviderList] fetch failed:', err))
+        //     .finally(() => setLoading(false));
+        */
+        // setTimeout(() => {
+        //     setProviders(MOCK_PROVIDERS);
+        //     setLoading(false);
+        // }, 300);
     }, []);
 
     if (loading) {
@@ -75,10 +93,10 @@ const ProviderList: React.FC = () => {
                     return (
                         <div
                             key={p.provider_id}
-                            className="flex flex-col items-center gap-2 shrink-0 w-[84px] cursor-pointer snap-start group"
+                            className="flex flex-col items-center gap-3 shrink-0 w-[84px] cursor-pointer snap-start group mt-2"
                             onClick={() => handleProviderClick(p.provider_name)}
                         >
-                            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-transparent group-hover:border-brand-primary transition-all duration-200 shadow-sm group-hover:shadow-md bg-bg-card flex items-center justify-center p-0.5 relative">
+                            <div className="w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] rounded-full overflow-hidden border-2 border-provider-border group-hover:border-provider-border-hover transition-all bg-provider-bg flex items-center justify-center relative">
                                 <img
                                     src={imgSrc}
                                     alt={p.provider_name}
@@ -88,8 +106,10 @@ const ProviderList: React.FC = () => {
                                         (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/09467B/ffffff?text=${p.provider_name.substring(0, 2).toUpperCase()}`;
                                     }}
                                 />
+                                {/* Light grey hover overlay */}
+                                <div className="absolute inset-0 bg-transparent group-hover:bg-provider-overlay transition-colors pointer-events-none rounded-full" />
                             </div>
-                            <span className="text-brand-text font-medium text-xs text-center truncate w-full group-hover:text-brand-primary transition-colors">
+                            <span className="text-brand-text font-bold text-xs sm:text-sm text-center truncate w-full">
                                 {p.provider_name}
                             </span>
                         </div>

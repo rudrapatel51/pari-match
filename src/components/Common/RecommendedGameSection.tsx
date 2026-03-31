@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { FiPlay } from 'react-icons/fi';
 import type { CasinoRawGame as Game } from '../../types/casino';
 
 interface GameSectionProps {
@@ -79,8 +80,8 @@ const RecommendedGameSection: React.FC<GameSectionProps> = ({ title, games, onGa
                         >
                             {/* Card container — rounded corners, white bg, subtle shadow, border */}
                             <div
-                                className="rounded-[14px] overflow-hidden cursor-pointer border border-stroke-light
-                                           shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200
+                                className="group rounded-[14px] overflow-hidden cursor-pointer border border-stroke-light
+                                           shadow-sm hover:shadow-md transition-all duration-200
                                            flex flex-col bg-bg-card"
                             >
                                 {/* Image block: perfectly square */}
@@ -88,13 +89,19 @@ const RecommendedGameSection: React.FC<GameSectionProps> = ({ title, games, onGa
                                     <img
                                         src={game.image || game.url_thumb || '/placeholder-game.png'}
                                         alt={game.title || game.game_name || ''}
-                                        className="absolute inset-0 w-full h-full object-cover"
+                                        className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:blur-sm"
                                         loading="lazy"
                                     />
+                                    {/* Hover Play Overlay with Button */}
+                                    <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
+                                      <button className="bg-accent-yellow text-black rounded-full p-2.5 transform scale-0 group-hover:scale-100 transition-all duration-300 shadow-lg flex items-center justify-center">
+                                        <FiPlay className="w-6 h-6 ml-0.5" fill="currentColor"/>
+                                      </button>
+                                    </div>
                                 </div>
 
                                 {/* Title area — white background, vertically centered, green text */}
-                               <div className="bg-brand-card dark:bg-brand-primary py-4 px-2 flex items-center justify-center">
+                               <div className="bg-brand-card dark:bg-brand-primary py-4 px-2 flex items-center justify-center z-30 relative">
                                 <span
                                     className="text-brand-text font-bold text-center leading-tight text-sm"
                                 >

@@ -90,7 +90,16 @@
   --color-accent-red-light: #FF6B7A;
   --color-accent-red-dark:  #E02436;
 
+  --color-accent-blue:      #44B4DC;
+  --color-accent-blue-light:#6AC9EA;
+  --color-accent-blue-dark: #209CC9;
+
   /* ── Neutral gray scale (dark → light, for dark bg) ── */
+  --color-provider-bg: #0a0a0a;
+  --color-provider-border: #1c1c1c;
+  --color-provider-border-hover: #383838;
+  --color-provider-overlay: rgba(255, 255, 255, 0.25);
+
   --color-neutral-50:  #333333;
   --color-neutral-100: #4d4d4d;
   --color-neutral-200: #666666;
