@@ -56,7 +56,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = () => {
             className={[
                 'hidden lg:flex flex-col',
                 'sticky top-[49px] h-[calc(100vh-49px)]',
-                'w-[280px]',
+                'w-[320px]',
                 'bg-bg-card border-r border-stroke-light',
                 'text-brand-text',
                 'z-sidebar overflow-y-auto custom-scrollbar flex-shrink-0'

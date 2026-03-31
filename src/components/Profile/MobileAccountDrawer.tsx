@@ -54,7 +54,7 @@ const MobileAccountDrawer: React.FC<MobileAccountDrawerProps> = ({
                 aria-hidden={!isOpen}
                 className={[
                     'fixed inset-y-0 left-0 z-[70]',
-                    'w-72 max-w-[85vw]',
+                    'w-72 max-w-[90vw]',
                     'flex flex-col',
                     'bg-bg-card shadow-elevated',
                     'transform transition-transform duration-300 ease-in-out',

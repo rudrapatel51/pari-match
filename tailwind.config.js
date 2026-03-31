@@ -73,8 +73,18 @@ module.exports = {
           light:   'var(--color-accent-red-light)',
           dark:    'var(--color-accent-red-dark)',
         },
+        'accent-blue': {
+          DEFAULT: 'var(--color-accent-blue)',
+          light:   'var(--color-accent-blue-light)',
+          dark:    'var(--color-accent-blue-dark)',
+        },
 
         // Neutral gray scale — INVERTS between light and dark
+        'provider-bg': 'var(--color-provider-bg)',
+        'provider-border': 'var(--color-provider-border)',
+        'provider-border-hover': 'var(--color-provider-border-hover)',
+        'provider-overlay': 'var(--color-provider-overlay)',
+
         'neutral-gray': {
           50:  'var(--color-neutral-50)',
           100: 'var(--color-neutral-100)',

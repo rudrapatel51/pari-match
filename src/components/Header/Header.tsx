@@ -10,10 +10,12 @@ import MobileNavDrawer from './MobileNavDrawer';
 interface HeaderProps {
     isMobileNavOpen?: boolean;
     onMobileNavToggle?: () => void;
+    isDesktopAccountDrawerOpen?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
     isMobileNavOpen = false,
+    isDesktopAccountDrawerOpen = false,
     onMobileNavToggle,
 }) => {
     const [currentTime, setCurrentTime] = useState<string>('');
@@ -43,24 +45,15 @@ const Header: React.FC<HeaderProps> = ({
                     <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6">
                         <div className="flex items-center h-11 sm:h-12 text-brand-text text-xs">
 
-                            {/* LEFT: Hamburger + Logo */}
+                            {/* LEFT: Logo */}
                             <div className="flex items-center gap-2 min-w-0">
-                                <button
-                                    className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors touch-manipulation"
-                                    onClick={onMobileNavToggle}
-                                    aria-label={isMobileNavOpen ? 'Close navigation' : 'Open navigation'}
-                                    aria-expanded={isMobileNavOpen}
-                                >
-                                    {isMobileNavOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
-                                </button>
-
-                                {/* Desktop empty hamburger menu directly to left of logo */}
+                                {/* Desktop hamburger menu — shows X when open */}
                                 <button
                                     className="hidden md:flex items-center justify-center w-9 h-9 mr-1 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors"
-                                    onClick={() => console.log('Desktop sidebar menu action pending')}
-                                    aria-label="Open desktop menu"
+                                    onClick={() => window.dispatchEvent(new Event('toggleDesktopAccountDrawer'))}
+                                    aria-label={isDesktopAccountDrawerOpen ? 'Close account menu' : 'Open account menu'}
                                 >
-                                    <FiMenu className="w-5 h-5" />
+                                    {isDesktopAccountDrawerOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
                                 </button>
 
                                 <div

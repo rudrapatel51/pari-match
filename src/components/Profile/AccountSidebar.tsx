@@ -4,7 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useBalance } from '../../hooks/useBalance';
 import {
     FiLogOut, FiUser, FiShield, FiSettings,
-    FiUsers, FiGift, FiTag, FiHelpCircle,
+    FiUsers, FiGift, FiTag, FiHelpCircle, FiGrid,
 } from 'react-icons/fi';
 import {
     MdAccountBalanceWallet, MdHistory, MdOutlineAccountBalance,
@@ -106,163 +106,99 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeMenuItem = '', on
 
     // ── Render ────────────────────────────────────────────────────────────────
     return (
-        /*
-         * Full-height flex column.
-         * The parent <aside> in AccountLayout is overflow-hidden + h-[calc(100vh-5rem)].
-         * This component fills that height and manages its own internal scroll.
-         */
         <div className="flex flex-col h-full bg-bg-card">
-
-            {/* ── Gradient Profile Header ──────────────────────────────────── */}
-            <div className="relative flex-shrink-0 overflow-hidden bg-brand-primary border-b border-stroke-light">
-                {/* Decorative circles */}
-                <div className="pointer-events-none absolute inset-0 opacity-10" aria-hidden="true">
-                    <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-white" />
-                    <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-white" />
-                </div>
-
-                <div className="relative z-10 px-5 pt-5 pb-4 space-y-3">
-                    {/* Avatar + username row */}
-                    <div className="flex items-center gap-3">
-                        <div className="relative shrink-0">
-                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center shadow-md">
-                                <FiUser className="w-6 h-6 text-white" />
-                            </div>
-                            {/* Edit pencil badge */}
-                            <button
-                                className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-bg-card flex items-center justify-center shadow border border-brand-primary/20 hover:bg-brand-primary-light hover:border-white transition-colors duration-200 group"
-                                aria-label="Edit profile picture"
-                            >
-                                <svg className="w-2.5 h-2.5 text-brand-primary group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                            <p className="text-white font-bold text-sm leading-tight truncate">
-                                {user?.username || user?.name || 'My Account'}
-                            </p>
-                            {user?.user_id && (
-                                <p className="text-white/70 text-xs mt-0.5 truncate">
-                                    ID: {user.user_id}
-                                </p>
-                            )}
-                        </div>
+            {/* ── Header in Black Box ─────────────────────────────────────── */}
+            <div className="flex-shrink-0 mx-3 mt-3 mb-3 px-4 py-4 border border-stroke-light bg-bg-card">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-neutral-gray-50 flex items-center justify-center">
+                        <FiUser className="w-5 h-5 text-brand-text" />
                     </div>
-
-                    {/* Balance cards */}
-                    <div className="space-y-1.5">
-                        <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15 hover:bg-white/20 transition-colors duration-200 cursor-pointer group">
-                            <span className="text-white/80 text-xs font-medium">Total Balance (INR)</span>
-                            <span className="text-white text-xs font-bold tabular-nums group-hover:scale-105 transition-transform duration-150 origin-right">
-                                {balanceLoading ? '—' : fmt(totalBalance)}
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15 hover:bg-white/20 transition-colors duration-200 cursor-pointer group">
-                            <span className="text-white/80 text-xs font-medium">Main Balance (INR)</span>
-                            <span className="text-white text-xs font-bold tabular-nums group-hover:scale-105 transition-transform duration-150 origin-right">
-                                {balanceLoading ? '—' : fmt(mainBalance)}
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15 hover:bg-white/20 transition-colors duration-200 cursor-pointer group">
-                            <span className="text-white/80 text-xs font-medium">Bonus Wallet</span>
-                            <span className="text-white text-xs font-bold tabular-nums group-hover:scale-105 transition-transform duration-150 origin-right">
-                                {balanceLoading ? '—' : fmt(bonusBalance)}
-                            </span>
-                        </div>
-                    </div>
+                    <span className="text-brand-text font-semibold text-sm">My Account</span>
                 </div>
             </div>
 
             {/* ── Scrollable Menu Area ─────────────────────────────────────── */}
-            <nav
-                className="flex-1 overflow-y-auto custom-scrollbar"
-                aria-label="Account navigation"
-            >
-                {sections.map((section, sIdx) => (
-                    <div
-                        key={section.id}
-                        className={sIdx < sections.length - 1 ? 'border-b border-stroke-light' : ''}
-                    >
-                        {/* Section header */}
-                        <div className="flex items-center gap-2 px-4 pt-3 pb-1.5">
+            <nav className="flex-1 overflow-y-auto custom-scrollbar px-3 py-0">
+                {/* Balance Section */}
+                <div className="bg-bg-card border border-stroke-light p-4 mb-3">
+                    <div className="space-y-2">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <p className="text-xs text-neutral-gray-500 mb-1">Balance</p>
+                                <p className="text-brand-text text-lg font-bold tabular-nums">
+                                    {balanceLoading ? '—' : fmt(totalBalance)}
+                                </p>
+                            </div>
                             <span className="text-neutral-gray-600">
-                                {section.icon}
-                            </span>
-                            <span className="text-[10px] font-bold tracking-widest uppercase text-neutral-gray-700 select-none">
-                                {section.label}
+                                <MdAccountBalanceWallet className="w-5 h-5" />
                             </span>
                         </div>
+                        
+                        {/* Deposit & Withdrawal Buttons */}
+                        <div className="flex gap-2 pt-2">
+                            <button
+                                onClick={() => navigate('/deposit')}
+                                className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 bg-accent-green hover:bg-accent-green-light text-neutral-gray-900 font-semibold text-xs transition-colors"
+                            >
+                                <span>➕</span>
+                                <span>Deposit</span>
+                            </button>
+                            <button
+                                onClick={() => navigate('/withdraw')}
+                                className="flex-1 py-2 px-3 bg-neutral-gray-600 hover:bg-neutral-gray-700 text-neutral-gray-50 font-semibold text-xs transition-colors"
+                            >
+                                Withdrawal
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                        {/* Menu items */}
-                        <ul className="pb-1.5">
-                            {section.items.map((item) => {
-                                const isActive = activeMenuItem === item.id;
-                                return (
-                                    <li key={item.id}>
-                                        <button
-                                            onClick={() => handleMenuClick(item)}
-                                            className={[
-                                                'relative w-full flex items-center gap-3 px-4 py-2.5 text-left',
-                                                'transition-colors duration-150 group',
-                                                isActive
-                                                    ? 'bg-sidebar-active text-neutral-gray-900'
-                                                    : 'text-brand-text hover:bg-bg-light-blue',
-                                            ].join(' ')}
-                                            aria-current={isActive ? 'page' : undefined}
-                                        >
-                                            {/* Left accent bar */}
-                                            <span
-                                                className={[
-                                                    'absolute left-0 top-1 bottom-1 w-0.5 rounded-r-full transition-all duration-200',
-                                                    isActive ? 'bg-brand-accent opacity-100' : 'opacity-0',
-                                                ].join(' ')}
-                                                aria-hidden="true"
-                                            />
+                {/* Search Section */}
+                <div className="bg-bg-card border border-stroke-light p-4 mb-3 flex items-center gap-3 cursor-pointer hover:bg-bg-light-blue transition-colors">
+                    <FiGrid className="w-5 h-5 text-neutral-gray-500" />
+                    <span className="text-brand-text font-medium text-sm">Search</span>
+                </div>
 
-                                            {/* Icon */}
-                                            <span className={[
-                                                'shrink-0 transition-colors duration-150',
-                                                isActive
-                                                    ? 'text-brand-accent'
-                                                    : 'text-neutral-gray-700',
-                                            ].join(' ')}>
-                                                {item.icon}
-                                            </span>
-
-                                            {/* Label */}
-                                            <span className={[
-                                                'flex-1 text-sm leading-snug',
-                                                isActive ? 'font-semibold' : 'font-medium',
-                                            ].join(' ')}>
-                                                {item.label}
-                                            </span>
-
-                                            {/* Active dot */}
-                                            {isActive && (
-                                                <span
-                                                    className="shrink-0 w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"
-                                                    aria-hidden="true"
-                                                />
-                                            )}
-                                        </button>
-                                    </li>
-                                );
-                            })}
-                        </ul>
+                {/* Menu Items in Black Boxes */}
+                {sections.map((section) => (
+                    <div key={section.id} className="mb-3">
+                        {section.items.map((item) => {
+                            const isActive = activeMenuItem === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleMenuClick(item)}
+                                    className={[
+                                        'w-full flex items-center px-4 py-3',
+                                        'border transition-colors mb-2',
+                                        'text-left text-sm font-medium',
+                                        isActive
+                                            ? 'bg-bg-light-blue text-brand-text border-stroke-light'
+                                            : 'bg-bg-card border-stroke-light text-brand-text hover:bg-bg-light-blue',
+                                    ].join(' ')}
+                                    aria-current={isActive ? 'page' : undefined}
+                                >
+                                    <div className="flex items-center gap-3 flex-1">
+                                        <span className="text-neutral-gray-500">
+                                            {item.icon}
+                                        </span>
+                                        <span>{item.label}</span>
+                                    </div>
+                                </button>
+                            );
+                        })}
                     </div>
                 ))}
             </nav>
 
             {/* ── Logout — pinned to bottom ────────────────────────────────── */}
-            <div className="flex-shrink-0 p-3 border-t border-stroke-light bg-bg-white shadow-[0_-2px_8px_0_rgba(0,0,0,0.06)]">
+            <div className="flex-shrink-0 p-3 border-t border-stroke-light bg-bg-card">
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-accent-red hover:bg-accent-red-dark text-white font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98] group"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-accent-red hover:bg-accent-red-dark text-brand-text font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98] group"
                     aria-label="Log out of your account"
                 >
-                    <FiLogOut className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
+                    <FiLogOut className="w-4 h-4" />
                     <span>Log Out</span>
                 </button>
             </div>

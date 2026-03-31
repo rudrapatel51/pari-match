@@ -77,7 +77,7 @@ const AccountLayout: React.FC = () => {
             <aside
                 className={[
                     'hidden md:flex md:flex-col',
-                    'w-64 lg:w-72 xl:w-80 flex-shrink-0 self-start',
+                    'w-72 lg:w-80 xl:w-320px flex-shrink-0 self-start',
                     'sticky top-[49px]',
                     'h-[calc(100vh-49px)]',
                     'border-r border-stroke-light',
