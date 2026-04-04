@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiChevronDown, FiMenu, FiX, FiGlobe, FiClock, FiBell, FiUser } from 'react-icons/fi';
+import { FiChevronDown, FiMenu, FiX, FiGlobe, FiClock, FiBell, FiUser, FiSearch } from 'react-icons/fi';
 import { navigationItems } from '../../data/mockData';
 import { useUiStore } from '../../store/uiStore';
 import { useAuth } from '../../hooks/useAuth';
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
                             <div className="flex items-center gap-2 min-w-0">
                                 {/* Desktop hamburger menu — shows X when open */}
                                 <button
-                                    className="hidden md:flex items-center justify-center w-9 h-9 mr-1 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors"
+                                    className="hidden md:flex items-center justify-center w-12 h-12 mr-1 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors"
                                     onClick={() => window.dispatchEvent(new Event('toggleDesktopAccountDrawer'))}
                                     aria-label={isDesktopAccountDrawerOpen ? 'Close account menu' : 'Open account menu'}
                                 >
@@ -73,13 +73,10 @@ const Header: React.FC<HeaderProps> = ({
                             {/* CENTER: Desktop Nav Links */}
                             <div className="hidden md:flex items-center flex-1 justify-center px-4 overflow-x-auto scrollbar-hide">
                                 <ul className="flex items-center">
-                                    {[
-                                        { label: "Live Events", href: "/betting", icon: "🔴" },
-                                        { label: "Live Casino", href: "/casino", icon: "🎰" }
-                                    ].map((item, index) => {
+                                    {navigationItems.map((item, index) => {
                                         const isActive =
                                             location.pathname === item.href ||
-                                            location.pathname.startsWith(item.href + '/');
+                                            (item.href !== '/' && location.pathname.startsWith(item.href + '/'));
                                         return (
                                             <li key={index}>
                                                 <a
@@ -94,11 +91,8 @@ const Header: React.FC<HeaderProps> = ({
                                                             : 'text-white hover:text-brand-accent',
                                                     ].join(' ')}
                                                 >
-                                                    <span className="text-base">{item.icon}</span>
+                                                    {item.icon && <span className="text-base">{item.icon}</span>}
                                                     <span>{item.label}</span>
-                                                    {isActive && (
-                                                        <span className="absolute bottom-0 left-0 w-full h-[3px] bg-brand-accent" />
-                                                    )}
                                                     {!isActive && (
                                                         <span className="absolute bottom-0 left-0 w-full h-[3px] bg-white/40 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
                                                     )}
@@ -115,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({
                                     <>
                                         <button
                                             onClick={() => openModal('login')}
-                                            className="flex items-center justify-center bg-transparent hover:text-brand-accent text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-semibold text-xs sm:text-sm touch-manipulation"
+                                            className="flex items-center justify-center bg-bg-card hover:bg-bg-light-blue text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-semibold text-xs sm:text-sm border border-stroke-light touch-manipulation"
                                         >
                                             Log in
                                         </button>

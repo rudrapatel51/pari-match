@@ -38,43 +38,43 @@ export interface BrandTheme {
 
 export const DEFAULT_THEME: BrandTheme = {
   mode: 'dark',
-  primaryColor:  '#1a3a5c',  // header, sidebar, nav bar background
-  primaryLight:  '#1e4976',  // sub-navigation bar, hover states
-  primaryDark:   '#162435',  // left sidebar panel, darker surfaces
-  accentColor:   '#4caf50',  // CTA buttons, active tab, LIVE badge, links
-  accentLight:   '#66bb6a',  // accent hover
-  accentDark:    '#388e3c',  // accent pressed
-  bgPrimary:     '#1a2d40',  // main page canvas background
-  bgSecondary:   '#152030',  // input fields, deeper background
-  bgCard:        '#1e3347',  // cards, panels, match rows
-  bgLightBlue:   '#1b3a52',  // row hover, tab hover, subtle tints
+  primaryColor:  '#121212',  // header, sidebar, nav bar background
+  primaryLight:  '#1f1f1f',  // sub-navigation bar, hover states
+  primaryDark:   '#0a0a0a',  // left sidebar panel, darker surfaces
+  accentColor:   '#CDFE04',  // CTA buttons, active tab, LIVE badge, links
+  accentLight:   '#D9FE36',  // accent hover
+  accentDark:    '#B3DE00',  // accent pressed
+  bgPrimary:     '#121212',  // main page canvas background
+  bgSecondary:   '#181818',  // input fields, deeper background
+  bgCard:        '#212121',  // cards, panels, match rows
+  bgLightBlue:   '#2a2a2a',  // row hover, tab hover, subtle tints
   textColor:     '#ffffff',  // primary text — white on dark bg
-  strokePrimary: '#1e3d5a',  // card borders, table dividers
-  strokeLight:   '#1a3347',  // subtle row separators
-  successColor:  '#4caf50',  // success (same as accent in 1xBet)
-  errorColor:    '#f44336',  // error, loss, lay bet
-  heroGradient:  'linear-gradient(135deg, #1a2d40 0%, #1a3a5c 50%, #1e4976 100%)',
+  strokePrimary: '#2a2a2a',  // card borders, table dividers
+  strokeLight:   '#1f1f1f',  // subtle row separators
+  successColor:  '#CDFE04',  // success (Parimatch yellow)
+  errorColor:    '#ff4757',  // error, loss, lay bet
+  heroGradient:  'linear-gradient(135deg, #121212 0%, #1a1a1a 50%, #212121 100%)',
 };
 
 /** Locked 1xBet-style dark theme — used as the base for mobile/desktop merges. */
 export const XBET_DARK_THEME: BrandTheme = {
   mode:          'dark',
-  primaryColor:  '#1a3a5c',
-  primaryLight:  '#1e4976',
-  primaryDark:   '#162435',
-  accentColor:   '#4caf50',
-  accentLight:   '#66bb6a',
-  accentDark:    '#388e3c',
-  bgPrimary:     '#1a2d40',
-  bgSecondary:   '#152030',
-  bgCard:        '#1e3347',
-  bgLightBlue:   '#1b3a52',
+  primaryColor:  '#121212',
+  primaryLight:  '#1f1f1f',
+  primaryDark:   '#0a0a0a',
+  accentColor:   '#CDFE04',
+  accentLight:   '#D9FE36',
+  accentDark:    '#B3DE00',
+  bgPrimary:     '#121212',
+  bgSecondary:   '#181818',
+  bgCard:        '#212121',
+  bgLightBlue:   '#2a2a2a',
   textColor:     '#ffffff',
-  strokePrimary: '#1e3d5a',
-  strokeLight:   '#1a3347',
-  successColor:  '#4caf50',
-  errorColor:    '#f44336',
-  heroGradient:  'linear-gradient(135deg, #1a2d40 0%, #1a3a5c 50%, #1e4976 100%)',
+  strokePrimary: '#2a2a2a',
+  strokeLight:   '#1f1f1f',
+  successColor:  '#CDFE04',
+  errorColor:    '#ff4757',
+  heroGradient:  'linear-gradient(135deg, #121212 0%, #1a1a1a 50%, #212121 100%)',
 };
 
 /**

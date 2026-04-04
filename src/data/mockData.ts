@@ -219,15 +219,15 @@ export const accumulatorBets: AccumulatorBet[] = [
 ];
 
 export const navigationItems = [
-  { label: 'CRICKET', href: '/cricket' },
-  { label: 'FOOTBALL', href: '/football' },
-  { label: 'LIVE', href: '/betting' },
-  { label: 'CASINO', href: '/casino' },
-  { label: 'TENNIS', href: '/tennis' },
-  { label: 'SOCCER', href: '/soccer' },
-  { label: 'HOCKEY', href: '/hockey' },
-  { label: 'ELECTION', href: '/election' },
-  { label: 'HORSE RACING', href: '/horse-racing' },
+  { label: 'CRICKET', href: '/cricket', icon: '🏏' },
+  { label: 'FOOTBALL', href: '/football', icon: '⚽' },
+  { label: 'LIVE', href: '/betting', icon: '🔴' },
+  { label: 'CASINO', href: '/casino', icon: '🎰' },
+  { label: 'TENNIS', href: '/tennis', icon: '🎾' },
+  { label: 'SOCCER', href: '/soccer', icon: '⚽' },
+  { label: 'HOCKEY', href: '/hockey', icon: '🏑' },
+  { label: 'ELECTION', href: '/election', icon: '🗳️' },
+  { label: 'HORSE RACING', href: '/horse-racing', icon: '🐎' },
 ];
 
 export interface SlotGame {

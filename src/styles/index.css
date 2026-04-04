@@ -22,49 +22,49 @@
    ============================================================ */
 :root {
   /* ── Admin seed colors (overwritten by themeGenerator.js) ── */
-  --admin-primary: #262626;
-  --admin-accent:  #FFD700;
+  --admin-primary: #121212;
+  --admin-accent:  #CDFE04;
 
   /* ── Always-dark surface — use for media players, code blocks, etc.
      This value is the SAME in both light and dark mode (never inverts). ── */
   --color-surface-dark: #0a0c0d;
 
   /* Brand blue scale — kept for any legacy references */
-  --color-brand-blue:     #1a1a1a;
-  --color-brand-blue-50:  #1a1a1a;
-  --color-brand-blue-100: #1a1a1a;
-  --color-brand-blue-200: #252525;
-  --color-brand-blue-300: #333333;
-  --color-brand-blue-400: #404040;
-  --color-brand-blue-500: #4d4d4d;
-  --color-brand-blue-600: #5a5a5a;
-  --color-brand-blue-700: #737373;
-  --color-brand-blue-800: #8c8c8c;
-  --color-brand-blue-900: #a6a6a6;
+  --color-brand-blue:     #121212;
+  --color-brand-blue-50:  #121212;
+  --color-brand-blue-100: #121212;
+  --color-brand-blue-200: #1a1a1a;
+  --color-brand-blue-300: #212121;
+  --color-brand-blue-400: #2a2a2a;
+  --color-brand-blue-500: #333333;
+  --color-brand-blue-600: #404040;
+  --color-brand-blue-700: #4d4d4d;
+  --color-brand-blue-800: #5a5a5a;
+  --color-brand-blue-900: #737373;
 
   /* Brand primary — header, sidebar, nav bar */
-  --color-brand-primary:       #1a1a1a;
-  --color-brand-primary-light: #252525;
-  --color-brand-primary-dark:  #000000;
+  --color-brand-primary:       #121212;
+  --color-brand-primary-light: #1f1f1f;
+  --color-brand-primary-dark:  #0a0a0a;
   /* Brand accent — CTA buttons, LIVE badge, active tabs */
-  --color-brand-accent:       #FFD700;
-  --color-brand-accent-light: #FFE44D;
-  --color-brand-accent-dark:  #E5C100;
+  --color-brand-accent:       #CDFE04;
+  --color-brand-accent-light: #D9FE36;
+  --color-brand-accent-dark:  #B3DE00;
 
   /* Surface white & gradient seed points */
   --color-brand-white:    #ffffff;
-  --color-gradient-start: #FFD700;
-  --color-gradient-end:   #000000;
+  --color-gradient-start: #CDFE04;
+  --color-gradient-end:   #121212;
 
   /* ── Semantic text — white on dark backgrounds ── */
   --color-brand-text: #ffffff;
 
   /* ── Backgrounds ── */
-  --color-bg-primary:    #000000;           /* main page canvas */
-  --color-bg-secondary:  #1a1a1a;           /* input fields, deeper bg */
-  --color-bg-white-rgb:  0 0 0;             /* #000000 rgb channels */
-  --color-bg-card:       #1a1a1a;           /* cards, panels, match rows */
-  --color-bg-light-blue: #252525;           /* row hover, tab hover */
+  --color-bg-primary:    #121212;           /* main page canvas */
+  --color-bg-secondary:  #181818;           /* input fields, deeper bg */
+  --color-bg-white-rgb:  18 18 18;          /* #121212 rgb channels */
+  --color-bg-card:       #212121;           /* cards, panels, match rows */
+  --color-bg-light-blue: #2A2A2A;           /* row hover, tab hover */
  
 
   /* ── Strokes / Borders ── */
@@ -124,11 +124,11 @@
   --shadow-elevated:     0 8px 24px rgba(0, 0, 0, 0.92);
   --shadow-sidebar-top:  0 -2px 8px 0 rgba(0, 0, 0, 0.55);
 
-  /* ── Gradients ── */
-  --gradient-hero: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #0a0a0a 100%);
-  --gradient-cta:  linear-gradient(90deg, #FFD700 0%, #E5C100 100%);
-  --gradient-card: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
-  --gradient-odds: linear-gradient(90deg, #000000 0%, #FFD700 100%);
+  /* ── Default Gradients ── */
+  --gradient-hero: linear-gradient(135deg, #121212 0%, #1a1a1a 50%, #212121 100%);
+  --gradient-cta:  linear-gradient(90deg, #CDFE04 0%, #D9FE36 100%);
+  --gradient-card: linear-gradient(180deg, #212121 0%, #121212 100%);
+  --gradient-odds: linear-gradient(90deg, #121212 0%, #CDFE04 100%);
 }
 /*
   DARK MODE OVERRIDES
