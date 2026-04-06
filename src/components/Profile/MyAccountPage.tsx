@@ -11,6 +11,7 @@ import {
 import { IoIosArrowForward } from "react-icons/io";
 import { BiMoneyWithdraw, BiSolidStar } from "react-icons/bi";
 import { MdAccountBalanceWallet, MdHistory } from "react-icons/md";
+import { CirclePlus } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { useBalance } from "../../hooks/useBalance";
 
@@ -136,9 +137,10 @@ const MyAccountPage: React.FC = () => {
           <div className="flex gap-2 ml-3">
             <button
               onClick={() => handleMenuClick("/deposit")}
-              className="bg-accent-green hover:bg-accent-green/90 text-black font-bold py-2 px-5 rounded text-sm transition-colors whitespace-nowrap"
+              className="bg-accent-green hover:bg-accent-green/90 text-black font-bold py-2 px-5 rounded text-sm transition-colors whitespace-nowrap flex items-center gap-2"
             >
-              + Deposit
+              <CirclePlus size={18} />
+              Deposit
             </button>
             <button
               onClick={() => handleMenuClick("/withdraw")}

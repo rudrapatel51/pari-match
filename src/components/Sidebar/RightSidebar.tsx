@@ -125,8 +125,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
     (!hasOddsChanged || acceptOddsChanges) &&
     !isSubmitting;
 
-  const bets: PlacedBet[] =
-    myBetsFilter === "active" ? activeBets : settledBets;
+  const bets: PlacedBet[] = myBetsFilter === "open" ? activeBets : settledBets;
 
   const handlePlaceBets = async () => {
     if (!canSubmit) return;
@@ -176,14 +175,14 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
   const fetchMyBets = (filter: MyBetsFilter) => {
     setMyBetsLoading(true);
     const req =
-      filter === "active"
+      filter === "open"
         ? bettingApi.getActiveBets()
         : bettingApi.getBetHistory();
     req
       .then((res: any) => {
         const data: PlacedBet[] =
           res?.data?.bets || res?.bets || res?.data || res || [];
-        if (filter === "active") setActiveBets(Array.isArray(data) ? data : []);
+        if (filter === "open") setActiveBets(Array.isArray(data) ? data : []);
         else setSettledBets(Array.isArray(data) ? data : []);
       })
       .catch(() => useToastStore.getState().error("Failed to load bets"))
@@ -199,7 +198,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
   const FloatingOpenBtn = (
     <button
       onClick={onToggleCollapse}
-      className="hidden md:flex fixed right-0 top-1/4 z-50 bg-brand-primary text-white rounded-l-full p-2 shadow-lg hover:bg-brand-primary-light transition-colors items-center"
+      className="hidden xl:flex fixed right-0 top-1/4 z-50 bg-brand-primary text-white rounded-l-full p-2 shadow-lg hover:bg-brand-primary-light transition-colors items-center"
       aria-label="Open sidebar"
     >
       <FiChevronLeft className="w-4 h-4" />
@@ -212,45 +211,71 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
   if (isAuthenticated && user) {
     return (
       <>
-        {/* Desktop floating open button (mobile uses bottom sheet) */}
+        {/* Desktop floating open button (xl+) */}
         {isCollapsed && FloatingOpenBtn}
 
+        {/* Mobile/tablet collapsed bar (non-blocking for page behind it) */}
+        {isCollapsed && (
+          <button
+            onClick={onToggleCollapse}
+            className="fixed inset-x-3 bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] z-30 xl:hidden flex items-center justify-between rounded-xl border border-brand-accent bg-brand-accent px-4 py-2.5 shadow-elevated"
+            aria-label="Expand betslip"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-xs font-bold text-black uppercase tracking-wide">
+                Betslip
+              </span>
+              <span className="bg-black text-brand-accent text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center leading-none">
+                {betItems.length}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-black font-mono">
+              <span>₹{totalStake.toFixed(0)}</span>
+              <FiChevronUp className="w-4 h-4" />
+            </div>
+          </button>
+        )}
+
         {/*
-          MOBILE: fixed full-screen bottom sheet that slides up from bottom.
-          DESKTOP: fixed right sidebar as before.
-
-          Mobile trigger: isCollapsed=false → sheet slides up to cover screen.
-          Desktop: normal right sidebar behaviour.
-
-          The key fix: on mobile (< md) this is position:fixed inset-0 z-50
-          so it covers the ENTIRE screen including the betting event page.
-          On desktop (md+) it's the normal sidebar column.
+          MOBILE/TABLET (< xl): full-width half-height bottom sheet.
+          DESKTOP (xl+): normal right sidebar column.
         */}
         {!isCollapsed && (
           <>
-            {/* Mobile backdrop */}
+            {/* Mobile/tablet backdrop */}
             <div
-              className="fixed inset-0 bg-black/60 z-40 md:hidden"
+              className="fixed inset-0 bg-black/55 z-40 xl:hidden"
               onClick={onToggleCollapse}
               aria-hidden="true"
             />
 
             <div
               className={clsx(
-                // ── MOBILE: full-screen bottom sheet ──
-                // Slides up from bottom, covers entire viewport
-                "fixed inset-x-0 bottom-0 z-50 md:hidden",
-                "h-[92vh]", // 92% height — shows a sliver of the page behind
+                // ── MOBILE/TABLET: half-height bottom sheet ──
+                "fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] z-50 xl:hidden",
+                "h-[50vh] max-h-[520px]",
                 "flex flex-col",
                 "bg-bg-secondary",
-                "rounded-t-2xl", // rounded top corners for sheet feel
+                "rounded-t-2xl",
                 "shadow-[0_-8px_32px_rgba(0,0,0,0.3)]",
               )}
             >
-              {/* Mobile sheet handle indicator */}
-              <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0">
-                <div className="w-10 h-1 rounded-full bg-stroke-light" />
-              </div>
+              {/* Mobile dropdown header */}
+              <button
+                onClick={onToggleCollapse}
+                className="flex items-center justify-between px-4 py-2.5 border-b border-stroke-light bg-bg-card"
+                aria-label="Collapse betslip"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-xs font-bold text-brand-text uppercase tracking-wide">
+                    Betslip
+                  </span>
+                  <span className="bg-brand-accent text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center leading-none">
+                    {betItems.length}
+                  </span>
+                </div>
+                <FiChevronDown className="w-4 h-4 text-brand-text/80" />
+              </button>
 
               {/* Sheet content */}
               <SheetContent
@@ -288,7 +313,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
             </div>
 
             {/* DESKTOP sidebar — normal right panel */}
-            <div className="hidden md:flex relative h-full flex-col bg-bg-secondary border-l-2 border-bg-secondary overflow-hidden">
+            <div className="hidden xl:flex relative h-full flex-col bg-bg-secondary border-l-2 border-bg-secondary overflow-hidden">
               <SheetContent
                 mainTab={mainTab}
                 setMainTab={setMainTab}
@@ -324,20 +349,6 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
             </div>
           </>
         )}
-
-        {/* Mobile floating bet slip button (when collapsed, shows over page) */}
-        {isCollapsed && betItems.length > 0 && (
-          <button
-            onClick={onToggleCollapse}
-            className="fixed bottom-20 right-4 z-50 md:hidden flex items-center gap-2 bg-brand-accent text-black px-4 py-3 rounded-full shadow-lg hover:opacity-90 transition-opacity"
-            aria-label="Open bet slip"
-          >
-            <span className="text-sm font-bold">BET SLIP</span>
-            <span className="bg-black text-brand-accent text-xs font-black w-5 h-5 rounded-full flex items-center justify-center leading-none">
-              {betItems.length}
-            </span>
-          </button>
-        )}
       </>
     );
   }
@@ -349,25 +360,50 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
     <>
       {isCollapsed && FloatingOpenBtn}
 
+      {isCollapsed && (
+        <button
+          onClick={onToggleCollapse}
+          className="fixed inset-x-3 bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] z-30 xl:hidden flex items-center justify-between rounded-xl border border-brand-accent bg-brand-accent px-4 py-2.5 shadow-elevated"
+          aria-label="Expand betslip"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-xs font-bold text-black uppercase tracking-wide">
+              Betslip
+            </span>
+            <span className="bg-black text-brand-accent text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center leading-none">
+              0
+            </span>
+          </div>
+          <FiChevronUp className="w-4 h-4 text-black" />
+        </button>
+      )}
+
       {!isCollapsed && (
         <>
-          {/* Mobile backdrop */}
+          {/* Mobile/tablet backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 z-40 md:hidden"
+            className="fixed inset-0 bg-black/55 z-40 xl:hidden"
             onClick={onToggleCollapse}
             aria-hidden="true"
           />
 
           {/* Mobile bottom sheet — empty betslip state */}
-          <div className="fixed inset-x-0 bottom-0 z-50 h-[85vh] flex flex-col bg-bg-secondary rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] md:hidden">
-            <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0">
-              <div className="w-10 h-1 rounded-full bg-stroke-light" />
-            </div>
+          <div className="fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] z-50 h-[50vh] max-h-[520px] flex flex-col bg-bg-secondary rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] xl:hidden">
+            <button
+              onClick={onToggleCollapse}
+              className="flex items-center justify-between px-4 py-2.5 border-b border-stroke-light bg-bg-card"
+              aria-label="Collapse betslip"
+            >
+              <span className="text-xs font-bold text-brand-text uppercase tracking-wide">
+                Betslip
+              </span>
+              <FiChevronDown className="w-4 h-4 text-brand-text/80" />
+            </button>
             <EmptyBetslipUnauthenticated onClose={onToggleCollapse} />
           </div>
 
           {/* Desktop sidebar — empty betslip state */}
-          <div className="hidden md:block relative h-full bg-bg-secondary border-l-2 border-bg-secondary">
+          <div className="hidden xl:block relative h-full bg-bg-secondary border-l-2 border-bg-secondary">
             <EmptyBetslipUnauthenticated onClose={onToggleCollapse} />
           </div>
         </>

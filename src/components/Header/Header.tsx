@@ -9,7 +9,7 @@ import {
   FiUser,
   FiSearch,
 } from "react-icons/fi";
-import { IndianRupee } from "lucide-react";
+import { IndianRupee, CirclePlus } from "lucide-react";
 import { navigationItems } from "../../data/mockData";
 import { useUiStore } from "../../store/uiStore";
 import { useAuth } from "../../hooks/useAuth";
@@ -212,9 +212,10 @@ const Header: React.FC<HeaderProps> = ({
                     {/* Deposit Button */}
                     <button
                       onClick={() => navigate("/deposit")}
-                      className="hidden md:flex items-center gap-2 bg-accent-green hover:opacity-90 text-black font-bold py-2 px-4 transition-colors"
+                      className="hidden md:flex items-center gap-2 bg-accent-green hover:opacity-90 text-black font-bold py-2 px-4 rounded transition-colors"
                     >
-                      + Deposit
+                      <CirclePlus size={18} />
+                      Deposit
                     </button>
                   </>
                 )}

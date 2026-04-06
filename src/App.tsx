@@ -202,40 +202,12 @@ const Layout: React.FC = () => {
               />
             </aside>
 
-            {/* ── Mobile / tablet — floating FAB + slide-in drawer ── */}
+            {/* ── Mobile / tablet (< xl) — shared bottom sheet / collapsed bar ── */}
             <div className="xl:hidden">
-              {/* Floating bet-count button (only when drawer is closed and bets exist) */}
-              {betItemsLength > 0 && !isMobileBetSlipOpen && (
-                <button
-                  onClick={() => setIsMobileBetSlipOpen(true)}
-                  className="fixed bottom-20 right-4 z-50 bg-brand-primary text-white rounded-full px-4 py-2.5 shadow-elevated font-bold text-sm flex items-center gap-2 hover:bg-brand-primary-light transition-colors"
-                >
-                  <span className="bg-accent-yellow text-neutral-gray-900 text-xs font-black w-5 h-5 rounded-full flex items-center justify-center">
-                    {betItemsLength}
-                  </span>
-                  BET SLIP
-                </button>
-              )}
-
-              {/* Dark scrim overlay */}
-              {isMobileBetSlipOpen && (
-                <div
-                  className="fixed inset-0 bg-black/50 z-40"
-                  onClick={() => setIsMobileBetSlipOpen(false)}
-                />
-              )}
-
-              {/* Slide-in drawer from right */}
-              <div
-                className={`fixed right-0 top-0 h-full w-80 max-w-[92vw] z-50 transition-transform duration-300 ${
-                  isMobileBetSlipOpen ? "translate-x-0" : "translate-x-full"
-                }`}
-              >
-                <RightSidebar
-                  isCollapsed={false}
-                  onToggleCollapse={() => setIsMobileBetSlipOpen(false)}
-                />
-              </div>
+              <RightSidebar
+                isCollapsed={!isMobileBetSlipOpen}
+                onToggleCollapse={() => setIsMobileBetSlipOpen((v) => !v)}
+              />
             </div>
           </>
         )}
