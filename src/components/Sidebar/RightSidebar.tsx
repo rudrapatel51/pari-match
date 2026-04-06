@@ -1,52 +1,79 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FiChevronLeft, FiX, FiTrash2, FiTv, FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { useLocation } from 'react-router-dom';
-import clsx from 'clsx';
-import LoginForm from '../Auth/LoginForm';
-import RegisterForm from '../Auth/RegisterForm';
-import { useAuth } from '../../hooks/useAuth';
-import { useBettingStore } from '../../store/bettingStore';
-import { useToastStore } from '../../store/toastStore';
-import { bettingApi } from '../../api/bettingClient';
-import type { PlacedBet } from '../../types/domain';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  FiChevronLeft,
+  FiX,
+  FiTrash2,
+  FiTv,
+  FiChevronDown,
+  FiChevronUp,
+} from "react-icons/fi";
+import { useLocation } from "react-router-dom";
+import clsx from "clsx";
+import LoginForm from "../Auth/LoginForm";
+import RegisterForm from "../Auth/RegisterForm";
+import { useAuth } from "../../hooks/useAuth";
+import { useBettingStore } from "../../store/bettingStore";
+import { useToastStore } from "../../store/toastStore";
+import { bettingApi } from "../../api/bettingClient";
+import type { PlacedBet } from "../../types/domain";
 
 const QUICK_STAKES = [100, 500, 1000, 5000];
 const SESSION_MARKET_TYPES = [
-  'session', 'fancy', 'fancy1', 'ball-by-ball', 'meter', 'bookmaker', 'bookmaker2', 'khado',
+  "session",
+  "fancy",
+  "fancy1",
+  "ball-by-ball",
+  "meter",
+  "bookmaker",
+  "bookmaker2",
+  "khado",
 ];
 const STATUS_COLORS: Record<string, string> = {
-  MATCHED: 'text-brand-text bg-bg-light-blue',
-  PENDING: 'text-accent-yellow bg-accent-yellow/10',
-  WON:     'text-accent-green bg-accent-green/10',
-  LOST:    'text-accent-red bg-accent-red/10',
-  VOID:    'text-brand-text/60 bg-bg-light-blue',
+  MATCHED: "text-brand-text bg-bg-light-blue",
+  PENDING: "text-accent-yellow bg-accent-yellow/10",
+  WON: "text-accent-green bg-accent-green/10",
+  LOST: "text-accent-red bg-accent-red/10",
+  VOID: "text-brand-text/60 bg-bg-light-blue",
 };
-type MainTab      = 'betslip' | 'mybets';
-type MyBetsFilter = 'active' | 'settled';
+type MainTab = "betslip" | "mybets";
+type MyBetsFilter = "active" | "settled";
 
 interface RightSidebarProps {
-  isCollapsed:      boolean;
+  isCollapsed: boolean;
   onToggleCollapse: () => void;
 }
 
-const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollapse }) => {
-  const [authMode, setAuthMode]                   = useState<'login' | 'register'>('register');
-  const { isAuthenticated, user }                 = useAuth();
-  const location                                  = useLocation();
+const RightSidebar: React.FC<RightSidebarProps> = ({
+  isCollapsed,
+  onToggleCollapse,
+}) => {
+  const { isAuthenticated, user } = useAuth();
+  const location = useLocation();
   const isEventPage = /\/betting\/event\//.test(location.pathname);
 
-  const [mainTab, setMainTab]                     = useState<MainTab>('betslip');
-  const [myBetsFilter, setMyBetsFilter]           = useState<MyBetsFilter>('active');
-  const [myBetsLoading, setMyBetsLoading]         = useState(false);
+  const [mainTab, setMainTab] = useState<MainTab>("betslip");
+  const [myBetsFilter, setMyBetsFilter] = useState<MyBetsFilter>("active");
+  const [myBetsLoading, setMyBetsLoading] = useState(false);
   const [acceptOddsChanges, setAcceptOddsChanges] = useState(false);
-  const [tvExpanded, setTvExpanded]               = useState(false);
+  const [tvExpanded, setTvExpanded] = useState(false);
   const prevBetCountRef = useRef(0);
-  const currentEvent    = useBettingStore((s) => s.currentEvent);
+  const currentEvent = useBettingStore((s) => s.currentEvent);
   const {
-    betItems, isSubmitting, lastResult, betError, availableBalance,
-    removeFromBetSlip, updateStake, clearBetSlip,
-    setSubmitting, setLastResult, setBetError,
-    activeBets, settledBets, setActiveBets, setSettledBets,
+    betItems,
+    isSubmitting,
+    lastResult,
+    betError,
+    availableBalance,
+    removeFromBetSlip,
+    updateStake,
+    clearBetSlip,
+    setSubmitting,
+    setLastResult,
+    setBetError,
+    activeBets,
+    settledBets,
+    setActiveBets,
+    setSettledBets,
   } = useBettingStore();
 
   useEffect(() => {
@@ -57,23 +84,37 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
   }, [betItems.length, isCollapsed, onToggleCollapse]);
 
   useEffect(() => {
-    const handler = () => { if (isCollapsed) onToggleCollapse(); };
-    window.addEventListener('betting:open-sidebar', handler);
-    return () => window.removeEventListener('betting:open-sidebar', handler);
+    const handler = () => {
+      if (isCollapsed) onToggleCollapse();
+    };
+    window.addEventListener("betting:open-sidebar", handler);
+    return () => window.removeEventListener("betting:open-sidebar", handler);
   }, [isCollapsed, onToggleCollapse]);
 
   const totalStake = betItems.reduce((s, i) => s + (Number(i.stake) || 0), 0);
 
   const totalReturn = betItems.reduce((sum, i) => {
-    const isSession = SESSION_MARKET_TYPES.includes((i.marketType || '').toLowerCase());
-    if (isSession) return i.betType === 'BACK' ? sum + (i.odds * i.stake) / 100 + i.stake : sum + i.stake;
-    return i.betType === 'BACK' ? sum + (i.odds - 1) * i.stake + i.stake : sum + i.stake;
+    const isSession = SESSION_MARKET_TYPES.includes(
+      (i.marketType || "").toLowerCase(),
+    );
+    if (isSession)
+      return i.betType === "BACK"
+        ? sum + (i.odds * i.stake) / 100 + i.stake
+        : sum + i.stake;
+    return i.betType === "BACK"
+      ? sum + (i.odds - 1) * i.stake + i.stake
+      : sum + i.stake;
   }, 0);
 
   const totalLiability = betItems.reduce((sum, i) => {
-    const isSession = SESSION_MARKET_TYPES.includes((i.marketType || '').toLowerCase());
-    if (isSession) return i.betType === 'BACK' ? sum + i.stake : sum + (i.odds * i.stake) / 100;
-    return i.betType === 'LAY' ? sum + (i.odds - 1) * i.stake : sum + i.stake;
+    const isSession = SESSION_MARKET_TYPES.includes(
+      (i.marketType || "").toLowerCase(),
+    );
+    if (isSession)
+      return i.betType === "BACK"
+        ? sum + i.stake
+        : sum + (i.odds * i.stake) / 100;
+    return i.betType === "LAY" ? sum + (i.odds - 1) * i.stake : sum + i.stake;
   }, 0);
 
   const hasOddsChanged = betItems.some((i) => i.oddsChanged);
@@ -83,7 +124,8 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
     (!hasOddsChanged || acceptOddsChanges) &&
     !isSubmitting;
 
-  const bets: PlacedBet[] = myBetsFilter === 'active' ? activeBets : settledBets;
+  const bets: PlacedBet[] =
+    myBetsFilter === "active" ? activeBets : settledBets;
 
   const handlePlaceBets = async () => {
     if (!canSubmit) return;
@@ -93,32 +135,36 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
     try {
       const results = await Promise.all(
         betItems.map((bet) => {
-          const isSession = SESSION_MARKET_TYPES.includes((bet.marketType || '').toLowerCase());
+          const isSession = SESSION_MARKET_TYPES.includes(
+            (bet.marketType || "").toLowerCase(),
+          );
           const payload: Record<string, any> = {
-            eventId:    bet.eventId,
-            marketId:   bet.marketId,
+            eventId: bet.eventId,
+            marketId: bet.marketId,
             marketName: bet.marketName,
             marketType: bet.marketType,
-            runnerId:   bet.runnerId,
+            runnerId: bet.runnerId,
             runnerName: bet.runnerName,
-            betType:    bet.betType,
-            odds:       bet.odds,
-            stake:      bet.stake,
-            line:       bet.line ?? 0,
+            betType: bet.betType,
+            odds: bet.odds,
+            stake: bet.stake,
+            line: bet.line ?? 0,
             idempotencyKey: crypto.randomUUID(),
           };
           if (isSession) {
-            payload.selection = bet.betType === 'BACK' ? 'YES' : 'NO';
-            payload.rate      = bet.odds;
+            payload.selection = bet.betType === "BACK" ? "YES" : "NO";
+            payload.rate = bet.odds;
           }
           return bettingApi.placeBet(payload);
-        })
+        }),
       );
       setLastResult(results);
       useBettingStore.getState().clearBetSlip();
-      useToastStore.getState().success(`${count} bet${count > 1 ? 's' : ''} placed successfully`);
+      useToastStore
+        .getState()
+        .success(`${count} bet${count > 1 ? "s" : ""} placed successfully`);
     } catch (err: any) {
-      const msg = err.message || 'Bet placement failed';
+      const msg = err.message || "Bet placement failed";
       setBetError(msg);
       useToastStore.getState().error(msg);
     } finally {
@@ -128,19 +174,23 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
 
   const fetchMyBets = (filter: MyBetsFilter) => {
     setMyBetsLoading(true);
-    const req = filter === 'active' ? bettingApi.getActiveBets() : bettingApi.getBetHistory();
+    const req =
+      filter === "active"
+        ? bettingApi.getActiveBets()
+        : bettingApi.getBetHistory();
     req
       .then((res: any) => {
-        const data: PlacedBet[] = res?.data?.bets || res?.bets || res?.data || res || [];
-        if (filter === 'active') setActiveBets(Array.isArray(data) ? data : []);
-        else                     setSettledBets(Array.isArray(data) ? data : []);
+        const data: PlacedBet[] =
+          res?.data?.bets || res?.bets || res?.data || res || [];
+        if (filter === "active") setActiveBets(Array.isArray(data) ? data : []);
+        else setSettledBets(Array.isArray(data) ? data : []);
       })
-      .catch(() => useToastStore.getState().error('Failed to load bets'))
+      .catch(() => useToastStore.getState().error("Failed to load bets"))
       .finally(() => setMyBetsLoading(false));
   };
 
   useEffect(() => {
-    if (mainTab === 'mybets') fetchMyBets(myBetsFilter);
+    if (mainTab === "mybets") fetchMyBets(myBetsFilter);
   }, [mainTab, myBetsFilter]);
 
   // ── Floating open button (desktop only — on mobile the bet slip
@@ -184,16 +234,18 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
               aria-hidden="true"
             />
 
-            <div className={clsx(
-              // ── MOBILE: full-screen bottom sheet ──
-              // Slides up from bottom, covers entire viewport
-              'fixed inset-x-0 bottom-0 z-50 md:hidden',
-              'h-[92vh]',                    // 92% height — shows a sliver of the page behind
-              'flex flex-col',
-              'bg-bg-card',
-              'rounded-t-2xl',               // rounded top corners for sheet feel
-              'shadow-[0_-8px_32px_rgba(0,0,0,0.3)]',
-            )}>
+            <div
+              className={clsx(
+                // ── MOBILE: full-screen bottom sheet ──
+                // Slides up from bottom, covers entire viewport
+                "fixed inset-x-0 bottom-0 z-50 md:hidden",
+                "h-[92vh]", // 92% height — shows a sliver of the page behind
+                "flex flex-col",
+                "bg-bg-card",
+                "rounded-t-2xl", // rounded top corners for sheet feel
+                "shadow-[0_-8px_32px_rgba(0,0,0,0.3)]",
+              )}
+            >
               {/* Mobile sheet handle indicator */}
               <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0">
                 <div className="w-10 h-1 rounded-full bg-stroke-light" />
@@ -235,7 +287,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
             </div>
 
             {/* DESKTOP sidebar — normal right panel */}
-            <div className="hidden md:flex relative h-full flex-col bg-bg-card border-l-2 border-stroke-primary overflow-hidden">
+            <div className="hidden md:flex relative h-full flex-col bg-bg-card border-l-2 border-bg-secondary overflow-hidden">
               <SheetContent
                 mainTab={mainTab}
                 setMainTab={setMainTab}
@@ -290,7 +342,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
   }
 
   /* ============================================================
-     NON-AUTH USER VIEW
+     NON-AUTH USER VIEW — Shows empty betslip, no login/signup
   ============================================================ */
   return (
     <>
@@ -305,25 +357,17 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
             aria-hidden="true"
           />
 
-          {/* Mobile bottom sheet */}
+          {/* Mobile bottom sheet — empty betslip state */}
           <div className="fixed inset-x-0 bottom-0 z-50 h-[85vh] flex flex-col bg-bg-card rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] md:hidden">
             <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0">
               <div className="w-10 h-1 rounded-full bg-stroke-light" />
             </div>
-            <AuthContent
-              authMode={authMode}
-              setAuthMode={setAuthMode}
-              onClose={onToggleCollapse}
-            />
+            <EmptyBetslipUnauthenticated onClose={onToggleCollapse} />
           </div>
 
-          {/* Desktop sidebar */}
-          <div className="hidden md:block relative h-full bg-bg-card border-l-2 border-stroke-primary">
-            <AuthContent
-              authMode={authMode}
-              setAuthMode={setAuthMode}
-              onClose={onToggleCollapse}
-            />
+          {/* Desktop sidebar — empty betslip state */}
+          <div className="hidden md:block relative h-full bg-bg-card border-l-2 border-bg-secondary">
+            <EmptyBetslipUnauthenticated onClose={onToggleCollapse} />
           </div>
         </>
       )}
@@ -331,15 +375,69 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ isCollapsed, onToggleCollap
   );
 };
 
+// ─── Extracted: Empty Betslip for Unauthenticated Users ───────────────────
+
+interface EmptyBetslipUnauthenticatedProps {
+  onClose: () => void;
+}
+
+const EmptyBetslipUnauthenticated: React.FC<
+  EmptyBetslipUnauthenticatedProps
+> = ({ onClose }) => (
+  <div className="flex flex-col h-full w-full">
+    {/* Header with Betslip title */}
+    <div className="px-4 py-3 border-b border-bg-secondary bg-bg-card flex-shrink-0 flex items-center justify-center">
+      <h2 className="text-brand-text font-semibold text-base">Betslip</h2>
+    </div>
+
+    {/* Empty state content — positioned near top */}
+    <div className="flex-1 flex flex-col items-center justify-start pt-12 p-6 text-center">
+      {/* Ticket Icon */}
+      <div className="mb-6">
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-neutral-gray-500"
+        >
+          <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+          <path d="M13 5v2" />
+          <path d="M13 17v2" />
+          <path d="M13 11v2" />
+        </svg>
+      </div>
+
+      {/* Main text */}
+      <h3 className="text-brand-text font-semibold text-sm mb-2">
+        Your betslip is empty
+      </h3>
+
+      {/* Subtext */}
+      <p className="text-neutral-gray-500 text-xs leading-relaxed max-w-xs">
+        Click on odds to add a bet to the betslip
+      </p>
+    </div>
+  </div>
+);
+
 // ─── Extracted: Auth panel content ───────────────────────────────────────────
 
 interface AuthContentProps {
-  authMode:    'login' | 'register';
-  setAuthMode: (m: 'login' | 'register') => void;
-  onClose:     () => void;
+  authMode: "login" | "register";
+  setAuthMode: (m: "login" | "register") => void;
+  onClose: () => void;
 }
 
-const AuthContent: React.FC<AuthContentProps> = ({ authMode, setAuthMode, onClose }) => (
+const AuthContent: React.FC<AuthContentProps> = ({
+  authMode,
+  setAuthMode,
+  onClose,
+}) => (
   <div className="flex flex-col h-full">
     {/* Close */}
     <div className="px-3 py-2.5 border-b border-stroke-light bg-bg-card flex-shrink-0">
@@ -352,23 +450,23 @@ const AuthContent: React.FC<AuthContentProps> = ({ authMode, setAuthMode, onClos
     </div>
     {/* Tabs */}
     <div className="flex text-xs font-bold border-b border-stroke-light bg-bg-card flex-shrink-0">
-      {(['register', 'login'] as const).map(mode => (
+      {(["register", "login"] as const).map((mode) => (
         <button
           key={mode}
           onClick={() => setAuthMode(mode)}
           className={clsx(
-            'flex-1 py-3 text-center transition-colors uppercase text-xs font-bold',
+            "flex-1 py-3 text-center transition-colors uppercase text-xs font-bold",
             authMode === mode
-              ? 'text-brand-text border-b-2 border-accent-green'
-              : 'text-neutral-gray-500 hover:text-brand-text'
+              ? "text-brand-text border-b-2 border-accent-green"
+              : "text-neutral-gray-500 hover:text-brand-text",
           )}
         >
-          {mode === 'register' ? 'Registration' : 'Login'}
+          {mode === "register" ? "Registration" : "Login"}
         </button>
       ))}
     </div>
     <div className="flex-1 overflow-y-auto p-4">
-      {authMode === 'register' ? <RegisterForm /> : <LoginForm />}
+      {authMode === "register" ? <RegisterForm /> : <LoginForm />}
     </div>
   </div>
 );
@@ -376,68 +474,79 @@ const AuthContent: React.FC<AuthContentProps> = ({ authMode, setAuthMode, onClos
 // ─── Extracted: Main sheet content (shared between mobile and desktop) ────────
 
 interface SheetContentProps {
-  mainTab:             MainTab;
-  setMainTab:          (t: MainTab) => void;
-  myBetsFilter:        MyBetsFilter;
-  setMyBetsFilter:     (f: MyBetsFilter) => void;
-  myBetsLoading:       boolean;
-  acceptOddsChanges:   boolean;
-  setAcceptOddsChanges:(v: boolean) => void;
-  tvExpanded:          boolean;
-  setTvExpanded:       (v: boolean) => void;
-  isEventPage:         boolean;
-  currentEvent:        any;
-  betItems:            any[];
-  bets:                PlacedBet[];
-  hasOddsChanged:      boolean;
-  canSubmit:           boolean;
-  isSubmitting:        boolean;
-  lastResult:          any;
-  betError:            string | null;
-  totalStake:          number;
-  totalReturn:         number;
-  totalLiability:      number;
-  availableBalance:    number;
+  mainTab: MainTab;
+  setMainTab: (t: MainTab) => void;
+  myBetsFilter: MyBetsFilter;
+  setMyBetsFilter: (f: MyBetsFilter) => void;
+  myBetsLoading: boolean;
+  acceptOddsChanges: boolean;
+  setAcceptOddsChanges: (v: boolean) => void;
+  tvExpanded: boolean;
+  setTvExpanded: (v: boolean) => void;
+  isEventPage: boolean;
+  currentEvent: any;
+  betItems: any[];
+  bets: PlacedBet[];
+  hasOddsChanged: boolean;
+  canSubmit: boolean;
+  isSubmitting: boolean;
+  lastResult: any;
+  betError: string | null;
+  totalStake: number;
+  totalReturn: number;
+  totalLiability: number;
+  availableBalance: number;
   SESSION_MARKET_TYPES: string[];
-  onClose:             () => void;
-  onRemove:            (id: string) => void;
-  onUpdateStake:       (id: string, stake: number) => void;
-  onClear:             () => void;
-  onPlace:             () => void;
-  onDone:              () => void;
-  onAcceptChange:      (v: boolean) => void;
+  onClose: () => void;
+  onRemove: (id: string) => void;
+  onUpdateStake: (id: string, stake: number) => void;
+  onClear: () => void;
+  onPlace: () => void;
+  onDone: () => void;
+  onAcceptChange: (v: boolean) => void;
 }
 
 const SheetContent: React.FC<SheetContentProps> = ({
-  mainTab, setMainTab, myBetsFilter, setMyBetsFilter,
-  myBetsLoading, acceptOddsChanges, tvExpanded, setTvExpanded,
-  isEventPage, currentEvent, betItems, bets, hasOddsChanged,
-  canSubmit, isSubmitting, lastResult, betError,
-  totalStake, totalReturn, totalLiability, availableBalance,
-  SESSION_MARKET_TYPES, onClose, onRemove, onUpdateStake,
-  onClear, onPlace, onDone, onAcceptChange,
+  mainTab,
+  setMainTab,
+  myBetsFilter,
+  setMyBetsFilter,
+  myBetsLoading,
+  acceptOddsChanges,
+  tvExpanded,
+  setTvExpanded,
+  isEventPage,
+  currentEvent,
+  betItems,
+  bets,
+  hasOddsChanged,
+  canSubmit,
+  isSubmitting,
+  lastResult,
+  betError,
+  totalStake,
+  totalReturn,
+  totalLiability,
+  availableBalance,
+  SESSION_MARKET_TYPES,
+  onClose,
+  onRemove,
+  onUpdateStake,
+  onClear,
+  onPlace,
+  onDone,
+  onAcceptChange,
 }) => (
   <div className="flex flex-col h-full min-h-0">
-
-    {/* ── Close button ── */}
-    <div className="flex justify-center items-center px-3 py-2.5 border-b border-stroke-light bg-bg-card flex-shrink-0">
-      <button
-        onClick={onClose}
-        className="bg-brand-primary text-white w-full px-3 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
-      >
-        Close
-      </button>
-    </div>
-
     {/* ── BET SLIP | MY BETS tabs ── */}
     <div className="flex gap-2 px-3 py-2 border-b-2 border-stroke-light bg-bg-card flex-shrink-0">
       <button
-        onClick={() => setMainTab('betslip')}
+        onClick={() => setMainTab("betslip")}
         className={clsx(
-          'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all',
-          mainTab === 'betslip'
-            ? 'bg-brand-primary text-white shadow-sm'
-            : 'bg-bg-light-blue text-neutral-gray-500'
+          "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all",
+          mainTab === "betslip"
+            ? "bg-brand-primary text-white shadow-sm"
+            : "bg-bg-light-blue text-neutral-gray-500",
         )}
       >
         BET SLIP
@@ -448,12 +557,12 @@ const SheetContent: React.FC<SheetContentProps> = ({
         )}
       </button>
       <button
-        onClick={() => setMainTab('mybets')}
+        onClick={() => setMainTab("mybets")}
         className={clsx(
-          'flex-1 py-2 rounded-lg text-xs font-bold transition-all',
-          mainTab === 'mybets'
-            ? 'bg-brand-primary text-white shadow-sm'
-            : 'bg-bg-light-blue text-neutral-gray-500'
+          "flex-1 py-2 rounded-lg text-xs font-bold transition-all",
+          mainTab === "mybets"
+            ? "bg-brand-primary text-white shadow-sm"
+            : "bg-bg-light-blue text-neutral-gray-500",
         )}
       >
         MY BETS
@@ -462,29 +571,38 @@ const SheetContent: React.FC<SheetContentProps> = ({
 
     {/* ── Scrollable body ── */}
     <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">
-
       {/* ── Live TV — collapsible, compact on mobile ── */}
       {isEventPage && currentEvent?.tvStream && (
         <div
           className="flex-shrink-0 border-b border-stroke-light"
-          style={{ background: 'var(--color-surface-dark)' }}
+          style={{ background: "var(--color-surface-dark)" }}
         >
           {/* TV header — always visible, tap to expand/collapse */}
           <button
             onClick={() => setTvExpanded(!tvExpanded)}
             className="w-full flex items-center justify-between px-3 py-2.5"
-            style={{ background: 'rgba(255,255,255,0.07)' }}
+            style={{ background: "rgba(255,255,255,0.07)" }}
           >
             <div className="flex items-center gap-2">
-              <FiTv size={14} style={{ color: 'rgba(255,255,255,0.7)' }} />
-              <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>
+              <FiTv size={14} style={{ color: "rgba(255,255,255,0.7)" }} />
+              <span
+                className="text-xs font-semibold"
+                style={{ color: "rgba(255,255,255,0.85)" }}
+              >
                 Live TV
               </span>
             </div>
-            {tvExpanded
-              ? <FiChevronUp  size={14} style={{ color: 'rgba(255,255,255,0.5)' }} />
-              : <FiChevronDown size={14} style={{ color: 'rgba(255,255,255,0.5)' }} />
-            }
+            {tvExpanded ? (
+              <FiChevronUp
+                size={14}
+                style={{ color: "rgba(255,255,255,0.5)" }}
+              />
+            ) : (
+              <FiChevronDown
+                size={14}
+                style={{ color: "rgba(255,255,255,0.5)" }}
+              />
+            )}
           </button>
           {/*
             On mobile: max-h-40 (160px) — just enough to see the stream
@@ -501,7 +619,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
       )}
 
       {/* ══════════ BET SLIP TAB ══════════ */}
-      {mainTab === 'betslip' && (
+      {mainTab === "betslip" && (
         <>
           {/* Success */}
           {lastResult && (
@@ -509,11 +627,16 @@ const SheetContent: React.FC<SheetContentProps> = ({
               <div className="w-16 h-16 bg-accent-green rounded-full flex items-center justify-center">
                 <span className="text-white text-3xl">✓</span>
               </div>
-              <h3 className="font-display text-lg font-bold text-brand-text">Bets Placed!</h3>
+              <h3 className="font-display text-lg font-bold text-brand-text">
+                Bets Placed!
+              </h3>
               <p className="text-brand-text/70 text-sm">
-                {Array.isArray(lastResult) ? lastResult.length : 1} bet(s) placed successfully
+                {Array.isArray(lastResult) ? lastResult.length : 1} bet(s)
+                placed successfully
               </p>
-              <button onClick={onDone} className="btn-primary w-full py-3">Done</button>
+              <button onClick={onDone} className="btn-primary w-full py-3">
+                Done
+              </button>
             </div>
           )}
 
@@ -524,7 +647,9 @@ const SheetContent: React.FC<SheetContentProps> = ({
               <p className="text-xs font-semibold text-neutral-gray-500 uppercase tracking-wider">
                 Your Bets
               </p>
-              <p className="text-neutral-gray-500 text-sm">Click any odds to add a selection</p>
+              <p className="text-neutral-gray-500 text-sm">
+                Click any odds to add a selection
+              </p>
             </div>
           )}
 
@@ -532,36 +657,52 @@ const SheetContent: React.FC<SheetContentProps> = ({
           {!lastResult && betItems.length > 0 && (
             <div className="p-2.5 space-y-2">
               {betItems.map((item) => {
-                const isSessionItem = SESSION_MARKET_TYPES.includes((item.marketType || '').toLowerCase());
-                const potentialReturn = item.betType === 'BACK'
-                  ? isSessionItem ? (item.odds * item.stake) / 100 + item.stake : (item.odds - 1) * item.stake + item.stake
-                  : item.stake;
-                const liability = item.betType === 'LAY'
-                  ? isSessionItem ? (item.odds * item.stake) / 100 : (item.odds - 1) * item.stake
-                  : item.stake;
+                const isSessionItem = SESSION_MARKET_TYPES.includes(
+                  (item.marketType || "").toLowerCase(),
+                );
+                const potentialReturn =
+                  item.betType === "BACK"
+                    ? isSessionItem
+                      ? (item.odds * item.stake) / 100 + item.stake
+                      : (item.odds - 1) * item.stake + item.stake
+                    : item.stake;
+                const liability =
+                  item.betType === "LAY"
+                    ? isSessionItem
+                      ? (item.odds * item.stake) / 100
+                      : (item.odds - 1) * item.stake
+                    : item.stake;
 
                 return (
                   <div
                     key={item.id}
                     className={clsx(
-                      'rounded-xl border border-l-4 overflow-hidden',
+                      "rounded-xl border border-l-4 overflow-hidden",
                       item.oddsChanged
-                        ? 'border-accent-orange border-l-accent-orange'
-                        : item.betType === 'BACK'
-                          ? 'border-stroke-light border-l-odds-back'
-                          : 'border-stroke-light border-l-odds-lay'
+                        ? "border-accent-orange border-l-accent-orange"
+                        : item.betType === "BACK"
+                          ? "border-stroke-light border-l-odds-back"
+                          : "border-stroke-light border-l-odds-lay",
                     )}
                   >
                     {/* Card header */}
-                    <div className={clsx(
-                      'flex items-center justify-between px-3 py-2.5 border-b border-stroke-light/50',
-                      item.betType === 'BACK' ? 'bg-odds-back/10' : 'bg-odds-lay/10'
-                    )}>
+                    <div
+                      className={clsx(
+                        "flex items-center justify-between px-3 py-2.5 border-b border-stroke-light/50",
+                        item.betType === "BACK"
+                          ? "bg-odds-back/10"
+                          : "bg-odds-lay/10",
+                      )}
+                    >
                       <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <span className={clsx(
-                          'text-[10px] font-bold px-2 py-0.5 rounded uppercase shrink-0 text-white',
-                          item.betType === 'BACK' ? 'bg-odds-back' : 'bg-odds-lay'
-                        )}>
+                        <span
+                          className={clsx(
+                            "text-[10px] font-bold px-2 py-0.5 rounded uppercase shrink-0 text-white",
+                            item.betType === "BACK"
+                              ? "bg-odds-back"
+                              : "bg-odds-lay",
+                          )}
+                        >
                           {item.betType}
                         </span>
                         <span className="text-xs font-semibold text-brand-text truncate">
@@ -578,28 +719,42 @@ const SheetContent: React.FC<SheetContentProps> = ({
 
                     {/* Card body */}
                     <div className="bg-bg-card px-3 py-2.5 space-y-2.5">
-                      <p className="text-[11px] text-neutral-gray-500 truncate">{item.marketName}</p>
+                      <p className="text-[11px] text-neutral-gray-500 truncate">
+                        {item.marketName}
+                      </p>
 
                       {/* Odds */}
-                      <div className={clsx(
-                        'text-sm font-bold font-mono',
-                        item.oddsChanged ? 'text-accent-orange' : 'text-brand-text'
-                      )}>
-                        {isSessionItem && item.line !== undefined ? `Line: ${item.line} @ ` : '@ '}
+                      <div
+                        className={clsx(
+                          "text-sm font-bold font-mono",
+                          item.oddsChanged
+                            ? "text-accent-orange"
+                            : "text-brand-text",
+                        )}
+                      >
+                        {isSessionItem && item.line !== undefined
+                          ? `Line: ${item.line} @ `
+                          : "@ "}
                         {Number(item.odds).toFixed(2)}
-                        {item.oddsChanged && <span className="ml-1 text-xs">↕</span>}
+                        {item.oddsChanged && (
+                          <span className="ml-1 text-xs">↕</span>
+                        )}
                       </div>
 
                       {/* Stake input */}
                       <div className="flex items-center gap-1.5 bg-bg-secondary border border-stroke-primary rounded-lg px-2.5 py-2">
-                        <span className="text-brand-text/50 text-sm font-mono shrink-0">₹</span>
+                        <span className="text-brand-text/50 text-sm font-mono shrink-0">
+                          ₹
+                        </span>
                         <input
                           type="number"
                           className="flex-1 bg-transparent text-brand-text text-sm font-mono outline-none min-w-0"
-                          value={item.stake || ''}
+                          value={item.stake || ""}
                           min={10}
                           max={100000}
-                          onChange={(e) => onUpdateStake(item.id, Number(e.target.value))}
+                          onChange={(e) =>
+                            onUpdateStake(item.id, Number(e.target.value))
+                          }
                           placeholder="0"
                         />
                       </div>
@@ -610,7 +765,9 @@ const SheetContent: React.FC<SheetContentProps> = ({
                           <button
                             key={amount}
                             className="text-[11px] bg-bg-light-blue border border-stroke-light hover:bg-brand-primary hover:text-white rounded-md py-1.5 transition-colors font-mono text-brand-text"
-                            onClick={() => onUpdateStake(item.id, (item.stake || 0) + amount)}
+                            onClick={() =>
+                              onUpdateStake(item.id, (item.stake || 0) + amount)
+                            }
                           >
                             +{amount >= 1000 ? `${amount / 1000}K` : amount}
                           </button>
@@ -620,13 +777,23 @@ const SheetContent: React.FC<SheetContentProps> = ({
                       {/* Return / Liability */}
                       <div className="flex justify-between items-center text-xs pt-0.5 border-t border-stroke-light">
                         <span className="text-brand-text/60">
-                          {item.betType === 'BACK' ? 'Potential Return' : 'Liability'}
+                          {item.betType === "BACK"
+                            ? "Potential Return"
+                            : "Liability"}
                         </span>
-                        <span className={clsx(
-                          'font-bold font-mono',
-                          item.betType === 'LAY' ? 'text-accent-red' : 'text-accent-green'
-                        )}>
-                          ₹{(item.betType === 'BACK' ? potentialReturn : liability).toFixed(2)}
+                        <span
+                          className={clsx(
+                            "font-bold font-mono",
+                            item.betType === "LAY"
+                              ? "text-accent-red"
+                              : "text-accent-green",
+                          )}
+                        >
+                          ₹
+                          {(item.betType === "BACK"
+                            ? potentialReturn
+                            : liability
+                          ).toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -639,19 +806,19 @@ const SheetContent: React.FC<SheetContentProps> = ({
       )}
 
       {/* ══════════ MY BETS TAB ══════════ */}
-      {mainTab === 'mybets' && (
+      {mainTab === "mybets" && (
         <>
           {/* Sub-tabs */}
           <div className="flex gap-2 px-3 py-2 bg-bg-card sticky top-0 z-10 border-b border-stroke-light">
-            {(['active', 'settled'] as MyBetsFilter[]).map(f => (
+            {(["active", "settled"] as MyBetsFilter[]).map((f) => (
               <button
                 key={f}
                 onClick={() => setMyBetsFilter(f)}
                 className={clsx(
-                  'flex-1 py-2 rounded-lg text-xs font-bold transition-all capitalize',
+                  "flex-1 py-2 rounded-lg text-xs font-bold transition-all capitalize",
                   myBetsFilter === f
-                    ? 'bg-brand-primary text-white shadow-sm'
-                    : 'bg-bg-light-blue text-neutral-gray-500'
+                    ? "bg-brand-primary text-white shadow-sm"
+                    : "bg-bg-light-blue text-neutral-gray-500",
                 )}
               >
                 {f}
@@ -667,37 +834,59 @@ const SheetContent: React.FC<SheetContentProps> = ({
 
           {!myBetsLoading && bets.length === 0 && (
             <div className="flex flex-col items-center justify-center py-14 gap-2 text-center px-4">
-              <span className="text-3xl">{myBetsFilter === 'active' ? '🎯' : '📋'}</span>
-              <p className="text-neutral-gray-500 text-sm">No {myBetsFilter} bets found</p>
+              <span className="text-3xl">
+                {myBetsFilter === "active" ? "🎯" : "📋"}
+              </span>
+              <p className="text-neutral-gray-500 text-sm">
+                No {myBetsFilter} bets found
+              </p>
             </div>
           )}
 
           {!myBetsLoading && bets.length > 0 && (
             <div className="p-2.5 space-y-2">
               {bets.map((bet, idx) => {
-                const isSession = SESSION_MARKET_TYPES.includes((bet.marketType || '').toLowerCase());
-                const potentialReturn = bet.betType === 'BACK'
-                  ? isSession ? (Number(bet.odds) * Number(bet.stake)) / 100 + Number(bet.stake) : (Number(bet.odds) - 1) * Number(bet.stake) + Number(bet.stake)
-                  : Number(bet.stake);
-                const liability = bet.betType === 'LAY'
-                  ? isSession ? (Number(bet.odds) * Number(bet.stake)) / 100 : (Number(bet.odds) - 1) * Number(bet.stake)
-                  : Number(bet.stake);
-                const statusClass = STATUS_COLORS[bet.status ?? ''] ?? 'text-brand-text/60 bg-bg-light-blue';
+                const isSession = SESSION_MARKET_TYPES.includes(
+                  (bet.marketType || "").toLowerCase(),
+                );
+                const potentialReturn =
+                  bet.betType === "BACK"
+                    ? isSession
+                      ? (Number(bet.odds) * Number(bet.stake)) / 100 +
+                        Number(bet.stake)
+                      : (Number(bet.odds) - 1) * Number(bet.stake) +
+                        Number(bet.stake)
+                    : Number(bet.stake);
+                const liability =
+                  bet.betType === "LAY"
+                    ? isSession
+                      ? (Number(bet.odds) * Number(bet.stake)) / 100
+                      : (Number(bet.odds) - 1) * Number(bet.stake)
+                    : Number(bet.stake);
+                const statusClass =
+                  STATUS_COLORS[bet.status ?? ""] ??
+                  "text-brand-text/60 bg-bg-light-blue";
 
                 return (
                   <div
                     key={bet.betId ?? idx}
                     className={clsx(
-                      'border border-stroke-light border-l-4 rounded-xl overflow-hidden bg-bg-card',
-                      bet.betType === 'BACK' ? 'border-l-odds-back' : 'border-l-odds-lay'
+                      "border border-stroke-light border-l-4 rounded-xl overflow-hidden bg-bg-card",
+                      bet.betType === "BACK"
+                        ? "border-l-odds-back"
+                        : "border-l-odds-lay",
                     )}
                   >
                     <div className="flex items-center justify-between px-2.5 py-2 bg-bg-light-blue border-b border-stroke-light flex-wrap gap-1">
                       <div className="flex items-center gap-1.5">
-                        <span className={clsx(
-                          'text-[10px] font-bold px-1.5 py-0.5 rounded uppercase text-white',
-                          bet.betType === 'BACK' ? 'bg-odds-back' : 'bg-odds-lay'
-                        )}>
+                        <span
+                          className={clsx(
+                            "text-[10px] font-bold px-1.5 py-0.5 rounded uppercase text-white",
+                            bet.betType === "BACK"
+                              ? "bg-odds-back"
+                              : "bg-odds-lay",
+                          )}
+                        >
                           {bet.betType}
                         </span>
                         <span className="text-[11px] text-neutral-gray-500 truncate max-w-[80px]">
@@ -705,30 +894,52 @@ const SheetContent: React.FC<SheetContentProps> = ({
                         </span>
                       </div>
                       {bet.status && (
-                        <span className={clsx('text-[10px] font-bold px-1.5 py-0.5 rounded uppercase', statusClass)}>
+                        <span
+                          className={clsx(
+                            "text-[10px] font-bold px-1.5 py-0.5 rounded uppercase",
+                            statusClass,
+                          )}
+                        >
                           {bet.status}
                         </span>
                       )}
                     </div>
                     <div className="px-2.5 py-2.5">
-                      <p className="text-xs font-semibold text-brand-text mb-2 truncate">{bet.runnerName}</p>
+                      <p className="text-xs font-semibold text-brand-text mb-2 truncate">
+                        {bet.runnerName}
+                      </p>
                       <div className="grid grid-cols-3 gap-1 text-center pt-2 border-t border-stroke-light">
                         {[
-                          { label: 'Odds',  value: `${Number(bet.odds).toFixed(2)}` },
-                          { label: 'Stake', value: `₹${Number(bet.stake).toFixed(2)}` },
                           {
-                            label:   bet.betType === 'BACK' ? 'Return' : 'Liability',
-                            value:   `₹${(bet.betType === 'BACK' ? potentialReturn : liability).toFixed(2)}`,
+                            label: "Odds",
+                            value: `${Number(bet.odds).toFixed(2)}`,
+                          },
+                          {
+                            label: "Stake",
+                            value: `₹${Number(bet.stake).toFixed(2)}`,
+                          },
+                          {
+                            label:
+                              bet.betType === "BACK" ? "Return" : "Liability",
+                            value: `₹${(bet.betType === "BACK" ? potentialReturn : liability).toFixed(2)}`,
                             colored: true,
-                            isLay:   bet.betType === 'LAY',
+                            isLay: bet.betType === "LAY",
                           },
                         ].map(({ label, value, colored, isLay }) => (
                           <div key={label}>
-                            <p className="text-[10px] text-neutral-gray-500 mb-0.5">{label}</p>
-                            <p className={clsx(
-                              'text-xs font-mono font-bold',
-                              colored ? (isLay ? 'text-accent-red' : 'text-accent-green') : 'text-brand-text'
-                            )}>
+                            <p className="text-[10px] text-neutral-gray-500 mb-0.5">
+                              {label}
+                            </p>
+                            <p
+                              className={clsx(
+                                "text-xs font-mono font-bold",
+                                colored
+                                  ? isLay
+                                    ? "text-accent-red"
+                                    : "text-accent-green"
+                                  : "text-brand-text",
+                              )}
+                            >
                               {value}
                             </p>
                           </div>
@@ -745,7 +956,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
     </div>
 
     {/* ── Sticky footer: Place Bets ── */}
-    {mainTab === 'betslip' && !lastResult && betItems.length > 0 && (
+    {mainTab === "betslip" && !lastResult && betItems.length > 0 && (
       <div className="flex-shrink-0 border-t-2 border-stroke-primary bg-bg-card px-3 py-3 space-y-2">
         <div className="flex justify-end">
           <button
@@ -773,18 +984,26 @@ const SheetContent: React.FC<SheetContentProps> = ({
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs">
             <span className="text-brand-text/60">Total Stake</span>
-            <span className="font-mono font-bold text-brand-text">₹{totalStake.toFixed(2)}</span>
+            <span className="font-mono font-bold text-brand-text">
+              ₹{totalStake.toFixed(2)}
+            </span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-brand-text/60">Potential Return</span>
-            <span className="font-mono font-bold text-accent-green">₹{totalReturn.toFixed(2)}</span>
+            <span className="font-mono font-bold text-accent-green">
+              ₹{totalReturn.toFixed(2)}
+            </span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-brand-text/60">Liability</span>
-            <span className={clsx(
-              'font-mono font-bold',
-              totalLiability > (availableBalance ?? 0) ? 'text-accent-red' : 'text-brand-text'
-            )}>
+            <span
+              className={clsx(
+                "font-mono font-bold",
+                totalLiability > (availableBalance ?? 0)
+                  ? "text-accent-red"
+                  : "text-brand-text",
+              )}
+            >
               ₹{totalLiability.toFixed(2)}
             </span>
           </div>
@@ -795,13 +1014,15 @@ const SheetContent: React.FC<SheetContentProps> = ({
           onClick={onPlace}
           disabled={!canSubmit}
           className={clsx(
-            'w-full py-3.5 rounded-xl font-display font-bold text-sm tracking-wide transition-all',
+            "w-full py-3.5 rounded-xl font-display font-bold text-sm tracking-wide transition-all",
             canSubmit
-              ? 'bg-brand-accent text-black hover:opacity-90 active:opacity-80'
-              : 'bg-stroke-light text-neutral-gray-500 cursor-not-allowed'
+              ? "bg-brand-accent text-black hover:opacity-90 active:opacity-80"
+              : "bg-stroke-light text-neutral-gray-500 cursor-not-allowed",
           )}
         >
-          {isSubmitting ? 'Placing...' : `Place ${betItems.length} Bet${betItems.length > 1 ? 's' : ''}`}
+          {isSubmitting
+            ? "Placing..."
+            : `Place ${betItems.length} Bet${betItems.length > 1 ? "s" : ""}`}
         </button>
       </div>
     )}
