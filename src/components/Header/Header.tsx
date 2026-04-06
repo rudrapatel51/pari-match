@@ -51,9 +51,9 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-header bg-brand-primary shadow-betting-card">
+      <header className="fixed top-0 left-0 right-0 z-header bg-bg-secondary">
         {/* ── Top bar ── */}
-        <div className="bg-brand-primary border-b border-stroke-light">
+        <div className="bg-bg-secondary">
           <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6">
             <div className="flex items-center h-11 sm:h-12 text-brand-text text-xs">
               {/* LEFT: Logo */}

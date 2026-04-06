@@ -70,7 +70,8 @@ const Layout: React.FC = () => {
    * isDesktopAccountDrawerOpen → Desktop account settings drawer.
    *                              Opened by hamburger icon next to logo on desktop.
    */
-  const [isDesktopAccountDrawerOpen, setIsDesktopAccountDrawerOpen] = useState(false);
+  const [isDesktopAccountDrawerOpen, setIsDesktopAccountDrawerOpen] =
+    useState(false);
 
   /**
    * isMobileFilterOpen → Left sidebar filter drawer (LeftSidebar component).
@@ -99,10 +100,17 @@ const Layout: React.FC = () => {
 
   // Listen for 'toggleDesktopAccountDrawer' event dispatched by Header hamburger
   useEffect(() => {
-    const handleToggleAccountDrawer = () => setIsDesktopAccountDrawerOpen((prev) => !prev);
-    window.addEventListener("toggleDesktopAccountDrawer", handleToggleAccountDrawer);
+    const handleToggleAccountDrawer = () =>
+      setIsDesktopAccountDrawerOpen((prev) => !prev);
+    window.addEventListener(
+      "toggleDesktopAccountDrawer",
+      handleToggleAccountDrawer,
+    );
     return () =>
-      window.removeEventListener("toggleDesktopAccountDrawer", handleToggleAccountDrawer);
+      window.removeEventListener(
+        "toggleDesktopAccountDrawer",
+        handleToggleAccountDrawer,
+      );
   }, []);
 
   // Close all mobile menus when route changes
@@ -139,7 +147,7 @@ const Layout: React.FC = () => {
   );
 
   return (
-    <div className="bg-bg-primary flex flex-col">
+    <div className="bg-brand-primary-dark flex flex-col">
       <Header
         isMobileNavOpen={isMobileNavOpen}
         onMobileNavToggle={() => setIsMobileNavOpen((prev) => !prev)}

@@ -7,6 +7,7 @@ import {
   FiChevronDown,
   FiChevronUp,
 } from "react-icons/fi";
+import { Ticket, Clock4 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import clsx from "clsx";
 import LoginForm from "../Auth/LoginForm";
@@ -36,7 +37,7 @@ const STATUS_COLORS: Record<string, string> = {
   VOID: "text-brand-text/60 bg-bg-light-blue",
 };
 type MainTab = "betslip" | "mybets";
-type MyBetsFilter = "active" | "settled";
+type MyBetsFilter = "open" | "settled";
 
 interface RightSidebarProps {
   isCollapsed: boolean;
@@ -52,7 +53,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
   const isEventPage = /\/betting\/event\//.test(location.pathname);
 
   const [mainTab, setMainTab] = useState<MainTab>("betslip");
-  const [myBetsFilter, setMyBetsFilter] = useState<MyBetsFilter>("active");
+  const [myBetsFilter, setMyBetsFilter] = useState<MyBetsFilter>("open");
   const [myBetsLoading, setMyBetsLoading] = useState(false);
   const [acceptOddsChanges, setAcceptOddsChanges] = useState(false);
   const [tvExpanded, setTvExpanded] = useState(false);
@@ -241,7 +242,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
                 "fixed inset-x-0 bottom-0 z-50 md:hidden",
                 "h-[92vh]", // 92% height — shows a sliver of the page behind
                 "flex flex-col",
-                "bg-bg-card",
+                "bg-bg-secondary",
                 "rounded-t-2xl", // rounded top corners for sheet feel
                 "shadow-[0_-8px_32px_rgba(0,0,0,0.3)]",
               )}
@@ -287,7 +288,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
             </div>
 
             {/* DESKTOP sidebar — normal right panel */}
-            <div className="hidden md:flex relative h-full flex-col bg-bg-card border-l-2 border-bg-secondary overflow-hidden">
+            <div className="hidden md:flex relative h-full flex-col bg-bg-secondary border-l-2 border-bg-secondary overflow-hidden">
               <SheetContent
                 mainTab={mainTab}
                 setMainTab={setMainTab}
@@ -358,7 +359,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
           />
 
           {/* Mobile bottom sheet — empty betslip state */}
-          <div className="fixed inset-x-0 bottom-0 z-50 h-[85vh] flex flex-col bg-bg-card rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] md:hidden">
+          <div className="fixed inset-x-0 bottom-0 z-50 h-[85vh] flex flex-col bg-bg-secondary rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] md:hidden">
             <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0">
               <div className="w-10 h-1 rounded-full bg-stroke-light" />
             </div>
@@ -366,7 +367,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
           </div>
 
           {/* Desktop sidebar — empty betslip state */}
-          <div className="hidden md:block relative h-full bg-bg-card border-l-2 border-bg-secondary">
+          <div className="hidden md:block relative h-full bg-bg-secondary border-l-2 border-bg-secondary">
             <EmptyBetslipUnauthenticated onClose={onToggleCollapse} />
           </div>
         </>
@@ -386,7 +387,7 @@ const EmptyBetslipUnauthenticated: React.FC<
 > = ({ onClose }) => (
   <div className="flex flex-col h-full w-full">
     {/* Header with Betslip title */}
-    <div className="px-4 py-3 border-b border-bg-secondary bg-bg-card flex-shrink-0 flex items-center justify-center">
+    <div className="px-4 py-3 bg-bg-secondary flex-shrink-0 flex items-center justify-center mt-2">
       <h2 className="text-brand-text font-semibold text-base">Betslip</h2>
     </div>
 
@@ -394,22 +395,7 @@ const EmptyBetslipUnauthenticated: React.FC<
     <div className="flex-1 flex flex-col items-center justify-start pt-12 p-6 text-center">
       {/* Ticket Icon */}
       <div className="mb-6">
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-neutral-gray-500"
-        >
-          <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
-          <path d="M13 5v2" />
-          <path d="M13 17v2" />
-          <path d="M13 11v2" />
-        </svg>
+        <Ticket size={48} className="text-neutral-gray-500" />
       </div>
 
       {/* Main text */}
@@ -539,17 +525,17 @@ const SheetContent: React.FC<SheetContentProps> = ({
 }) => (
   <div className="flex flex-col h-full min-h-0">
     {/* ── BET SLIP | MY BETS tabs ── */}
-    <div className="flex gap-2 px-3 py-2 border-b-2 border-stroke-light bg-bg-card flex-shrink-0">
+    <div className="flex gap-2 px-3 py-2 bg-bg-secondary flex-shrink-0 mt-2">
       <button
         onClick={() => setMainTab("betslip")}
         className={clsx(
-          "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all",
+          "flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-bold transition-all",
           mainTab === "betslip"
             ? "bg-brand-primary text-white shadow-sm"
-            : "bg-bg-light-blue text-neutral-gray-500",
+            : "text-neutral-gray-400 hover:bg-bg-card transition-colors",
         )}
       >
-        BET SLIP
+        Betslip
         {betItems.length > 0 && (
           <span className="bg-brand-accent text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
             {betItems.length}
@@ -559,13 +545,13 @@ const SheetContent: React.FC<SheetContentProps> = ({
       <button
         onClick={() => setMainTab("mybets")}
         className={clsx(
-          "flex-1 py-2 rounded-lg text-xs font-bold transition-all",
+          "flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all",
           mainTab === "mybets"
             ? "bg-brand-primary text-white shadow-sm"
-            : "bg-bg-light-blue text-neutral-gray-500",
+            : "text-neutral-gray-400 hover:bg-bg-card transition-colors",
         )}
       >
-        MY BETS
+        My bets
       </button>
     </div>
 
@@ -643,7 +629,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
           {/* Empty */}
           {!lastResult && betItems.length === 0 && (
             <div className="flex flex-col items-center justify-center h-48 gap-3 p-6 text-center">
-              <span className="text-4xl">🎯</span>
+              <Ticket size={48} className="text-neutral-gray-500" />
               <p className="text-xs font-semibold text-neutral-gray-500 uppercase tracking-wider">
                 Your Bets
               </p>
@@ -809,16 +795,16 @@ const SheetContent: React.FC<SheetContentProps> = ({
       {mainTab === "mybets" && (
         <>
           {/* Sub-tabs */}
-          <div className="flex gap-2 px-3 py-2 bg-bg-card sticky top-0 z-10 border-b border-stroke-light">
-            {(["active", "settled"] as MyBetsFilter[]).map((f) => (
+          <div className="flex gap-2 px-3 py-2 bg-bg-secondary sticky top-0 z-10">
+            {(["open", "settled"] as MyBetsFilter[]).map((f) => (
               <button
                 key={f}
                 onClick={() => setMyBetsFilter(f)}
                 className={clsx(
-                  "flex-1 py-2 rounded-lg text-xs font-bold transition-all capitalize",
+                  "flex-1 py-2.5 rounded-lg text-sm font-bold transition-all capitalize",
                   myBetsFilter === f
-                    ? "bg-brand-primary text-white shadow-sm"
-                    : "bg-bg-light-blue text-neutral-gray-500",
+                    ? "bg-accent-olive text-neutral-gray-900 shadow-sm hover:bg-accent-olive-dark"
+                    : "text-neutral-gray-400 hover:bg-bg-card transition-colors",
                 )}
               >
                 {f}
@@ -834,9 +820,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
 
           {!myBetsLoading && bets.length === 0 && (
             <div className="flex flex-col items-center justify-center py-14 gap-2 text-center px-4">
-              <span className="text-3xl">
-                {myBetsFilter === "active" ? "🎯" : "📋"}
-              </span>
+              <Clock4 size={48} className="text-neutral-gray-500" />
               <p className="text-neutral-gray-500 text-sm">
                 No {myBetsFilter} bets found
               </p>
