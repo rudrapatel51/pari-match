@@ -11,7 +11,7 @@ import { BETTING_SPORT_IDS } from '../../api/endpoints';
 import EventMatchCard from '../shared/EventMatchCard';
 import SportsEventsSection from '../shared/SportsEventsSection';
 import LeagueCompetitionCard from '../shared/LeagueCompetitionCard';
-import SharedEventListRow from '../shared/EventListRow';
+import EventCardGrid from '../shared/EventCardGrid';
 
 interface CricketRunner {
     runnerId: number;
@@ -162,9 +162,7 @@ const CricketPage: React.FC = () => {
     const fetchEvents = useCallback(async () => {
         try {
             const res = await bettingApi.getEventsBySport(BETTING_SPORT_IDS.cricket) as any;
-            // bettingClient interceptor returns response.data (the HTTP body)
-            // So res = { success: true, data: [...], source: "cache" }
-            const data: CricketEvent[] = res?.data || [];
+            const data: CricketEvent[] = Array.isArray(res?.data) ? res.data : [];
             if (Array.isArray(data)) {
                 setEvents(data.filter(e => !e.isGameOver));
             }
@@ -358,40 +356,7 @@ const CricketPage: React.FC = () => {
 
                 {/* Event list */}
                 <div className="bg-bg-white">
-                    {loading ? (
-                        <div className="px-3 pt-3 pb-4 space-y-2">
-                            {[...Array(6)].map((_, i) => (
-                                <div key={i} className="h-14 bg-bg-light-blue animate-pulse rounded-lg" />
-                            ))}
-                        </div>
-                    ) : searchedEvents.length === 0 ? (
-                        <div className="text-center py-16 text-neutral-gray-500">
-                            <span className="text-5xl block mb-3">🏏</span>
-                            <p className="text-sm font-medium">No matches found</p>
-                            <p className="text-xs mt-1">
-                                {searchQuery ? 'Try a different search term' : 'No events for this filter'}
-                            </p>
-                        </div>
-                    ) : (
-                        Object.entries(leagueGroups).map(([league, leagueEvents]) => (
-                            <div key={league}>
-                                {/* League sub-header with left accent */}
-                                <div className="flex items-center gap-2 px-4 py-2 bg-bg-light-blue border-b border-stroke-light border-l-4 border-l-brand-primary sticky top-0 z-10">
-                                    <span className="text-accent-yellow text-xs">🏏</span>
-                                    <span className="text-xs font-bold text-neutral-gray-800 flex-1 truncate">{league}</span>
-                                    <span className="text-[10px] text-neutral-gray-500 flex-shrink-0">
-                                        {leagueEvents.length} {leagueEvents.length === 1 ? 'match' : 'matches'}
-                                    </span>
-                                </div>
-                                {/* Event rows */}
-                                <div className="divide-y divide-stroke-light">
-                                    {leagueEvents.map((e, idx) => (
-                                        <SharedEventListRow key={e._id} event={e} isAlternate={idx % 2 === 1} />
-                                    ))}
-                                </div>
-                            </div>
-                        ))
-                    )}
+                    <EventCardGrid events={searchedEvents} groupByLeague={true} loading={loading} />
                 </div>
             </div>
         </div>

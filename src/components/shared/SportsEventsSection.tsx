@@ -331,9 +331,10 @@ const SportsEventsSection: React.FC<SportsEventsSectionProps> = ({
         setLoading(true);
         try {
             const res: any = await bettingApi.getEventsBySport(sportId);
-            const raw = Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : [];
-            setEvents(raw.filter((e: SportEvent) => !e.isGameOver));
-        } catch {
+            const events = Array.isArray(res?.data) ? res.data : [];
+            setEvents(events.filter((e: SportEvent) => !e.isGameOver));
+        } catch (err) {
+            console.error('Error fetching events:', err);
             setEvents([]);
         } finally {
             setLoading(false);

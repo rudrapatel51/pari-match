@@ -114,6 +114,8 @@ export default function BettingEventPage() {
 
     // Collapsed state per section type — identical to old-code collapsedSections
     const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+    const [loadingEvent, setLoadingEvent] = useState(false);
+    const [loadingMarkets, setLoadingMarkets] = useState(false);
 
     const toggleSection = (marketType: string) => {
         setCollapsedSections((prev) => ({ ...prev, [marketType]: !prev[marketType] }));
@@ -137,19 +139,13 @@ export default function BettingEventPage() {
     const fetchMarkets = useCallback(
         async (eid: string) => {
             try {
-                const res: any = await bettingApi.getEventMarkets(eid);
-                const data = res?.data ?? res;
-                const g = data?.grouped ?? {};
-                const ids = data?.marketIds ?? [];
-
-                setMarkets(g, ids);
-
-                // Subscribe WebSocket — mirrors marketsSlice which calls bettingWsService.subscribeToMarkets
-                if (ids.length > 0) {
-                    bettingSocketService.subscribeToMarkets(ids);
+                const res = await bettingApi.getEventMarkets(eid) as any;
+                const marketsData = res?.data;
+                if (marketsData) {
+                    setMarkets(marketsData.grouped, marketsData.marketIds);
                 }
-            } catch {
-                /* silent — page still renders with empty markets */
+            } finally {
+                setLoadingMarkets(false);
             }
         },
         [setMarkets]
@@ -158,35 +154,35 @@ export default function BettingEventPage() {
     useEffect(() => {
         if (!eventId) return;
 
-        // 1) Fetch event details — mirrors old-code dispatch(fetchEventById(eventId))
-        bettingApi.getEventById(eventId)
-            .then((res: any) => {
-                const d = res?.data ?? res;
-                setCurrentEvent(d);
-            })
-            .catch(() => { });
-
-        // 2) Fetch markets + subscribe WS — mirrors dispatch(fetchEventMarkets(eventId))
-        fetchMarkets(eventId);
-
-        // 3) Connect /events WS namespace — mirrors bettingWsService.connectEvent(eventId)
-        bettingSocketService.connectEvent(eventId);
-
-        // 4) Listen for markets:new browser event from socket service
-        //    (fires when server emits 'markets:new', so we re-fetch all markets)
-        const handleMarketsNew = (e: Event) => {
-            const detail = (e as CustomEvent).detail;
-            if (detail?.eventId === eventId) fetchMarkets(eventId);
+        const fetchEventDetail = async () => {
+            try {
+                const res = await bettingApi.getEventById(eventId) as any;
+                const eventData = res?.data;
+                if (eventData) {
+                    setCurrentEvent({
+                        eventId: eventData.eventId,
+                        name: eventData.name,
+                        league: eventData.league,
+                        startTime: eventData.startTime,
+                        matchStatus: eventData.matchStatus,
+                        isInPlay: eventData.isInPlay,
+                    });
+                    setLoadingEvent(false);
+                    fetchMarkets(eventId);
+                }
+            } catch (error) {
+                console.error('Failed to fetch event:', error);
+                setLoadingEvent(false);
+            }
         };
-        window.addEventListener('betting:markets-new', handleMarketsNew);
 
-        // Cleanup — mirrors old-code leaveEvent + clearMarkets
+        setLoadingEvent(true);
+        fetchEventDetail();
+
+        // Cleanup
         return () => {
-            bettingSocketService.leaveEvent(eventId);
-            bettingSocketService.unsubscribeFromMarkets(marketIds);
             clearMarkets();
             setCurrentEvent(null);
-            window.removeEventListener('betting:markets-new', handleMarketsNew);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [eventId]);
@@ -226,24 +222,44 @@ export default function BettingEventPage() {
         <div className="ev-page flex flex-col min-h-full">
             {/* ── Event header bar (ev-top-bar) — dynamic primary color ─ */}
             <div
-                className="sticky top-0 z-20 flex items-center gap-3 px-3 py-3 text-white shadow-betting-card bg-brand-primary"
+                className="sticky top-0 z-20 px-4 py-3 text-white bg-brand-primary"
             >
-                <button
-                    onClick={() => navigate(-1)}
-                    className="text-white/80 hover:text-white transition-colors shrink-0 p-0.5"
-                    aria-label="Go back"
-                >
-                    <FiArrowLeft size={20} />
-                </button>
-                <h1 className="font-display text-sm font-semibold flex-1 truncate leading-tight">
-                    {currentEvent.name}
-                </h1>
-                {/* Live indicator */}
-                {currentEvent.isInPlay && (
-                    <span className="shrink-0 text-[10px] bg-accent-red text-white font-bold px-1.5 py-0.5 rounded animate-pulse">
-                        LIVE
-                    </span>
-                )}
+                <div className="flex items-center justify-between">
+                    {/* Back button left */}
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="text-white/80 hover:text-white transition-colors p-1 shrink-0"
+                        aria-label="Go back"
+                    >
+                        <FiArrowLeft size={24} />
+                    </button>
+
+                    {/* Centered content */}
+                    <div className="flex flex-col items-center justify-center flex-1">
+                        {/* Main title */}
+                        <h1 className="font-display text-lg sm:text-xl font-bold leading-tight">
+                            {currentEvent.name}
+                        </h1>
+
+                        {/* League / Subtitle */}
+                        {currentEvent.league && (
+                            <p className="text-xs sm:text-sm text-white/70">
+                                {currentEvent.league}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* LIVE indicator on the right if applicable */}
+                    {currentEvent.isInPlay && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/20 border border-red-500/40 rounded-full shrink-0">
+                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            <span className="text-xs font-bold text-red-400">LIVE</span>
+                        </span>
+                    )}
+                    {!currentEvent.isInPlay && (
+                        <div className="w-6"></div>
+                    )}
+                </div>
             </div>
 
 

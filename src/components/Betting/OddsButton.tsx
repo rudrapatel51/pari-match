@@ -5,7 +5,7 @@ interface OddsButtonProps {
     odds?: number | string | null;
     volume?: number | string | null;
     type: 'back' | 'lay' | 'no' | 'yes';
-    size?: 'sm' | 'md';
+    size?: 'sm' | 'md' | 'lg';
     active?: boolean;
     suspended?: boolean;
     onClick?: () => void;
@@ -84,12 +84,14 @@ export default function OddsButton({
                 'relative flex flex-col items-center justify-center rounded transition-all duration-150 font-mono select-none',
                 // Size
                 size === 'sm'
-                    ? 'px-2 py-1.5 min-w-[40px] text-[11px]'
-                    : 'px-3 py-2 min-w-[54px] text-sm',
+                    ? 'px-5 py-3 min-w-[110px] text-[13px]'
+                    : size === 'lg'
+                    ? 'px-10 py-3 min-w-[240px] text-base'
+                    : 'px-6 py-3 min-w-[128px] text-base',
                 // Colour
                 isBullish
-                    ? 'bg-odds-back text-neutral-gray-900 hover:brightness-110'
-                    : 'bg-odds-lay  text-neutral-gray-900 hover:brightness-110',
+                    ? 'bg-odds-back text-sky-400 hover:bg-neutral-gray-100 hover:text-white'
+                    : 'bg-odds-lay text-sky-400 hover:bg-neutral-gray-100 hover:text-white',
                 // Active selection solid fill
                 active && '!bg-brand-accent !text-black shadow-odds-hover scale-95',
                 // Flash states — override bg momentarily

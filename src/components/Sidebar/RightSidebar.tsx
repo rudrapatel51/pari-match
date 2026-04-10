@@ -18,6 +18,81 @@ import { useToastStore } from "../../store/toastStore";
 import { bettingApi } from "../../api/bettingClient";
 import type { PlacedBet } from "../../types/domain";
 
+// ── MOCK DATA COMMENTED OUT — Using real API instead ──────
+/* MOCK DATA
+const MOCK_BETSLIP_ITEMS = [
+  {
+    id: "bet-1",
+    eventId: "evt-1",
+    marketId: "mkt-1",
+    marketName: "Match Winner",
+    marketType: "bookmaker",
+    runnerId: "run-1",
+    runnerName: "India",
+    betType: "BACK" as const,
+    odds: 1.95,
+    stake: 500,
+    line: undefined,
+    oddsChanged: false,
+  },
+  {
+    id: "bet-2",
+    eventId: "evt-1",
+    marketId: "mkt-2",
+    marketName: "Total Runs",
+    marketType: "session",
+    runnerId: "run-2",
+    runnerName: "Over 230.5",
+    betType: "LAY" as const,
+    odds: 2.5,
+    stake: 300,
+    line: 230.5,
+    oddsChanged: false,
+  },
+];
+
+const MOCK_ACTIVE_BETS: PlacedBet[] = [
+  {
+    betId: "placed-1",
+    runnerName: "India",
+    marketType: "bookmaker",
+    betType: "BACK",
+    odds: 1.95,
+    stake: 500,
+    status: "MATCHED",
+  },
+  {
+    betId: "placed-2",
+    runnerName: "Wickets Falls",
+    marketType: "session",
+    betType: "BACK",
+    odds: 1.5,
+    stake: 1000,
+    status: "PENDING",
+  },
+];
+
+const MOCK_SETTLED_BETS: PlacedBet[] = [
+  {
+    betId: "settled-1",
+    runnerName: "Pakistan",
+    marketType: "bookmaker",
+    betType: "LAY",
+    odds: 2.1,
+    stake: 250,
+    status: "WON",
+  },
+  {
+    betId: "settled-2",
+    runnerName: "Sixes",
+    marketType: "fancy",
+    betType: "LAY",
+    odds: 3.5,
+    stake: 200,
+    status: "LOST",
+  },
+];
+*/
 const QUICK_STAKES = [100, 500, 1000, 5000];
 const SESSION_MARKET_TYPES = [
   "session",
@@ -127,6 +202,29 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
 
   const bets: PlacedBet[] = myBetsFilter === "open" ? activeBets : settledBets;
 
+  // Initialize mock data on mount — COMMENTED OUT
+  useEffect(() => {
+    /* MOCK DATA INITIALIZATION COMMENTED OUT
+    if (activeBets.length === 0) setActiveBets(MOCK_ACTIVE_BETS);
+    if (settledBets.length === 0) setSettledBets(MOCK_SETTLED_BETS);
+    // Add mock betslip items if store is empty and user is authenticated
+    if (betItems.length === 0 && isAuthenticated) {
+      const { addToBetSlip, updateStake } = useBettingStore.getState();
+      MOCK_BETSLIP_ITEMS.forEach((item) => {
+        const { id, stake, ...rest } = item;
+        addToBetSlip(rest);
+      });
+      // Update stakes after items are added
+      setTimeout(() => {
+        const { betItems: newBetItems } = useBettingStore.getState();
+        MOCK_BETSLIP_ITEMS.forEach((mockItem, idx) => {
+          if (newBetItems[idx]) updateStake(newBetItems[idx].id, mockItem.stake);
+        });
+      }, 0);
+    }
+    */
+  }, [isAuthenticated, betItems.length]);
+
   const handlePlaceBets = async () => {
     if (!canSubmit) return;
     setSubmitting(true);
@@ -158,6 +256,12 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
           return bettingApi.placeBet(payload);
         }),
       );
+      /* MOCK RESPONSE COMMENTED OUT
+      const results = betItems.map((bet, idx) => ({
+        betId: `mock-placed-${Date.now()}-${idx}`,
+        status: "MATCHED",
+      }));
+      */
       setLastResult(results);
       useBettingStore.getState().clearBetSlip();
       useToastStore
@@ -187,6 +291,9 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
       })
       .catch(() => useToastStore.getState().error("Failed to load bets"))
       .finally(() => setMyBetsLoading(false));
+    /* MOCK DATA CALLS COMMENTED OUT
+    // Using mock data instead
+    */
   };
 
   useEffect(() => {
@@ -251,13 +358,16 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
 
             <div
               className={clsx(
-                // ── MOBILE/TABLET: half-height bottom sheet ──
-                "fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] z-50 xl:hidden",
-                "h-[50vh] max-h-[520px]",
+                // ── MOBILE/TABLET: bottom sheet extends down to cover nav when open ──
+                "fixed inset-x-0 z-50 xl:hidden",
                 "flex flex-col",
                 "bg-bg-secondary",
                 "rounded-t-2xl",
                 "shadow-[0_-8px_32px_rgba(0,0,0,0.3)]",
+                // Dynamically position: when open use smaller height, collapsed state uses original
+                !isCollapsed
+                  ? "bottom-0 top-auto max-h-[75vh]"
+                  : "bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] h-[50vh] max-h-[520px]",
               )}
             >
               {/* Mobile dropdown header */}
@@ -388,7 +498,15 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
           />
 
           {/* Mobile bottom sheet — empty betslip state */}
-          <div className="fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] z-50 h-[50vh] max-h-[520px] flex flex-col bg-bg-secondary rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] xl:hidden">
+          <div
+            className={clsx(
+              "fixed inset-x-0 z-50 flex flex-col bg-bg-secondary rounded-t-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.3)] xl:hidden",
+              // Dynamically position: when open use smaller height, collapsed state uses original
+              !isCollapsed
+                ? "bottom-0 top-auto max-h-[75vh]"
+                : "bottom-[calc(56px+env(safe-area-inset-bottom,0px)+8px)] h-[50vh] max-h-[520px]",
+            )}
+          >
             <button
               onClick={onToggleCollapse}
               className="flex items-center justify-between px-4 py-2.5 border-b border-stroke-light bg-bg-card"
@@ -677,7 +795,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
 
           {/* Bet cards */}
           {!lastResult && betItems.length > 0 && (
-            <div className="p-2.5 space-y-2">
+            <div className="flex flex-row xl:flex-col gap-2 px-2.5 py-2.5 overflow-x-auto xl:overflow-visible scrollbar-hide">
               {betItems.map((item) => {
                 const isSessionItem = SESSION_MARKET_TYPES.includes(
                   (item.marketType || "").toLowerCase(),
@@ -699,7 +817,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
                   <div
                     key={item.id}
                     className={clsx(
-                      "rounded-xl border border-l-4 overflow-hidden",
+                      "rounded-xl border border-l-4 overflow-hidden flex-shrink-0 xl:flex-shrink min-w-[260px] xl:min-w-0",
                       item.oddsChanged
                         ? "border-accent-orange border-l-accent-orange"
                         : item.betType === "BACK"
@@ -864,7 +982,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
           )}
 
           {!myBetsLoading && bets.length > 0 && (
-            <div className="p-2.5 space-y-2">
+            <div className="flex flex-row xl:flex-col gap-2 px-2.5 py-2.5 overflow-x-auto xl:overflow-visible scrollbar-hide">
               {bets.map((bet, idx) => {
                 const isSession = SESSION_MARKET_TYPES.includes(
                   (bet.marketType || "").toLowerCase(),
@@ -891,7 +1009,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
                   <div
                     key={bet.betId ?? idx}
                     className={clsx(
-                      "border border-stroke-light border-l-4 rounded-xl overflow-hidden bg-bg-card",
+                      "border border-stroke-light border-l-4 rounded-xl overflow-hidden bg-bg-card flex-shrink-0 xl:flex-shrink min-w-[290px] xl:min-w-0",
                       bet.betType === "BACK"
                         ? "border-l-odds-back"
                         : "border-l-odds-lay",

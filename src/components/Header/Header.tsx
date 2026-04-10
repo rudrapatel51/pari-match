@@ -17,6 +17,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useNotificationStore } from "../../store/notificationStore";
 import MobileNavDrawer from "./MobileNavDrawer";
+import ProfileDropdown from "./ProfileDropdown";
 
 interface HeaderProps {
   isMobileNavOpen?: boolean;
@@ -147,29 +148,7 @@ const Header: React.FC<HeaderProps> = ({
                     </button>
                   </>
                 ) : (
-                  <>
-                    {/* Spin & Win blinking icon */}
-                    <button
-                      onClick={() => navigate("/spin-win")}
-                      aria-label="Spin & Win"
-                      title="Spin & Win"
-                      className="relative flex items-center justify-center w-9 h-9 rounded-full text-brand-text hover:bg-bg-light-blue transition-colors"
-                    >
-                      <span
-                        className="text-xl leading-none select-none"
-                        style={{
-                          animation:
-                            "sw-header-blink 1.4s ease-in-out infinite",
-                        }}
-                      >
-                        🎰
-                      </span>
-                      {/* Ping dot */}
-                      <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-yellow-400">
-                        <span className="absolute inset-0 rounded-full bg-yellow-400 animate-ping opacity-75" />
-                      </span>
-                    </button>
-
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
                     {/* Notification bell */}
                     <button
                       onClick={() => navigate("/notification")}
@@ -183,41 +162,38 @@ const Header: React.FC<HeaderProps> = ({
                         </span>
                       )}
                     </button>
-                    <button
-                      onClick={() => navigate("/my-account")}
-                      className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-primary hover:bg-brand-primary-light transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
-                      aria-label="Account"
-                      title="My Account"
-                    >
-                      <FiUser className="w-5 h-5 text-white" />
-                    </button>
+
+                    {/* Account — Desktop only */}
+                    <div className="hidden lg:flex">
+                      <ProfileDropdown />
+                    </div>
 
                     {/* Balance Button with Currency Icon */}
                     <button
                       onClick={() => navigate("/wallet")}
-                      className="hidden md:flex items-center gap-2 px-3 py-2 bg-bg-secondary hover:bg-bg-light-blue text-white transition-colors"
+                      className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-bg-secondary hover:bg-bg-light-blue text-white transition-colors rounded"
                       title="Balance & Wallet"
                     >
                       {/* Currency Circle */}
-                      <div className="flex items-center justify-center w-6 h-6 bg-accent-yellow rounded-full text-black flex-shrink-0">
-                        <IndianRupee size={12} strokeWidth={3} />
+                      <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 bg-accent-yellow rounded-full text-black flex-shrink-0">
+                        <IndianRupee size={10} strokeWidth={3} />
                       </div>
                       {/* Balance Amount */}
-                      <span className="text-sm font-bold text-brand-text">
+                      <span className="text-xs sm:text-sm font-bold text-brand-text">
                         {user?.balance?.toFixed(2) || "0.00"}
                       </span>
-                      <FiChevronDown className="w-4 h-4 text-brand-text opacity-70" />
+                      <FiChevronDown className="hidden sm:block w-4 h-4 text-brand-text opacity-70" />
                     </button>
 
                     {/* Deposit Button */}
                     <button
                       onClick={() => navigate("/deposit")}
-                      className="hidden md:flex items-center gap-2 bg-accent-green hover:opacity-90 text-black font-bold py-2 px-4 rounded transition-colors"
+                      className="flex items-center gap-1.5 sm:gap-2 bg-accent-green hover:opacity-90 text-black font-bold py-1.5 sm:py-2 px-2 sm:px-4 rounded text-xs sm:text-sm transition-colors"
                     >
-                      <CirclePlus size={18} />
-                      Deposit
+                      <CirclePlus size={16} />
+                      <span>Deposit</span>
                     </button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

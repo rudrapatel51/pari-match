@@ -303,7 +303,7 @@ function BetfairMarket({
     market, runnerOddsMap, oddsData, handleOddsClick, isRunnerInSlip, collapsed, setCollapsed,
 }: any) {
     return (
-        <div className="bg-bg-card rounded shadow-betting-card mb-3 overflow-hidden">
+        <div className="bg-black rounded shadow-betting-card mb-3 overflow-hidden">
             <MarketHeader
                 market={market}
                 collapsed={collapsed}
@@ -317,23 +317,25 @@ function BetfairMarket({
                         const ro = runnerOddsMap[runner.runnerId] ?? {};
                         const overlay = getSuspensionOverlay(ro, oddsData);
                         return (
-                            <div key={runner.runnerId} className="flex items-center px-2 py-2 gap-1.5">
+                            <div key={runner.runnerId} className="flex flex-col px-3 py-3 gap-3 border-b border-stroke-light last:border-b-0">
                                 {/* Runner name */}
-                                <div className="flex-1 flex flex-col gap-0.5 min-w-0">
-                                    <span className="text-sm font-medium text-brand-text truncate">
-                                        {runner.name || `Runner ${runner.runnerId}`}
-                                    </span>
-                                </div>
-                                {/* Odds cells */}
-                                <div className="relative flex gap-0.5 shrink-0">
+                                <span className="text-sm font-medium text-brand-text">
+                                    {runner.name || `Runner ${runner.runnerId}`}
+                                </span>
+                                {/* Odds cells below - stretch full width */}
+                                <div className="relative flex gap-2 shrink-0 w-full">
                                     {overlay ? (
                                         /* ── Full-width suspension bar across all 6 cells ── */
-                                        <div className="relative flex gap-0.5">
+                                        <div className="relative flex gap-1 w-full">
                                             {[ro.b3, ro.b2, ro.b1].map((o, i) => (
-                                                <OddsButton key={`b${i}`} odds={o} type="back" size="sm" suspended />
+                                                <div key={`b${i}`} className="flex-1 min-w-0">
+                                                    <OddsButton odds={o} type="back" size="sm" suspended />
+                                                </div>
                                             ))}
                                             {[ro.l1, ro.l2, ro.l3].map((o, i) => (
-                                                <OddsButton key={`l${i}`} odds={o} type="lay" size="sm" suspended />
+                                                <div key={`l${i}`} className="flex-1 min-w-0">
+                                                    <OddsButton odds={o} type="lay" size="sm" suspended />
+                                                </div>
                                             ))}
                                             <div className="absolute inset-0 flex items-center justify-center z-10">
                                                 <SuspensionOverlay text={overlay} />
@@ -342,37 +344,49 @@ function BetfairMarket({
                                     ) : (
                                         <>
                                             {/* 3 Back (light → bold) */}
-                                            <OddsButton
-                                                odds={ro.b3} volume={ro.br3} type="back" size="sm"
-                                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                                                onClick={() => handleOddsClick(runner, 'BACK', ro.b3)}
-                                            />
-                                            <OddsButton
-                                                odds={ro.b2} volume={ro.br2} type="back" size="sm"
-                                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                                                onClick={() => handleOddsClick(runner, 'BACK', ro.b2)}
-                                            />
-                                            <OddsButton
-                                                odds={ro.b1 ?? ro.b} volume={ro.br1 ?? ro.br} type="back" size="md"
-                                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                                                onClick={() => handleOddsClick(runner, 'BACK', ro.b1 ?? ro.b)}
-                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <OddsButton
+                                                    odds={ro.b3} volume={ro.br3} type="back" size="md"
+                                                    active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                                    onClick={() => handleOddsClick(runner, 'BACK', ro.b3)}
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <OddsButton
+                                                    odds={ro.b2} volume={ro.br2} type="back" size="md"
+                                                    active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                                    onClick={() => handleOddsClick(runner, 'BACK', ro.b2)}
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <OddsButton
+                                                    odds={ro.b1 ?? ro.b} volume={ro.br1 ?? ro.br} type="back" size="md"
+                                                    active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                                    onClick={() => handleOddsClick(runner, 'BACK', ro.b1 ?? ro.b)}
+                                                />
+                                            </div>
                                             {/* 3 Lay (bold → light) */}
-                                            <OddsButton
-                                                odds={ro.l1 ?? ro.l} volume={ro.lr1 ?? ro.lr} type="lay" size="md"
-                                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                                                onClick={() => handleOddsClick(runner, 'LAY', ro.l1 ?? ro.l)}
-                                            />
-                                            <OddsButton
-                                                odds={ro.l2} volume={ro.lr2} type="lay" size="sm"
-                                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                                                onClick={() => handleOddsClick(runner, 'LAY', ro.l2)}
-                                            />
-                                            <OddsButton
-                                                odds={ro.l3} volume={ro.lr3} type="lay" size="sm"
-                                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                                                onClick={() => handleOddsClick(runner, 'LAY', ro.l3)}
-                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <OddsButton
+                                                    odds={ro.l1 ?? ro.l} volume={ro.lr1 ?? ro.lr} type="lay" size="md"
+                                                    active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                                    onClick={() => handleOddsClick(runner, 'LAY', ro.l1 ?? ro.l)}
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <OddsButton
+                                                    odds={ro.l2} volume={ro.lr2} type="lay" size="md"
+                                                    active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                                    onClick={() => handleOddsClick(runner, 'LAY', ro.l2)}
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <OddsButton
+                                                    odds={ro.l3} volume={ro.lr3} type="lay" size="md"
+                                                    active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                                    onClick={() => handleOddsClick(runner, 'LAY', ro.l3)}
+                                                />
+                                            </div>
                                         </>
                                     )}
                                 </div>
@@ -390,7 +404,7 @@ function BetfairMarket({
 
 function LineMarket({ market, runnerOddsMap, oddsData, handleOddsClick, isRunnerInSlip }: any) {
     return (
-        <div className="bg-bg-card rounded shadow-betting-card mb-3 overflow-hidden">
+        <div className="bg-black rounded shadow-betting-card mb-3 overflow-hidden">
             <div className="divide-y divide-stroke-light">
                 {market.runners?.map((runner: any) => {
                     const ro = runnerOddsMap[runner.runnerId] ?? {};
@@ -464,7 +478,7 @@ function BookmakerMarket({
     market, runnerOddsMap, oddsData, handleOddsClick, isRunnerInSlip, getRunnerPnl, collapsed, setCollapsed,
 }: any) {
     return (
-        <div className="bg-bg-card rounded shadow-betting-card mb-3 overflow-hidden">
+        <div className="bg-black rounded shadow-betting-card mb-3 overflow-hidden">
             <MarketHeader
                 market={market}
                 collapsed={collapsed}
@@ -478,32 +492,34 @@ function BookmakerMarket({
                         const ro = runnerOddsMap[runner.runnerId] ?? {};
                         const overlay = getSuspensionOverlay(ro, oddsData);
                         return (
-                            <div key={runner.runnerId} className="flex items-center px-3 py-2 gap-2">
-                                <div className="flex-1 flex items-center gap-2 min-w-0">
-                                    <span className="text-sm font-medium text-brand-text truncate">
-                                        {runner.name || `Runner ${runner.runnerId}`}
-                                    </span>
-                                    <span className="text-xs font-mono text-neutral-gray-600">{getRunnerPnl(runner.runnerId)}</span>
-                                </div>
-                                <div className="relative flex gap-1 shrink-0">
+                            <div key={runner.runnerId} className="flex flex-col px-3 py-3 gap-3 border-b border-stroke-light last:border-b-0">
+                                <div className="relative flex gap-2 shrink-0 w-full">
                                     {overlay ? (
-                                        <div className="relative flex gap-1">
-                                            <OddsButton odds={ro.b1} type="back" suspended />
-                                            <OddsButton odds={ro.l1} type="lay" suspended />
+                                        <div className="relative flex gap-2 w-full">
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton odds={ro.b1} type="back" suspended />
+                                            </div>
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton odds={ro.l1} type="lay" suspended />
+                                            </div>
                                             <SuspensionOverlay text={overlay} />
                                         </div>
                                     ) : (
                                         <>
-                                            <OddsButton
-                                                odds={ro.b1} volume={ro.bs1} type="back"
-                                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                                                onClick={() => handleOddsClick(runner, 'BACK', ro.b1)}
-                                            />
-                                            <OddsButton
-                                                odds={ro.l1} volume={ro.ls1} type="lay"
-                                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                                                onClick={() => handleOddsClick(runner, 'LAY', ro.l1)}
-                                            />
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton
+                                                    odds={ro.b1} volume={ro.bs1} type="back" size="lg"
+                                                    active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                                    onClick={() => handleOddsClick(runner, 'BACK', ro.b1)}
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton
+                                                    odds={ro.l1} volume={ro.ls1} type="lay" size="lg"
+                                                    active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                                    onClick={() => handleOddsClick(runner, 'LAY', ro.l1)}
+                                                />
+                                            </div>
                                         </>
                                     )}
                                 </div>
@@ -530,13 +546,14 @@ function SessionMarketRow({
     useNoYes: boolean;
 }) {
     // Distinguish session types (br/lr = rates, b/l = lines) from odd-even (b/l = odds, no line)
+    const marketType = market.marketType || market.type || 'session';
     const isSessionType =
-        market.marketType.includes('session') ||
-        market.marketType.includes('ball-by-ball') ||
-        market.marketType.includes('meter') ||
-        market.marketType.includes('khado') ||
-        market.marketType === 'fancy' ||
-        market.marketType === 'fancy1';
+        marketType.includes('session') ||
+        marketType.includes('ball-by-ball') ||
+        marketType.includes('meter') ||
+        marketType.includes('khado') ||
+        marketType === 'fancy' ||
+        marketType === 'fancy1';
 
     const rawB  = oddsData?.b  ?? oddsData?.b1  ?? market.runners?.[0]?.metadata?.b1  ?? 0;
     const rawL  = oddsData?.l  ?? oddsData?.l1  ?? market.runners?.[0]?.metadata?.l1  ?? 0;
@@ -559,8 +576,8 @@ function SessionMarketRow({
     const runner = market.runners?.[0] ?? { runnerId: market.marketId, name: market.name };
 
     return (
-        <div className="flex items-center justify-between px-3 py-2 border-b border-stroke-light bg-bg-card hover:bg-bg-light-blue transition-colors">
-            {/* Left: pill/number + name + BOOK button */}
+        <div className="flex flex-col px-3 py-3 gap-3 border-b border-stroke-light bg-black">
+            {/* Top: pill/number + name + BOOK button */}
             <div className="flex items-center gap-2 flex-1 min-w-0">
                 {market.ballNumber ? (
                     <span className="text-[11px] font-bold text-white bg-bg-light-blue px-1.5 py-0.5 rounded shrink-0">
@@ -574,19 +591,27 @@ function SessionMarketRow({
                     BOOK
                 </button>
             </div>
-            {/* Right: NO + YES (or BACK + LAY) odds with suspension */}
-            <div className="relative flex gap-1 shrink-0">
+            {/* Bottom: NO + YES (or BACK + LAY) odds stretched full width */}
+            <div className="relative flex gap-2 shrink-0 w-full">
                 {overlay ? (
-                    <div className="relative flex gap-1">
+                    <div className="relative flex gap-2 w-full">
                         {useNoYes ? (
                             <>
-                                <OddsButton odds={noDisplayOdds} volume={noDisplayVol} type="no" suspended />
-                                <OddsButton odds={yesDisplayOdds} volume={yesDisplayVol} type="yes" suspended />
+                                <div className="flex-1 min-w-0 flex items-center justify-center">
+                                    <OddsButton odds={noDisplayOdds} volume={noDisplayVol} type="no" size="lg" suspended />
+                                </div>
+                                <div className="flex-1 min-w-0 flex items-center justify-center">
+                                    <OddsButton odds={yesDisplayOdds} volume={yesDisplayVol} type="yes" size="lg" suspended />
+                                </div>
                             </>
                         ) : (
                             <>
-                                <OddsButton odds={yesDisplayOdds} volume={yesDisplayVol} type="back" suspended />
-                                <OddsButton odds={noDisplayOdds} volume={noDisplayVol} type="lay" suspended />
+                                <div className="flex-1 min-w-0 flex items-center justify-center">
+                                    <OddsButton odds={yesDisplayOdds} volume={yesDisplayVol} type="back" size="lg" suspended />
+                                </div>
+                                <div className="flex-1 min-w-0 flex items-center justify-center">
+                                    <OddsButton odds={noDisplayOdds} volume={noDisplayVol} type="lay" size="lg" suspended />
+                                </div>
                             </>
                         )}
                         <SuspensionOverlay text={overlay} />
@@ -594,34 +619,42 @@ function SessionMarketRow({
                 ) : useNoYes ? (
                     // NO/YES: NO first (left), YES second (right)
                     <>
-                        <OddsButton
-                            odds={noDisplayOdds} volume={noDisplayVol}
-                            type="no"
-                            active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                            onClick={() => handleOddsClick(runner, 'LAY', noClickOdds, noClickLine)}
-                        />
-                        <OddsButton
-                            odds={yesDisplayOdds} volume={yesDisplayVol}
-                            type="yes"
-                            active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                            onClick={() => handleOddsClick(runner, 'BACK', yesClickOdds, yesClickLine)}
-                        />
+                        <div className="flex-1 min-w-0 flex items-center justify-center">
+                            <OddsButton
+                                odds={noDisplayOdds} volume={noDisplayVol}
+                                type="no" size="lg"
+                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                onClick={() => handleOddsClick(runner, 'LAY', noClickOdds, noClickLine)}
+                            />
+                        </div>
+                        <div className="flex-1 min-w-0 flex items-center justify-center">
+                            <OddsButton
+                                odds={yesDisplayOdds} volume={yesDisplayVol}
+                                type="yes" size="lg"
+                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                onClick={() => handleOddsClick(runner, 'BACK', yesClickOdds, yesClickLine)}
+                            />
+                        </div>
                     </>
                 ) : (
                     // BACK/LAY: BACK first (left), LAY second (right)
                     <>
-                        <OddsButton
-                            odds={yesDisplayOdds} volume={yesDisplayVol}
-                            type="back"
-                            active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                            onClick={() => handleOddsClick(runner, 'BACK', yesClickOdds, yesClickLine)}
-                        />
-                        <OddsButton
-                            odds={noDisplayOdds} volume={noDisplayVol}
-                            type="lay"
-                            active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                            onClick={() => handleOddsClick(runner, 'LAY', noClickOdds, noClickLine)}
-                        />
+                        <div className="flex-1 min-w-0 flex items-center justify-center">
+                            <OddsButton
+                                odds={yesDisplayOdds} volume={yesDisplayVol}
+                                type="back" size="lg"
+                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                onClick={() => handleOddsClick(runner, 'BACK', yesClickOdds, yesClickLine)}
+                            />
+                        </div>
+                        <div className="flex-1 min-w-0 flex items-center justify-center">
+                            <OddsButton
+                                odds={noDisplayOdds} volume={noDisplayVol}
+                                type="lay" size="lg"
+                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                onClick={() => handleOddsClick(runner, 'LAY', noClickOdds, noClickLine)}
+                            />
+                        </div>
                     </>
                 )}
                 {/* Info button — matches old-code mc-info-btn-sm */}
@@ -639,7 +672,7 @@ function BackOnlyMarket({
     market, runnerOddsMap, oddsData, handleOddsClick, isRunnerInSlip, collapsed, setCollapsed,
 }: any) {
     return (
-        <div className="bg-bg-card rounded shadow-betting-card mb-3 overflow-hidden">
+        <div className="bg-black rounded shadow-betting-card mb-3 overflow-hidden">
             <MarketHeader
                 market={market}
                 collapsed={collapsed}
@@ -653,26 +686,25 @@ function BackOnlyMarket({
                         const ro = runnerOddsMap[runner.runnerId] ?? {};
                         const overlay = getSuspensionOverlay(ro, oddsData);
                         return (
-                            <div key={runner.runnerId} className="flex items-center px-3 py-2 gap-2">
-                                <div className="flex-1 min-w-0">
-                                    <span className="text-sm font-medium text-brand-text truncate block">
-                                        {runner.name || `Runner ${runner.runnerId}`}
-                                    </span>
-                                </div>
-                                {/* BOOK button + back odds — matches old-code back-only-cells */}
-                                <div className="flex items-center gap-1.5 shrink-0">
-                                    <button className="text-[10px] font-bold border border-brand-primary text-brand-primary px-1.5 py-0.5 rounded hover:bg-brand-primary hover:text-white transition-colors">
+                            <div key={runner.runnerId} className="flex flex-col px-3 py-3 gap-3 border-b border-stroke-light last:border-b-0">
+                                {/* Runner name */}
+                                <span className="text-sm font-medium text-brand-text">
+                                    {runner.name || `Runner ${runner.runnerId}`}
+                                </span>
+                                {/* BOOK button + back odds below */}
+                                <div className="flex gap-2 shrink-0 w-full">
+                                    <button className="text-[10px] font-bold border border-brand-primary text-brand-primary px-1.5 py-0.5 rounded hover:bg-brand-primary hover:text-white transition-colors shrink-0">
                                         BOOK
                                     </button>
-                                    <div className="relative">
+                                    <div className="relative flex-1 min-w-0">
                                         {overlay ? (
                                             <div className="relative">
-                                                <OddsButton odds={ro.b1} type="back" suspended />
+                                                <OddsButton odds={ro.b1} type="back" size="lg" suspended />
                                                 <SuspensionOverlay text={overlay} />
                                             </div>
                                         ) : (
                                             <OddsButton
-                                                odds={ro.b1} volume={ro.bs1} type="back"
+                                                odds={ro.b1} volume={ro.bs1} type="back" size="lg"
                                                 active={isRunnerInSlip(runner.runnerId, 'BACK')}
                                                 onClick={() => handleOddsClick(runner, 'BACK', ro.b1)}
                                             />
@@ -694,7 +726,7 @@ function BackLayMarket({
     market, runnerOddsMap, oddsData, handleOddsClick, isRunnerInSlip, getRunnerPnl, collapsed, setCollapsed, type,
 }: any) {
     return (
-        <div className="bg-bg-card rounded shadow-betting-card mb-3 overflow-hidden">
+        <div className="bg-black rounded shadow-betting-card mb-3 overflow-hidden">
             <MarketHeader
                 market={market}
                 collapsed={collapsed}
@@ -708,35 +740,35 @@ function BackLayMarket({
                         const ro = runnerOddsMap[runner.runnerId] ?? {};
                         const overlay = getSuspensionOverlay(ro, oddsData);
                         return (
-                            <div key={runner.runnerId} className="flex items-center px-3 py-2 gap-2">
-                                {/* Runner name — hidden for 'other-market' */}
-                                {type !== 'other-market' && (
-                                    <div className="flex-1 flex items-center gap-2 min-w-0">
-                                        <span className="text-sm font-medium text-brand-text truncate">
-                                            {runner.name || `Runner ${runner.runnerId}`}
-                                        </span>
-                                        <span className="text-xs font-mono text-neutral-gray-600">{getRunnerPnl(runner.runnerId)}</span>
-                                    </div>
-                                )}
-                                <div className="relative flex gap-1 shrink-0">
+                            <div key={runner.runnerId} className="flex flex-col px-3 py-3 gap-3 border-b border-stroke-light last:border-b-0">
+                                {/* BACK/LAY odds below - stretched full width */}
+                                <div className="relative flex gap-2 shrink-0 w-full">
                                     {overlay ? (
-                                        <div className="relative flex gap-1">
-                                            <OddsButton odds={ro.b1 ?? ro.b} type="back" suspended />
-                                            <OddsButton odds={ro.l1 ?? ro.l} type="lay" suspended />
+                                        <div className="relative flex gap-2 w-full">
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton odds={ro.b1 ?? ro.b} type="back" size="lg" suspended />
+                                            </div>
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton odds={ro.l1 ?? ro.l} type="lay" size="lg" suspended />
+                                            </div>
                                             <SuspensionOverlay text={overlay} />
                                         </div>
                                     ) : (
                                         <>
-                                            <OddsButton
-                                                odds={ro.b1 ?? ro.b} volume={ro.bs1 || ro.bs || 0} type="back"
-                                                active={isRunnerInSlip(runner.runnerId, 'BACK')}
-                                                onClick={() => handleOddsClick(runner, 'BACK', ro.b1 ?? ro.b)}
-                                            />
-                                            <OddsButton
-                                                odds={ro.l1 ?? ro.l} volume={ro.ls1 || ro.ls || 0} type="lay"
-                                                active={isRunnerInSlip(runner.runnerId, 'LAY')}
-                                                onClick={() => handleOddsClick(runner, 'LAY', ro.l1 ?? ro.l)}
-                                            />
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton
+                                                    odds={ro.b1 ?? ro.b} volume={ro.bs1 || ro.bs || 0} type="back" size="lg"
+                                                    active={isRunnerInSlip(runner.runnerId, 'BACK')}
+                                                    onClick={() => handleOddsClick(runner, 'BACK', ro.b1 ?? ro.b)}
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0 flex items-center justify-center">
+                                                <OddsButton
+                                                    odds={ro.l1 ?? ro.l} volume={ro.ls1 || ro.ls || 0} type="lay" size="lg"
+                                                    active={isRunnerInSlip(runner.runnerId, 'LAY')}
+                                                    onClick={() => handleOddsClick(runner, 'LAY', ro.l1 ?? ro.l)}
+                                                />
+                                            </div>
                                         </>
                                     )}
                                 </div>

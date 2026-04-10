@@ -10,7 +10,7 @@ import { bettingApi } from '../../api/bettingClient';
 import EventMatchCard from '../shared/EventMatchCard';
 import SportsEventsSection from '../shared/SportsEventsSection';
 import LeagueCompetitionCard from '../shared/LeagueCompetitionCard';
-import SharedEventListRow from '../shared/EventListRow';
+import EventCardGrid from '../shared/EventCardGrid';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -360,22 +360,7 @@ const SportEventPage: React.FC<SportEventPageProps> = ({ sportId, sportName, spo
                             </p>
                         </div>
                     ) : (
-                        Object.entries(leagueGroups).map(([league, leagueEvents]) => (
-                            <div key={league}>
-                                <div className="flex items-center gap-2 px-3 py-2 bg-bg-card border-b border-stroke-light sticky top-0 z-10">
-                                    <span className="text-accent-yellow text-xs">{sportIcon}</span>
-                                    <span className="text-xs font-bold text-neutral-gray-800 flex-1 truncate">{league}</span>
-                                    <span className="text-[10px] text-neutral-gray-500 flex-shrink-0">
-                                        {leagueEvents.length} {leagueEvents.length === 1 ? 'match' : 'matches'}
-                                    </span>
-                                </div>
-                                <div className="divide-y divide-stroke-light">
-                                    {leagueEvents.map((e, idx) => (
-                                        <SharedEventListRow key={e._id} event={e} isAlternate={idx % 2 === 1} />
-                                    ))}
-                                </div>
-                            </div>
-                        ))
+                        <EventCardGrid events={searchedEvents} groupByLeague={true} loading={false} />
                     )}
                 </div>
             </div>

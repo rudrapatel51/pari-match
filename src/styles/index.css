@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Condensed:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Condensed:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -65,12 +65,10 @@
   --color-bg-white-rgb:  18 18 18;          /* #121212 rgb channels */
   --color-bg-card:       #212121;           /* cards, panels, match rows */
   --color-bg-light-blue: #2A2A2A;           /* row hover, tab hover */
- 
 
   /* ── Strokes / Borders ── */
   --color-stroke-primary: #333333;
   --color-stroke-light:   #333333;
-
 
   /* ── Fixed accent colours ── */
   --color-accent-orange:       #ff6b35;
@@ -94,6 +92,11 @@
   --color-accent-blue-light:#6AC9EA;
   --color-accent-blue-dark: #209CC9;
 
+  /* Olive — active filter/tab buttons */
+  --color-accent-olive: #434415;
+  --color-accent-olive-light: #5a5a36;
+  --color-accent-olive-dark: #2d2d0f;
+
   /* ── Neutral gray scale (dark → light, for dark bg) ── */
   --color-provider-bg: #0a0a0a;
   --color-provider-border: #1c1c1c;
@@ -116,13 +119,12 @@
   --color-odds-lay:      #1a1a1a;   /* Parimatch odd button */
   --color-odds-positive: #48BB78;
   --color-odds-negative: #FF4757;
- 
 
   /* ── Shadows ── */
   --shadow-betting-card: 0 2px 8px rgba(0, 0, 0, 0.85);
-  --shadow-odds-hover:   0 4px 12px rgba(255, 215, 0, 0.2);
-  --shadow-elevated:     0 8px 24px rgba(0, 0, 0, 0.92);
-  --shadow-sidebar-top:  0 -2px 8px 0 rgba(0, 0, 0, 0.55);
+  --shadow-odds-hover: 0 4px 12px rgba(255, 215, 0, 0.2);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.92);
+  --shadow-sidebar-top: 0 -2px 8px 0 rgba(0, 0, 0, 0.55);
 
   /* ── Default Gradients ── */
   --gradient-hero: linear-gradient(135deg, #121212 0%, #1a1a1a 50%, #212121 100%);
@@ -163,11 +165,19 @@ html.dark .filter-pill {
   background: var(--color-bg-light-blue);
 }
 html.dark .filter-pill:hover {
-  background: color-mix(in srgb, var(--color-brand-text) 12%, var(--color-bg-card));
+  background: color-mix(
+    in srgb,
+    var(--color-brand-text) 12%,
+    var(--color-bg-card)
+  );
   color: var(--color-neutral-900);
 }
 html.dark .filter-pill-active {
-  background: color-mix(in srgb, var(--color-brand-text) 20%, var(--color-bg-card));
+  background: color-mix(
+    in srgb,
+    var(--color-brand-text) 20%,
+    var(--color-bg-card)
+  );
   color: var(--color-neutral-900);
   border-color: color-mix(in srgb, var(--color-brand-text) 40%, transparent);
 }
@@ -199,7 +209,11 @@ html.dark .sidebar-menu-item.active {
   color: var(--color-neutral-900);
 }
 html.dark .bg-sidebar-active {
-  background-color: color-mix(in srgb, var(--color-brand-text) 10%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--color-brand-text) 10%,
+    transparent
+  );
 }
 
 /* ── Amount selector ─────────────────────────────────────────────────────── */
@@ -233,7 +247,6 @@ html.dark .swiper-button-prev:hover {
   background-color: var(--color-bg-light-blue) !important;
   transform: scale(1.05);
 }
-
 
 /* ============================================================
    BASE STYLES
@@ -385,7 +398,11 @@ html.dark .swiper-button-prev:hover {
     transition: background 0.15s ease, color 0.15s ease;
   }
   .filter-pill:hover {
-    background: color-mix(in srgb, var(--color-brand-primary) 10%, var(--color-bg-card));
+    background: color-mix(
+      in srgb,
+      var(--color-brand-primary) 10%,
+      var(--color-bg-card)
+    );
     color: var(--color-neutral-700);
   }
   .filter-pill-active {
@@ -443,11 +460,19 @@ html.dark .filter-pill {
   background: var(--color-bg-light-blue);
 }
 html.dark .filter-pill:hover {
-  background: color-mix(in srgb, var(--color-brand-text) 12%, var(--color-bg-card));
+  background: color-mix(
+    in srgb,
+    var(--color-brand-text) 12%,
+    var(--color-bg-card)
+  );
   color: var(--color-neutral-900);
 }
 html.dark .filter-pill-active {
-  background: color-mix(in srgb, var(--color-brand-text) 20%, var(--color-bg-card));
+  background: color-mix(
+    in srgb,
+    var(--color-brand-text) 20%,
+    var(--color-bg-card)
+  );
   color: var(--color-neutral-900);
   border-color: color-mix(in srgb, var(--color-brand-text) 40%, transparent);
 }
@@ -481,7 +506,11 @@ html.dark .sidebar-menu-item.active {
 
 /* AccountSidebar active background utility */
 html.dark .bg-sidebar-active {
-  background-color: color-mix(in srgb, var(--color-brand-text) 10%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--color-brand-text) 10%,
+    transparent
+  );
 }
 
 /* Amount selector hover — brand-primary text is invisible in dark mode */
@@ -535,7 +564,7 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
    so override arrow colour and button bg to remain visible */
 html.dark .swiper-button-next,
 html.dark .swiper-button-prev {
-  color: var(--color-neutral-700) !important;    /* light tinted hue */
+  color: var(--color-neutral-700) !important; /* light tinted hue */
   background-color: var(--color-bg-card) !important;
   border: 1px solid var(--color-stroke-light);
 }
@@ -655,12 +684,12 @@ html.dark .swiper-button-prev:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2D3748;
+  background: #2d3748;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A0AEC0;
+  background: #a0aec0;
 }
 
 /* ============================================================
