@@ -1,5 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { sportsApi } from "../../api/client";
+import Loader from "../Common/Loader";
 import {
   FiSearch,
   FiChevronDown,
@@ -47,449 +49,8 @@ interface Competition {
 
 // ─── Static Mock Data ─────────────────────────────────────────────────────────
 
-const COMPETITIONS: Competition[] = [
-  {
-    id: "ipl-w",
-    name: "Indian Premier League. Women",
-    flag: "🇮🇳",
-    sport: "Cricket",
-    matches: [
-      {
-        id: "m1",
-        homeTeam: "Royal Challengers Bangalore (Women)",
-        awayTeam: "Delhi Capitals (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "05/02 / 19:30",
-        stage: "Play-off. Final",
-        sport: "Cricket",
-        odds: {
-          w1: 1.822,
-          draw: 25,
-          w2: 2.015,
-          o: 1.92,
-          it1: 161.5,
-          u: 1.92,
-          o2: 1.92,
-          it2: 158.5,
-          u2: 1.92,
-          extraCount: 658,
-        },
-      },
-    ],
-  },
-  {
-    id: "t20-wc",
-    name: "T20 World Cup. 2026",
-    flag: "🌍",
-    sport: "Cricket",
-    matches: [
-      {
-        id: "m2",
-        homeTeam: "India",
-        awayTeam: "USA",
-        homeFlag: "🇮🇳",
-        awayFlag: "🇺🇸",
-        dateTime: "07/02 / 19:00",
-        stage: "Group stage. Group A",
-        sport: "Cricket",
-        odds: { w1: null, draw: null, w2: null, extraCount: 563 },
-      },
-      {
-        id: "m3",
-        homeTeam: "India",
-        awayTeam: "Pakistan",
-        homeFlag: "🇮🇳",
-        awayFlag: "🇵🇰",
-        dateTime: "15/02 / 19:00",
-        stage: "Group stage. Group A",
-        sport: "Cricket",
-        odds: { w1: 1.277, draw: 25, w2: 3.895, extraCount: 43 },
-      },
-    ],
-  },
-  {
-    id: "alcon",
-    name: "Alcon GSB Unity Cup",
-    flag: "🏏",
-    sport: "Cricket",
-    matches: [
-      {
-        id: "m4",
-        homeTeam: "Priority Titans",
-        awayTeam: "K K Strikers",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "05/02 / 18:00",
-        sport: "Cricket",
-        odds: { w1: 1.703, draw: 25, w2: 2.004, extraCount: 41 },
-      },
-    ],
-  },
-  {
-    id: "nayudu",
-    name: "India. COL CK Nayudu Trophy U23",
-    flag: "🇮🇳",
-    sport: "Cricket",
-    matches: [
-      {
-        id: "m5",
-        homeTeam: "Odisha U23",
-        awayTeam: "Bengal U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-      {
-        id: "m6",
-        homeTeam: "Chhattisgarh U23",
-        awayTeam: "Himachal Pradesh U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:45",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-      {
-        id: "m7",
-        homeTeam: "Andhra Pradesh U23",
-        awayTeam: "Maharashtra U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 09:00",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-      {
-        id: "m8",
-        homeTeam: "Bihar U23",
-        awayTeam: "Nagaland U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 09:00",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-      {
-        id: "m9",
-        homeTeam: "Delhi U23",
-        awayTeam: "Saurashtra U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 09:00",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-      {
-        id: "m10",
-        homeTeam: "Gujarat U23",
-        awayTeam: "Jharkhand U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 09:00",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-      {
-        id: "m11",
-        homeTeam: "Haryana U23",
-        awayTeam: "Mumbai U23",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 09:00",
-        sport: "Cricket",
-        odds: { extraCount: 2 },
-      },
-    ],
-  },
-  {
-    id: "odi-w",
-    name: "India. One Day Trophy. Women",
-    flag: "🇮🇳",
-    sport: "Cricket",
-    matches: [
-      {
-        id: "m12",
-        homeTeam: "Andhra (Women)",
-        awayTeam: "Jharkhand (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 1.806, draw: 50, w2: 2.013, extraCount: 15 },
-      },
-      {
-        id: "m13",
-        homeTeam: "Arunachal Pradesh (Women)",
-        awayTeam: "Bengal (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { extraCount: 8 },
-      },
-      {
-        id: "m14",
-        homeTeam: "Assam (Women)",
-        awayTeam: "Baroda (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 2.261, draw: 50, w2: 1.644, extraCount: 15 },
-      },
-      {
-        id: "m15",
-        homeTeam: "Chandigarh (Women)",
-        awayTeam: "Vidarbha (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 2.985, draw: 50, w2: 1.397, extraCount: 15 },
-      },
-      {
-        id: "m16",
-        homeTeam: "Chhattisgarh (Women)",
-        awayTeam: "Rajasthan (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 1.616, draw: 50, w2: 2.316, extraCount: 15 },
-      },
-      {
-        id: "m17",
-        homeTeam: "Delhi (Women)",
-        awayTeam: "Goa (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 1.379, draw: 50, w2: 3.07, extraCount: 15 },
-      },
-      {
-        id: "m18",
-        homeTeam: "Haryana (Women)",
-        awayTeam: "Uttarakhand (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 1.806, draw: 50, w2: 2.013, extraCount: 15 },
-      },
-      {
-        id: "m19",
-        homeTeam: "Himachal Pradesh (Women)",
-        awayTeam: "Mumbai (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 2.79, draw: 50, w2: 1.445, extraCount: 15 },
-      },
-      {
-        id: "m20",
-        homeTeam: "Hyderabad (Women)",
-        awayTeam: "Tripura (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 1.478, draw: 50, w2: 2.673, extraCount: 15 },
-      },
-      {
-        id: "m21",
-        homeTeam: "Karnataka (Women)",
-        awayTeam: "Uttar Pradesh (Women)",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "06/02 / 08:30",
-        sport: "Cricket",
-        odds: { w1: 1.644, draw: 50, w2: 2.261, extraCount: 15 },
-      },
-    ],
-  },
-  {
-    id: "ipl-2025",
-    name: "IPL. 2025",
-    flag: "🇮🇳",
-    sport: "Cricket",
-    matches: [
-      {
-        id: "ipl1",
-        homeTeam: "Sunrisers Hyderabad",
-        awayTeam: "Rajasthan Royals",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "23/03 / 19:30",
-        stage: "Round Robin",
-        sport: "Cricket",
-        odds: { w1: 1.652, draw: 55, w2: 2.273, extraCount: 56 },
-      },
-      {
-        id: "ipl2",
-        homeTeam: "Mumbai Indians",
-        awayTeam: "Chennai Super Kings",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "23/03 / 19:30",
-        stage: "Round Robin",
-        sport: "Cricket",
-        odds: { w1: 1.818, draw: 55, w2: 2.02, extraCount: 56 },
-      },
-      {
-        id: "ipl3",
-        homeTeam: "Delhi Capitals",
-        awayTeam: "Lucknow Super Giants",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "24/03 / 19:30",
-        stage: "Round Robin",
-        sport: "Cricket",
-        odds: { w1: 1.914, draw: 55, w2: 1.914, extraCount: 56 },
-      },
-      {
-        id: "ipl4",
-        homeTeam: "Gujarat Titans",
-        awayTeam: "Kings XI Punjab",
-        homeFlag: "🏏",
-        awayFlag: "🏏",
-        dateTime: "25/03 / 19:30",
-        stage: "Round Robin",
-        sport: "Cricket",
-        odds: { w1: 1.914, draw: 55, w2: 1.914, extraCount: 56 },
-      },
-    ],
-  },
-  // Football
-  {
-    id: "epl",
-    name: "England. Premier League",
-    flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    sport: "Football",
-    matches: [
-      {
-        id: "f1",
-        homeTeam: "Arsenal",
-        awayTeam: "Manchester City",
-        homeFlag: "⚽",
-        awayFlag: "⚽",
-        dateTime: "08/02 / 17:30",
-        stage: "Round 25",
-        sport: "Football",
-        odds: {
-          w1: 2.45,
-          draw: 3.4,
-          w2: 2.9,
-          o: 1.87,
-          it1: 2.5,
-          u: 1.94,
-          o2: 1.91,
-          it2: 2.5,
-          u2: 1.91,
-          extraCount: 212,
-        },
-      },
-      {
-        id: "f2",
-        homeTeam: "Liverpool",
-        awayTeam: "Chelsea",
-        homeFlag: "⚽",
-        awayFlag: "⚽",
-        dateTime: "09/02 / 14:00",
-        stage: "Round 25",
-        sport: "Football",
-        odds: {
-          w1: 1.72,
-          draw: 4.1,
-          w2: 4.5,
-          o: 1.87,
-          it1: 2.5,
-          u: 1.94,
-          o2: 1.91,
-          it2: 2.5,
-          u2: 1.91,
-          extraCount: 196,
-        },
-      },
-      {
-        id: "f3",
-        homeTeam: "Tottenham",
-        awayTeam: "Newcastle United",
-        homeFlag: "⚽",
-        awayFlag: "⚽",
-        dateTime: "09/02 / 16:30",
-        stage: "Round 25",
-        sport: "Football",
-        odds: { w1: 2.1, draw: 3.6, w2: 3.2, extraCount: 187 },
-      },
-    ],
-  },
-  {
-    id: "laliga",
-    name: "Spain. La Liga",
-    flag: "🇪🇸",
-    sport: "Football",
-    matches: [
-      {
-        id: "f4",
-        homeTeam: "Real Madrid",
-        awayTeam: "Barcelona",
-        homeFlag: "⚽",
-        awayFlag: "⚽",
-        dateTime: "08/02 / 20:00",
-        stage: "Round 24",
-        sport: "Football",
-        odds: {
-          w1: 2.2,
-          draw: 3.5,
-          w2: 3.1,
-          o: 1.91,
-          it1: 2.5,
-          u: 1.91,
-          o2: 1.91,
-          it2: 2.5,
-          u2: 1.91,
-          extraCount: 231,
-        },
-      },
-    ],
-  },
-  // Tennis
-  {
-    id: "atp-ao",
-    name: "ATP. Australian Open",
-    flag: "🎾",
-    sport: "Tennis",
-    matches: [
-      {
-        id: "t1",
-        homeTeam: "Carlos Alcaraz",
-        awayTeam: "Jannik Sinner",
-        homeFlag: "🎾",
-        awayFlag: "🎾",
-        dateTime: "10/02 / 10:00",
-        stage: "Final",
-        sport: "Tennis",
-        odds: { w1: 1.95, w2: 1.85, extraCount: 87 },
-      },
-      {
-        id: "t2",
-        homeTeam: "Novak Djokovic",
-        awayTeam: "Daniil Medvedev",
-        homeFlag: "🎾",
-        awayFlag: "🎾",
-        dateTime: "10/02 / 08:00",
-        stage: "Semi-final",
-        sport: "Tennis",
-        odds: { w1: 1.72, w2: 2.05, extraCount: 64 },
-      },
-    ],
-  },
-];
+// REMOVED: Mock data moved to API
+// Use sportsApi.getInPlay() or sportsApi.getUpcomingCricket() instead
 
 const VIEW_TABS = [
   "Matches",
@@ -774,9 +335,36 @@ const SportsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("India");
   const [regionOpen, setRegionOpen] = useState(false);
+  const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data from API
+  useEffect(() => {
+    const loadCompetitions = async () => {
+      try {
+        setLoading(true);
+        // Uncomment the appropriate API call based on need
+        // const response = await sportsApi.getInPlay();
+        // const response = await sportsApi.getUpcomingCricket();
+        // setCompetitions(response?.data?.data || response?.data || []);
+
+        // For now, show empty state until API is ready
+        setCompetitions([]);
+      } catch (error) {
+        console.error("Failed to load competitions:", error);
+        setCompetitions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCompetitions();
+  }, []);
+
+  if (loading) return <Loader text="Loading sports events..." />;
 
   const filteredCompetitions = useMemo(() => {
-    let comps = COMPETITIONS.filter((c) => c.sport === activeSport);
+    let comps = competitions.filter((c) => c.sport === activeSport);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       comps = comps
@@ -792,7 +380,7 @@ const SportsPage: React.FC = () => {
         .filter((c) => c.matches.length > 0);
     }
     return comps;
-  }, [activeSport, searchQuery]);
+  }, [activeSport, searchQuery, competitions]);
 
   return (
     <div className="w-full min-h-screen bg-bg-primary">
