@@ -53,7 +53,7 @@ const CasinoGameCard: React.FC<CasinoGameCardProps> = ({
         {/* Promo Badges (Right corner of Image) */}
         <div className="absolute top-1.5 right-1.5 flex flex-col items-end gap-0.5 z-10">
           {game.hasPromo && (
-            <span className="bg-brand-primary text-white text-[8px] font-bold px-1 py-0.5 rounded shadow-sm uppercase">
+            <span className="bg-brand-primary text-brand-text text-[8px] font-bold px-1 py-0.5 rounded shadow-sm uppercase">
               PROMO
             </span>
           )}
@@ -75,7 +75,7 @@ const CasinoGameCard: React.FC<CasinoGameCardProps> = ({
       {/* Title Section - Below Image, Smaller */}
       <div className="px-2 py-1.5 bg-gradient-to-t from-black/20 to-transparent">
         <h3
-          className="text-white text-xs font-medium truncate hover:line-clamp-2"
+          className="text-brand-text text-xs font-medium truncate hover:line-clamp-2"
           title={game.title}
         >
           {game.title}
@@ -85,7 +85,7 @@ const CasinoGameCard: React.FC<CasinoGameCardProps> = ({
         {game.minBet !== undefined &&
           game.maxBet !== undefined &&
           game.maxBet > 0 && (
-            <span className="text-white/60 text-[9px] font-medium block mt-0.5">
+            <span className="text-brand-text/60 text-[9px] font-medium block mt-0.5">
               {game.minBet} - {game.maxBet} {game.currency || "INR"}
             </span>
           )}

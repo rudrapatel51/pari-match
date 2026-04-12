@@ -85,7 +85,7 @@ const KycSection: React.FC = () => {
     };
 
     if (loading) return (
-        <div className="bg-bg-card border border-stroke-light rounded-xl shadow-betting-card p-8 text-center text-brand-text text-sm">
+        <div className="bg-bg-card border border-stroke-light shadow-betting-card p-8 text-center text-brand-text text-sm">
             Loading KYC details…
         </div>
     );
@@ -98,22 +98,22 @@ const KycSection: React.FC = () => {
         if (!kycStatus) return null;
         switch (kycStatus.is_kyc_verified) {
             case 1: return (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-accent-green/10 text-accent-green">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-accent-green text-brand-text">
                     <FiCheckCircle className="w-4 h-4" /> Verified
                 </span>
             );
             case 2: return (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-accent-yellow/10 text-accent-yellow">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-accent-yellow text-brand-text">
                     <FiClock className="w-4 h-4" /> Under Review
                 </span>
             );
             case 0: return (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-accent-red/10 text-accent-red">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-accent-red text-brand-text">
                     <FiAlertCircle className="w-4 h-4" /> Rejected
                 </span>
             );
             default: return (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-bg-light-blue text-brand-text">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-bg-light-blue text-brand-text">
                     <FiAlertCircle className="w-4 h-4" /> Not Submitted
                 </span>
             );
@@ -121,17 +121,17 @@ const KycSection: React.FC = () => {
     };
 
     return (
-        <div className="bg-bg-card border border-stroke-light rounded-xl shadow-betting-card overflow-hidden">
+        <div className="bg-bg-card border border-stroke-light shadow-betting-card overflow-hidden">
             {/* Card header */}
-            <div className="px-5 md:px-6 py-4 border-b border-stroke-light bg-bg-light-blue flex flex-wrap items-center justify-between gap-3">
-                <h2 className="font-display font-semibold text-base text-neutral-gray-800">KYC Verification</h2>
+            <div className="px-5 md:px-6 py-4 border-b border-stroke-light bg-brand-primary-dark flex flex-wrap items-center justify-between gap-3">
+                <h2 className="font-display font-semibold text-base text-brand-text">KYC Verification</h2>
                 <StatusBadge />
             </div>
 
             <div className="p-5 md:p-6">
                 {/* Alert message */}
                 {message && (
-                    <div className={`flex items-start gap-3 mb-5 p-4 rounded-xl border-l-4 ${message.type === 'success'
+                    <div className={`flex items-start gap-3 mb-5 p-4 border-l-4 ${message.type === 'success'
                         ? 'bg-accent-green/5 border-accent-green text-accent-green'
                         : 'bg-accent-red/5 border-accent-red text-accent-red'
                         }`}>
@@ -144,7 +144,7 @@ const KycSection: React.FC = () => {
 
                 {/* Rejection reason */}
                 {kycStatus?.kyc_comment && kycStatus.is_kyc_verified === 0 && (
-                    <div className="flex items-start gap-3 mb-5 p-4 rounded-xl border-l-4 bg-accent-red/5 border-accent-red text-accent-red">
+                    <div className="flex items-start gap-3 mb-5 p-4 border-l-4 bg-accent-red/5 border-accent-red text-accent-red">
                         <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <p className="text-sm font-medium"><span className="font-bold">Rejection Reason:</span> {kycStatus.kyc_comment}</p>
                     </div>
@@ -154,7 +154,7 @@ const KycSection: React.FC = () => {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-semibold text-brand-text uppercase tracking-wider mb-2">
+                                <label className="block text-xs font-semibold text-brand-text-70 uppercase tracking-wider mb-2">
                                     Document Type <span className="text-accent-red">*</span>
                                 </label>
                                 <select
@@ -170,7 +170,7 @@ const KycSection: React.FC = () => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-brand-text uppercase tracking-wider mb-2">
+                                <label className="block text-xs font-semibold text-brand-text-70 uppercase tracking-wider mb-2">
                                     Document Number <span className="text-accent-red">*</span>
                                 </label>
                                 <input
@@ -186,10 +186,10 @@ const KycSection: React.FC = () => {
 
                         {/* File upload */}
                         <div>
-                            <label className="block text-xs font-semibold text-brand-text uppercase tracking-wider mb-2">
+                            <label className="block text-xs font-semibold text-brand-text-70 uppercase tracking-wider mb-2">
                                 Upload Document (Max 2MB) <span className="text-accent-red">*</span>
                             </label>
-                            <div className="relative border-2 border-dashed border-stroke-light rounded-xl p-6 text-center hover:bg-bg-light-blue hover:border-brand-primary transition-all cursor-pointer">
+                            <div className="relative border-2 border-dashed border-stroke-light p-6 text-center hover:bg-bg-light-blue hover:border-brand-primary transition-all cursor-pointer">
                                 <input
                                     type="file"
                                     onChange={handleFileChange}
@@ -209,7 +209,7 @@ const KycSection: React.FC = () => {
                         <button
                             type="submit"
                             disabled={submitting}
-                            className="w-full sm:w-auto px-6 py-2.5 bg-brand-primary text-white font-bold text-sm rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+                            className="w-full sm:w-auto px-6 py-2.5 bg-accent-green text-black font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
                         >
                             {submitting ? 'Submitting…' : 'Submit Verification'}
                         </button>
@@ -218,14 +218,14 @@ const KycSection: React.FC = () => {
                     <div className="space-y-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-semibold text-brand-text uppercase tracking-wider mb-2">Document Type</label>
-                                <div className="px-4 py-2.5 border border-stroke-light rounded bg-bg-light-blue text-sm text-brand-text">
+                                <label className="block text-xs font-semibold text-brand-text-70 uppercase tracking-wider mb-2">Document Type</label>
+                                <div className="px-4 py-2.5 border border-stroke-light bg-bg-light-blue text-sm text-brand-text">
                                     {kycStatus?.kyc_details?.document_type_display || '—'}
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-brand-text uppercase tracking-wider mb-2">Document Number</label>
-                                <div className="px-4 py-2.5 border border-stroke-light rounded bg-bg-light-blue text-sm text-brand-text">
+                                <label className="block text-xs font-semibold text-brand-text-70 uppercase tracking-wider mb-2">Document Number</label>
+                                <div className="px-4 py-2.5 border border-stroke-light bg-bg-light-blue text-sm text-brand-text">
                                     {kycStatus?.kyc_details?.document_number || '—'}
                                 </div>
                             </div>

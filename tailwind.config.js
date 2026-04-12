@@ -35,7 +35,13 @@ module.exports = {
         "brand-gradient-end": "var(--color-gradient-end)",
 
         // Semantic text color — always readable (dark brand blue in light, light blue in dark)
-        "brand-text": "var(--color-brand-text)",
+        "brand-text": {
+          DEFAULT: "var(--color-brand-text)",
+          70: "var(--color-brand-text-70)",
+          60: "var(--color-brand-text-60)",
+          50: "var(--color-brand-text-50)",
+          10: "var(--color-brand-text-10)",
+        },
 
         // Background colors
         "bg-primary": "var(--color-bg-primary)",
@@ -77,8 +83,9 @@ module.exports = {
         },
         "accent-olive": {
           DEFAULT: "var(--color-accent-olive)",
-          light: "var(--color-accent-olive-light)",          
-          dark:    'var(--color-accent-olive-dark)',        },
+          light: "var(--color-accent-olive-light)",
+          dark: "var(--color-accent-olive-dark)",
+        },
 
         // Neutral gray scale — INVERTS between light and dark
         "provider-bg": "var(--color-provider-bg)",

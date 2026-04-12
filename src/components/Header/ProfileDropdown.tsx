@@ -14,7 +14,7 @@ const ProfileDropdown: React.FC = () => {
       aria-label="Account menu"
       title={`${user?.username || "Account"}`}
     >
-      <FiUser className="w-5 h-5 text-white" />
+      <FiUser className="w-5 h-5 text-brand-text" />
     </button>
   );
 };

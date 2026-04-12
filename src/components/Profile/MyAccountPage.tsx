@@ -110,11 +110,11 @@ const MyAccountPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <BiSolidStar className="w-6 h-6 text-accent-yellow" />
-              <span className="text-base font-bold text-white">
+              <span className="text-base font-bold text-brand-text">
                 Loyalty Hub
               </span>
             </div>
-            <IoIosArrowForward className="w-5 h-5 text-white" />
+            <IoIosArrowForward className="w-5 h-5 text-brand-text" />
           </div>
         </button>
 
@@ -161,7 +161,7 @@ const MyAccountPage: React.FC = () => {
             >
               <div className="flex items-center gap-3">
                 <span className="text-accent-yellow text-lg">{item.icon}</span>
-                <span className="text-base font-medium text-white">
+                <span className="text-base font-medium text-brand-text">
                   {item.label}
                 </span>
               </div>
@@ -186,7 +186,7 @@ const MyAccountPage: React.FC = () => {
                   <span className="text-accent-yellow text-lg">
                     {item.icon}
                   </span>
-                  <span className="text-base font-medium text-white">
+                  <span className="text-base font-medium text-brand-text">
                     {item.label}
                   </span>
                 </div>
@@ -203,7 +203,7 @@ const MyAccountPage: React.FC = () => {
                 <span className="text-accent-red text-lg">
                   <FiLogOut className="w-5 h-5" />
                 </span>
-                <span className="text-base font-medium text-white">
+                <span className="text-base font-medium text-brand-text">
                   Log out
                 </span>
               </div>

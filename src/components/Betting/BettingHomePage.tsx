@@ -10,7 +10,7 @@ function renderMatchOddsColumns(runners: EventRunner[] | undefined) {
   return slots.map((runner, i) => (
     <div key={i} className="flex flex-col items-center gap-0.5 min-w-[70px]">
       <div className="w-full px-3 py-2 flex flex-col items-center justify-center rounded-lg border border-stroke-light bg-neutral-gray-850 hover:bg-neutral-gray-800 transition-colors">
-        <span className="text-lg font-mono font-bold text-white leading-none">
+        <span className="text-lg font-mono font-bold text-brand-text leading-none">
           {runner?.back != null ? Number(runner.back).toFixed(2) : "—"}
         </span>
         <span className="text-[9px] text-neutral-gray-400 font-semibold mt-1">
@@ -18,7 +18,7 @@ function renderMatchOddsColumns(runners: EventRunner[] | undefined) {
         </span>
       </div>
       <div className="w-full px-3 py-2 flex flex-col items-center justify-center rounded-lg border border-stroke-light bg-neutral-gray-850 hover:bg-neutral-gray-800 transition-colors">
-        <span className="text-lg font-mono font-bold text-white leading-none">
+        <span className="text-lg font-mono font-bold text-brand-text leading-none">
           {runner?.lay != null ? Number(runner.lay).toFixed(2) : "—"}
         </span>
         <span className="text-[9px] text-neutral-gray-400 font-semibold mt-1">
@@ -49,7 +49,7 @@ export default function BettingHomePage() {
       ) : (
         <div className="bg-bg-card rounded-lg shadow-betting-card overflow-hidden">
           {/* Table header */}
-          <div className="flex items-center px-3 py-2 bg-brand-primary text-white text-xs font-display font-semibold">
+          <div className="flex items-center px-3 py-2 bg-brand-primary text-brand-text text-xs font-display font-semibold">
             <span className="flex-1">SCHEDULE</span>
             <div className="flex gap-1 text-center">
               <span className="min-w-[40px]">1</span>
@@ -74,7 +74,7 @@ export default function BettingHomePage() {
                   {event.name}
                 </span>
                 {event.hasBookmaker && (
-                  <span className="text-[10px] bg-brand-primary text-white font-bold px-1.5 py-0.5 rounded shrink-0">
+                  <span className="text-[10px] bg-brand-primary text-brand-text font-bold px-1.5 py-0.5 rounded shrink-0">
                     BM
                   </span>
                 )}

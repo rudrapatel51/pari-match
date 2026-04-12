@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { useUiStore } from "../../store/uiStore";
 import AccountSidebar from "./AccountSidebar";
 import MobileAccountDrawer from "./MobileAccountDrawer";
 
@@ -51,6 +52,7 @@ const AccountLayout: React.FC = () => {
   const { pathname } = useLocation();
   const activeMenuItem = useMemo(() => getActiveMenuItem(pathname), [pathname]);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const { isAccountSidebarOpen, setAccountSidebar } = useUiStore();
 
   // Listen for custom event to open mobile drawer (triggered from MobileBottomNav)
   useEffect(() => {
@@ -74,19 +76,21 @@ const AccountLayout: React.FC = () => {
        *  self-start → prevents the aside from stretching to match content height
        *              (which would break sticky)
        * ──────────────────────────────────────────────────────────────── */}
-      <aside
-        className={[
-          "hidden md:flex md:flex-col",
-          "w-72 lg:w-80 xl:w-320px flex-shrink-0 self-start",
-          "sticky top-[49px]",
-          "h-[calc(100vh-49px)]",
-          "border-r border-stroke-light",
-          "bg-bg-card",
-          "overflow-hidden",
-        ].join(" ")}
-      >
-        <AccountSidebar activeMenuItem={activeMenuItem} />
-      </aside>
+      {isAccountSidebarOpen && (
+        <aside
+          className={[
+            "hidden md:flex md:flex-col",
+            "w-72 lg:w-80 xl:w-320px flex-shrink-0 self-start",
+            "sticky top-[49px]",
+            "h-[calc(100vh-49px)]",
+            "border-r border-stroke-light",
+            "bg-bg-card",
+            "overflow-hidden",
+          ].join(" ")}
+        >
+          <AccountSidebar activeMenuItem={activeMenuItem} />
+        </aside>
+      )}
 
       {/* ── Mobile Drawer ─────────────────────────────────────────────── */}
       <MobileAccountDrawer

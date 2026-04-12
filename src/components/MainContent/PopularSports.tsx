@@ -69,16 +69,16 @@ const PopularSports: React.FC = () => {
                     {LIVE_CARD.icon}
                   </span>
                   {liveTotal > 0 && (
-                    <span className="bg-white/20 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                    <span className="bg-white/20 text-brand-text text-[9px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
                       {liveTotal} LIVE
                     </span>
                   )}
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm leading-tight">
+                  <p className="text-brand-text font-bold text-sm leading-tight">
                     {LIVE_CARD.name}
                   </p>
-                  <p className="text-white/60 text-[10px] mt-0.5">
+                  <p className="text-brand-text/60 text-[10px] mt-0.5">
                     Live betting
                   </p>
                 </div>
@@ -107,16 +107,18 @@ const PopularSports: React.FC = () => {
                 <div className="flex items-start justify-between">
                   <span className="text-3xl leading-none">{meta.icon}</span>
                   {sportLiveCount > 0 && (
-                    <span className="bg-accent-red text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                    <span className="bg-accent-red text-brand-text text-[9px] font-bold px-1.5 py-0.5 rounded-full">
                       {sportLiveCount} LIVE
                     </span>
                   )}
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm leading-tight">
+                  <p className="text-brand-text font-bold text-sm leading-tight">
                     {sport.name}
                   </p>
-                  <p className="text-white/60 text-[10px] mt-0.5">Bet now</p>
+                  <p className="text-brand-text/60 text-[10px] mt-0.5">
+                    Bet now
+                  </p>
                 </div>
               </div>
             </div>

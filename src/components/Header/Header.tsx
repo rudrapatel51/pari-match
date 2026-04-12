@@ -31,12 +31,40 @@ const Header: React.FC<HeaderProps> = ({
   onMobileNavToggle,
 }) => {
   const [currentTime, setCurrentTime] = useState<string>("");
-  const { openModal } = useUiStore();
+  const { openModal, isAccountSidebarOpen, toggleAccountSidebar } =
+    useUiStore();
   const { isAuthenticated } = useAuth();
   const user = useAuthStore((s) => s.user);
   const navigate = useNavigate();
   const location = useLocation();
   const unreadCount = useNotificationStore((s) => s.unreadCount);
+
+  // Check if we're on an account page
+  const ACCOUNT_PATHS = [
+    "/my-account",
+    "/profile",
+    "/kyc",
+    "/change-password",
+    "/notification",
+    "/wallet",
+    "/deposit",
+    "/withdraw",
+    "/bet-history",
+    "/unsettled-bets",
+    "/profit-loss",
+    "/bet-stake-setting",
+    "/payment-accounts",
+    "/casino-bet-history",
+    "/spin-win",
+    "/daily-rewards",
+    "/my-vip",
+    "/affiliate",
+    "/contact-us",
+    "/bonus-manager",
+  ];
+  const isAccountPage = ACCOUNT_PATHS.some(
+    (p) => location.pathname === p || location.pathname.startsWith(p + "/"),
+  );
 
   useEffect(() => {
     const updateTime = () => {
@@ -59,21 +87,35 @@ const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center h-11 sm:h-12 text-brand-text text-xs">
               {/* LEFT: Logo */}
               <div className="flex items-center gap-2 min-w-0">
-                {/* Desktop hamburger menu — shows X when open */}
+                {/* Desktop hamburger menu — shows X when open (hidden on tablets) */}
                 <button
-                  className="hidden md:flex items-center justify-center w-12 h-12 mr-1 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new Event("toggleDesktopAccountDrawer"),
-                    )
-                  }
+                  className="hidden lg:flex items-center justify-center w-12 h-12 mr-1 rounded-lg text-brand-text hover:bg-bg-light-blue transition-colors"
+                  onClick={() => {
+                    if (isAccountPage) {
+                      toggleAccountSidebar();
+                    } else {
+                      window.dispatchEvent(
+                        new Event("toggleDesktopAccountDrawer"),
+                      );
+                    }
+                  }}
                   aria-label={
-                    isDesktopAccountDrawerOpen
-                      ? "Close account menu"
-                      : "Open account menu"
+                    isAccountPage
+                      ? isAccountSidebarOpen
+                        ? "Close sidebar"
+                        : "Open sidebar"
+                      : isDesktopAccountDrawerOpen
+                        ? "Close account menu"
+                        : "Open account menu"
                   }
                 >
-                  {isDesktopAccountDrawerOpen ? (
+                  {isAccountPage ? (
+                    isAccountSidebarOpen ? (
+                      <FiX className="w-5 h-5" />
+                    ) : (
+                      <FiMenu className="w-5 h-5" />
+                    )
+                  ) : isDesktopAccountDrawerOpen ? (
                     <FiX className="w-5 h-5" />
                   ) : (
                     <FiMenu className="w-5 h-5" />
@@ -95,29 +137,31 @@ const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* CENTER: Desktop Nav Links */}
-              <div className="hidden md:flex items-center flex-1 justify-center px-4 overflow-x-auto scrollbar-hide">
-                <ul className="flex items-center">
+              <div className="hidden lg:flex items-center flex-1 justify-center px-2 overflow-x-auto scrollbar-hide">
+                <ul className="flex items-center gap-1">
                   {navigationItems.map((item, index) => {
                     const isActive =
                       location.pathname === item.href ||
                       (item.href !== "/" &&
                         location.pathname.startsWith(item.href + "/"));
                     return (
-                      <li key={index}>
+                      <li key={index} className="flex-shrink-0">
                         <a
                           href={item.href}
                           className={[
-                            "group relative flex items-center justify-center gap-2",
-                            "px-4 lg:px-5 py-3",
-                            "text-sm font-semibold whitespace-nowrap",
+                            "group relative flex items-center justify-center gap-1.5",
+                            "px-2 lg:px-3 py-3",
+                            "text-xs lg:text-sm font-semibold whitespace-nowrap",
                             "transition-all touch-manipulation",
                             isActive
                               ? "bg-transparent text-brand-accent font-bold"
-                              : "text-white hover:text-brand-accent",
+                              : "text-brand-text hover:text-brand-accent",
                           ].join(" ")}
                         >
                           {item.icon && (
-                            <span className="text-base">{item.icon}</span>
+                            <span className="text-base flex-shrink-0">
+                              {item.icon}
+                            </span>
                           )}
                           <span>{item.label}</span>
                           {!isActive && (
@@ -136,7 +180,7 @@ const Header: React.FC<HeaderProps> = ({
                   <>
                     <button
                       onClick={() => openModal("login")}
-                      className="flex items-center justify-center bg-bg-card hover:bg-bg-light-blue text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-semibold text-xs sm:text-sm border border-stroke-light touch-manipulation"
+                      className="flex items-center justify-center bg-bg-card hover:bg-bg-light-blue text-brand-text px-3 py-1.5 sm:px-4 sm:py-2 rounded transition-colors font-semibold text-xs sm:text-sm border border-stroke-light touch-manipulation"
                     >
                       Log in
                     </button>
@@ -157,7 +201,7 @@ const Header: React.FC<HeaderProps> = ({
                     >
                       <FiBell className="w-5 h-5" />
                       {unreadCount > 0 && (
-                        <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-accent-red text-white text-[9px] font-bold px-1 leading-none ring-2 ring-bg-card pointer-events-none">
+                        <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-accent-red text-brand-text text-[9px] font-bold px-1 leading-none ring-2 ring-bg-card pointer-events-none">
                           {unreadCount > 99 ? "99+" : unreadCount}
                         </span>
                       )}
@@ -171,7 +215,7 @@ const Header: React.FC<HeaderProps> = ({
                     {/* Balance Button with Currency Icon */}
                     <button
                       onClick={() => navigate("/wallet")}
-                      className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-bg-secondary hover:bg-bg-light-blue text-white transition-colors rounded"
+                      className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-bg-secondary hover:bg-bg-light-blue text-brand-text transition-colors rounded"
                       title="Balance & Wallet"
                     >
                       {/* Currency Circle */}

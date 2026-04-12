@@ -305,7 +305,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
   const FloatingOpenBtn = (
     <button
       onClick={onToggleCollapse}
-      className="hidden xl:flex fixed right-0 top-1/4 z-50 bg-brand-primary text-white rounded-l-full p-2 shadow-lg hover:bg-brand-primary-light transition-colors items-center"
+      className="hidden xl:flex fixed right-0 top-1/4 z-50 bg-brand-primary text-brand-text rounded-l-full p-2 shadow-lg hover:bg-brand-primary-light transition-colors items-center"
       aria-label="Open sidebar"
     >
       <FiChevronLeft className="w-4 h-4" />
@@ -583,7 +583,7 @@ const AuthContent: React.FC<AuthContentProps> = ({
     <div className="px-3 py-2.5 border-b border-stroke-light bg-bg-card flex-shrink-0">
       <button
         onClick={onClose}
-        className="bg-brand-primary text-white w-full px-3 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
+        className="bg-brand-primary text-brand-text w-full px-3 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
       >
         Close
       </button>
@@ -685,7 +685,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
         className={clsx(
           "flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-bold transition-all",
           mainTab === "betslip"
-            ? "bg-brand-primary text-white shadow-sm"
+            ? "bg-brand-primary text-brand-text shadow-sm"
             : "text-neutral-gray-400 hover:bg-bg-card transition-colors",
         )}
       >
@@ -701,7 +701,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
         className={clsx(
           "flex-1 flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all",
           mainTab === "mybets"
-            ? "bg-brand-primary text-white shadow-sm"
+            ? "bg-brand-primary text-brand-text shadow-sm"
             : "text-neutral-gray-400 hover:bg-bg-card transition-colors",
         )}
       >
@@ -724,7 +724,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
             style={{ background: "rgba(255,255,255,0.07)" }}
           >
             <div className="flex items-center gap-2">
-              <FiTv size={14} style={{ color: "rgba(255,255,255,0.7)" }} />
+              <FiTv size={14} style={{ color: "text-brand-text-70" }} />
               <span
                 className="text-xs font-semibold"
                 style={{ color: "rgba(255,255,255,0.85)" }}
@@ -733,14 +733,11 @@ const SheetContent: React.FC<SheetContentProps> = ({
               </span>
             </div>
             {tvExpanded ? (
-              <FiChevronUp
-                size={14}
-                style={{ color: "rgba(255,255,255,0.5)" }}
-              />
+              <FiChevronUp size={14} style={{ color: "text-brand-text-50" }} />
             ) : (
               <FiChevronDown
                 size={14}
-                style={{ color: "rgba(255,255,255,0.5)" }}
+                style={{ color: "text-brand-text-50" }}
               />
             )}
           </button>
@@ -765,7 +762,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
           {lastResult && (
             <div className="flex flex-col items-center justify-center h-full gap-4 p-6 text-center">
               <div className="w-16 h-16 bg-accent-green rounded-full flex items-center justify-center">
-                <span className="text-white text-3xl">✓</span>
+                <span className="text-brand-text text-3xl">✓</span>
               </div>
               <h3 className="font-display text-lg font-bold text-brand-text">
                 Bets Placed!
@@ -837,7 +834,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
                       <div className="flex items-center gap-2 min-w-0 flex-1">
                         <span
                           className={clsx(
-                            "text-[10px] font-bold px-2 py-0.5 rounded uppercase shrink-0 text-white",
+                            "text-[10px] font-bold px-2 py-0.5 rounded uppercase shrink-0 text-brand-text",
                             item.betType === "BACK"
                               ? "bg-odds-back"
                               : "bg-odds-lay",
@@ -904,7 +901,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
                         {QUICK_STAKES.map((amount) => (
                           <button
                             key={amount}
-                            className="text-[11px] bg-bg-light-blue border border-stroke-light hover:bg-brand-primary hover:text-white rounded-md py-1.5 transition-colors font-mono text-brand-text"
+                            className="text-[11px] bg-bg-light-blue border border-stroke-light hover:bg-brand-primary hover:text-brand-text rounded-md py-1.5 transition-colors font-mono text-brand-text"
                             onClick={() =>
                               onUpdateStake(item.id, (item.stake || 0) + amount)
                             }
@@ -1019,7 +1016,7 @@ const SheetContent: React.FC<SheetContentProps> = ({
                       <div className="flex items-center gap-1.5">
                         <span
                           className={clsx(
-                            "text-[10px] font-bold px-1.5 py-0.5 rounded uppercase text-white",
+                            "text-[10px] font-bold px-1.5 py-0.5 rounded uppercase text-brand-text",
                             bet.betType === "BACK"
                               ? "bg-odds-back"
                               : "bg-odds-lay",

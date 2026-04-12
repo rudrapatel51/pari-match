@@ -254,17 +254,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({
   if (!isAuthenticated) {
     return (
       <div className="flex flex-col h-full bg-bg-card">
-        <div className="flex-shrink-0 mx-3 mt-3 mb-3 px-4 py-4 bg-brand-primary rounded-md">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-neutral-gray-50 flex items-center justify-center rounded-full">
-              <FiUser className="w-5 h-5 text-brand-text" />
-            </div>
-            <span className="text-brand-text font-semibold text-sm">
-              My Account
-            </span>
-          </div>
-        </div>
-
         <div className="px-3 pb-3 grid grid-cols-2 gap-2">
           <button
             onClick={() => {

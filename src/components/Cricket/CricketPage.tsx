@@ -107,16 +107,16 @@ const CricketHeroBanner: React.FC = () => {
             <div className={`relative h-36 sm:h-44 md:h-56 overflow-hidden select-none bg-gradient-to-r ${slide.bg}`}>
                 <img src={slide.img} alt={slide.title} className="absolute inset-0 w-full h-full object-cover opacity-30" />
                 <div className="relative z-10 flex flex-col justify-center h-full px-6 sm:px-10">
-                    <h2 className="text-white font-extrabold text-xl sm:text-3xl md:text-4xl uppercase drop-shadow mb-1">{slide.title}</h2>
-                    <p className="text-white/80 text-xs sm:text-sm mb-3 max-w-sm">{slide.subtitle}</p>
-                    <button className="bg-bg-card text-white font-bold text-xs sm:text-sm px-4 py-2 rounded w-fit hover:bg-bg-light-blue transition-colors">
+                    <h2 className="text-brand-text font-extrabold text-xl sm:text-3xl md:text-4xl uppercase drop-shadow mb-1">{slide.title}</h2>
+                    <p className="text-brand-text/80 text-xs sm:text-sm mb-3 max-w-sm">{slide.subtitle}</p>
+                    <button className="bg-bg-card text-brand-text font-bold text-xs sm:text-sm px-4 py-2 rounded w-fit hover:bg-bg-light-blue transition-colors">
                         {slide.cta}
                     </button>
                 </div>
-                <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/30 hover:bg-neutral-gray-900/50 text-white rounded-full p-1.5" aria-label="Previous">
+                <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/30 hover:bg-neutral-gray-900/50 text-brand-text rounded-full p-1.5" aria-label="Previous">
                     <FiChevronLeft className="w-4 h-4" />
                 </button>
-                <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/30 hover:bg-neutral-gray-900/50 text-white rounded-full p-1.5" aria-label="Next">
+                <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/30 hover:bg-neutral-gray-900/50 text-brand-text rounded-full p-1.5" aria-label="Next">
                     <FiChevronRight className="w-4 h-4" />
                 </button>
             </div>
@@ -134,10 +134,10 @@ const CricketHeroBanner: React.FC = () => {
             )}
             {banners.length > 1 && (
                 <>
-                    <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/40 hover:bg-neutral-gray-900/60 text-white rounded-full p-1.5" aria-label="Previous">
+                    <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/40 hover:bg-neutral-gray-900/60 text-brand-text rounded-full p-1.5" aria-label="Previous">
                         <FiChevronLeft className="w-4 h-4" />
                     </button>
-                    <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/40 hover:bg-neutral-gray-900/60 text-white rounded-full p-1.5" aria-label="Next">
+                    <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-gray-900/40 hover:bg-neutral-gray-900/60 text-brand-text rounded-full p-1.5" aria-label="Next">
                         <FiChevronRight className="w-4 h-4" />
                     </button>
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
@@ -235,9 +235,9 @@ const CricketPage: React.FC = () => {
                     <div className="bg-brand-primary px-4 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <span className="text-accent-yellow text-base">🏆</span>
-                            <h2 className="text-sm font-bold text-white uppercase tracking-wide">Top Competitions</h2>
+                            <h2 className="text-sm font-bold text-brand-text uppercase tracking-wide">Top Competitions</h2>
                         </div>
-                        <a href="#all-games" className="text-white/80 text-xs font-semibold hover:text-white underline">
+                        <a href="#all-games" className="text-brand-text/80 text-xs font-semibold hover:text-brand-text underline">
                             All leagues
                         </a>
                     </div>
@@ -261,14 +261,14 @@ const CricketPage: React.FC = () => {
         <span className="text-3xl flex-shrink-0">🎁</span>
         <div className="min-w-0">
             {/*
-              text-white always reads on bg-brand-primary gradient.
+              text-brand-text always reads on bg-brand-primary gradient.
               Never use text-brand-text here — on bg-brand-primary
-              surfaces, text must always be text-white.
+              surfaces, text must always be text-brand-text.
             */}
-            <h3 className="text-white font-bold text-sm leading-tight">
+            <h3 className="text-brand-text font-bold text-sm leading-tight">
                 Cricket Welcome Bonus
             </h3>
-            <p className="text-white/70 text-xs mt-0.5 truncate">
+            <p className="text-brand-text/70 text-xs mt-0.5 truncate">
                 Get up to 100% bonus on your first bet!
             </p>
         </div>
@@ -280,15 +280,15 @@ const CricketPage: React.FC = () => {
         Dark mode: bg-bg-card = #1e3347 (dark), text-brand-primary = #1a3a5c (dark navy)
         Result: near-invisible dark text on dark card = broken
 
-      AFTER: bg-accent-green text-white
-        Works in ALL themes — accent-green is vivid (#4caf50), text-white
+      AFTER: bg-accent-green text-brand-text
+        Works in ALL themes — accent-green is vivid (#4caf50), text-brand-text
         always readable on it. This also matches the 1xBet CTA button style.
         Hover: slightly darker green via opacity.
     */}
     <button
         onClick={() => navigate('/wallet')}
         className="
-            bg-accent-green text-white font-bold text-xs
+            bg-accent-green text-brand-text font-bold text-xs
             px-4 py-2 rounded-lg flex-shrink-0
             hover:opacity-90 active:opacity-80
             transition-opacity whitespace-nowrap
@@ -304,9 +304,9 @@ const CricketPage: React.FC = () => {
                 <div className="bg-brand-primary px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <span className="text-accent-yellow text-sm">⚡</span>
-                        <h2 className="text-white font-bold text-sm uppercase tracking-wide">All Games</h2>
+                        <h2 className="text-brand-text font-bold text-sm uppercase tracking-wide">All Games</h2>
                     </div>
-                    <span className="text-white/60 text-xs">{events.length} events</span>
+                    <span className="text-brand-text/60 text-xs">{events.length} events</span>
                 </div>
 
                 {/* Filters + Search */}
@@ -317,8 +317,8 @@ const CricketPage: React.FC = () => {
                                 key={filter}
                                 onClick={() => setActiveFilter(filter)}
                                 className={`flex items-center gap-1 px-3 sm:px-4 py-2.5 text-xs font-semibold whitespace-nowrap border-r border-stroke-light transition-colors flex-shrink-0 ${activeFilter === filter
-                                    ? 'text-white border-b-2 border-b-accent-green bg-bg-light-blue'
-                                    : 'text-neutral-gray-700 hover:bg-bg-light-blue hover:text-white'
+                                    ? 'text-brand-text border-b-2 border-b-accent-green bg-bg-light-blue'
+                                    : 'text-neutral-gray-700 hover:bg-bg-light-blue hover:text-brand-text'
                                     }`}
                             >
                                 {filter === 'Live' && (
@@ -326,19 +326,19 @@ const CricketPage: React.FC = () => {
                                 )}
                                 {filter}
                                 {filter === 'Live' && liveCount > 0 && (
-                                    <span className="bg-accent-green text-white text-[8px] font-bold px-1 rounded-full ml-0.5">{liveCount}</span>
+                                    <span className="bg-accent-green text-brand-text text-[8px] font-bold px-1 rounded-full ml-0.5">{liveCount}</span>
                                 )}
                             </button>
                         ))}
                     </div>
                     <div className="flex items-center border-l border-stroke-light px-3 flex-shrink-0 bg-brand-primary">
-                        <FiSearch className="w-3.5 h-3.5 text-white/70" />
+                        <FiSearch className="w-3.5 h-3.5 text-brand-text/70" />
                         <input
                             type="text"
                             placeholder="Search"
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
-                            className="bg-transparent text-xs text-white placeholder-white/50 outline-none w-20 sm:w-28 ml-1.5 py-2"
+                            className="bg-transparent text-xs text-brand-text placeholder-white/50 outline-none w-20 sm:w-28 ml-1.5 py-2"
                         />
                     </div>
                 </div>

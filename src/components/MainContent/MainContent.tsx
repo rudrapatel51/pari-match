@@ -410,10 +410,10 @@ const MainContent: React.FC = () => {
                   e.stopPropagation(); /* handle bet */
                 }}
               >
-                <span className="text-[16px] font-bold text-accent-blue group-hover:text-white transition-colors">
+                <span className="text-[16px] font-bold text-accent-blue group-hover:text-brand-text transition-colors">
                   {runner?.back ? Number(runner.back).toFixed(2) : "-"}
                 </span>
-                <span className="text-[11px] font-semibold text-neutral-gray-500 group-hover:text-white transition-colors pt-0.5">
+                <span className="text-[11px] font-semibold text-neutral-gray-500 group-hover:text-brand-text transition-colors pt-0.5">
                   {label}
                 </span>
               </button>

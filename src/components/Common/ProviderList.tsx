@@ -11,15 +11,15 @@ export interface ProviderItem {
     games?: any[];
 }
 //COMMENT THIS OUT  REMOVE AFTER YOU HAVE BACKEND
-const MOCK_PROVIDERS: ProviderItem[] = [
-    { provider_id: '1', provider_name: 'Evolution', provider_image: 'https://picsum.photos/seed/evo/150/150' },
-    { provider_id: '2', provider_name: 'Pragmatic', provider_image: 'https://picsum.photos/seed/pragmatic/150/150' },
-    { provider_id: '3', provider_name: 'Ezugi', provider_image: 'https://picsum.photos/seed/ezugi/150/150' },
-    { provider_id: '4', provider_name: 'NetEnt', provider_image: 'https://picsum.photos/seed/netent/150/150' },
-    { provider_id: '5', provider_name: 'Spribe', provider_image: 'https://picsum.photos/seed/spribe/150/150' },
-    { provider_id: '6', provider_name: 'Playtech', provider_image: 'https://picsum.photos/seed/playtech/150/150' },
-    { provider_id: '7', provider_name: 'Red Tiger', provider_image: 'https://picsum.photos/seed/redtiger/150/150' },
-];
+// const MOCK_PROVIDERS: ProviderItem[] = [
+//     { provider_id: '1', provider_name: 'Evolution', provider_image: 'https://picsum.photos/seed/evo/150/150' },
+//     { provider_id: '2', provider_name: 'Pragmatic', provider_image: 'https://picsum.photos/seed/pragmatic/150/150' },
+//     { provider_id: '3', provider_name: 'Ezugi', provider_image: 'https://picsum.photos/seed/ezugi/150/150' },
+//     { provider_id: '4', provider_name: 'NetEnt', provider_image: 'https://picsum.photos/seed/netent/150/150' },
+//     { provider_id: '5', provider_name: 'Spribe', provider_image: 'https://picsum.photos/seed/spribe/150/150' },
+//     { provider_id: '6', provider_name: 'Playtech', provider_image: 'https://picsum.photos/seed/playtech/150/150' },
+//     { provider_id: '7', provider_name: 'Red Tiger', provider_image: 'https://picsum.photos/seed/redtiger/150/150' },
+// ];
 
 const ProviderList: React.FC = () => {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const ProviderList: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setLoading(true);
+        // setLoading(true);
         // MOCK DATA OVERRIDE
         /*
         // casinoApi.getFranchiseProviders()
@@ -41,10 +41,10 @@ const ProviderList: React.FC = () => {
         //     .catch((err) => console.error('[ProviderList] fetch failed:', err))
         //     .finally(() => setLoading(false));
         */
-        setTimeout(() => {
-            setProviders(MOCK_PROVIDERS);
-            setLoading(false);
-        }, 300);
+        // setTimeout(() => {
+        //     setProviders(MOCK_PROVIDERS);
+        //     setLoading(false);
+        // }, 300);
     }, []);
 
     if (loading) {

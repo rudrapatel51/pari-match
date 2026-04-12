@@ -209,7 +209,7 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
       {/* ── Backdrop ── */}
       <div
         className={[
-          "fixed inset-0 z-[55] md:hidden",
+          "fixed inset-0 z-[55] lg:hidden",
           "bg-black/50",
           "transition-opacity duration-300",
           isOpen
@@ -229,11 +229,11 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
         className={[
           "fixed inset-y-0 left-0 z-[60]",
           /*
-                      KEY FIX: w-full makes it full-screen width on mobile.
-                      md:w-80 caps it on tablet+ so it's not absurdly wide on desktop.
+                      KEY FIX: w-full makes it full-screen width on mobile/tablet.
+                      lg:w-80 caps it on lg+ so it's not absurdly wide on desktop.
                       This matches the 1xBet full-width mobile drawer in the target image.
                     */
-          "w-full md:w-80",
+          "w-full lg:w-80",
           "flex flex-col",
           /*
                       bg-bg-card:
@@ -243,27 +243,27 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
           "bg-bg-card",
           "shadow-elevated",
           "transform transition-transform duration-300 ease-in-out",
-          "md:hidden",
+          "lg:hidden",
           isOpen ? "translate-x-0" : "-translate-x-full",
         ].join(" ")}
       >
-        {/* ── Header: matches 1xBet top bar with time + close ── */}
-        <div className="flex items-center justify-between px-4 py-3 bg-brand-primary flex-shrink-0">
-          <span className="text-white font-bold text-sm tracking-widest uppercase">
+        {/* ── Header: dark theme with close button ── */}
+        <div className="flex items-center justify-between px-4 py-3 bg-brand-primary-dark flex-shrink-0">
+          <span className="text-brand-text font-bold text-sm tracking-widest uppercase">
             Menu
           </span>
           <button
             onClick={onClose}
-            className="p-1.5 rounded text-white/80 hover:text-white hover:bg-white/15 transition-colors"
+            className="p-1.5 text-brand-text-70 hover:text-brand-text transition-colors"
             aria-label="Close menu"
           >
             <FiX className="w-5 h-5" />
           </button>
         </div>
 
-        {/* ── App download banner — matches image: gray bg, two green buttons ── */}
-        <div className="px-3 py-2.5 bg-stroke-light border-b border-stroke-light flex-shrink-0">
-          <p className="text-[10px] font-bold text-neutral-gray-500 uppercase tracking-widest mb-2">
+        {/* ── App download banner – unified background ── */}
+        <div className="px-4 py-4 bg-bg-primary flex-shrink-0">
+          <p className="text-xs font-bold text-brand-text-70 uppercase tracking-wider mb-3">
             Download the App
           </p>
           <div className="flex gap-2">
@@ -273,7 +273,7 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
             ].map((app) => (
               <button
                 key={app.label}
-                className="flex-1 flex items-center justify-center gap-1.5 bg-accent-green text-white text-xs font-bold py-2.5 rounded-md hover:opacity-90 transition-opacity"
+                className="flex-1 flex items-center justify-center gap-1.5 bg-accent-green text-black text-xs font-bold py-2.5 hover:opacity-90 transition-opacity"
               >
                 <span className="text-sm leading-none">{app.icon}</span>
                 {app.label}
@@ -283,24 +283,19 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
         </div>
 
         {/* ── Scrollable nav list ── */}
-        <nav className="flex-1 overflow-y-auto" aria-label="Main navigation">
+        <nav className="flex-1 overflow-y-auto bg-brand-primary-dark px-4 py-4" aria-label="Main navigation">
           {NAV_SECTIONS.map((section, si) => (
-            <div key={si}>
-              {/* Category header — "CASINO", "GAMES", etc.
-                                Matches 1xBet: light gray full-width bar, tiny muted uppercase text.
-                                Light: bg-stroke-light + text-neutral-gray-500
-                                Dark:  bg-brand-primary-dark + text-white/50
-                            */}
+            <div key={si} className="mb-4">
+              {/* Category header */}
               {section.category && (
-                <div className="px-4 py-1.5 bg-stroke-light dark:bg-brand-primary-dark border-b border-stroke-light">
-                  <span className="text-[10px] font-bold text-neutral-gray-500 dark:text-white/50 uppercase tracking-widest">
-                    {section.category}
-                  </span>
-                </div>
+                <p className="text-xs font-bold text-brand-text-70 uppercase tracking-wider mb-3">
+                  {section.category}
+                </p>
               )}
 
-              {/* Items */}
-              {section.items.map((item) => {
+              {/* Items section - individual items with spacing */}
+              <div className="space-y-2">
+                {section.items.map((item) => {
                 const isActive =
                   location.pathname === item.href ||
                   location.pathname.startsWith(item.href + "/");
@@ -317,25 +312,17 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                         }
                       }}
                       className={[
-                        "w-full flex items-center gap-3 px-4 py-3.5",
-                        "border-b border-stroke-light",
-                        "transition-colors duration-150",
-                        "text-left",
+                        "w-full flex items-center gap-3 px-4 py-3 rounded transition-colors duration-150 text-left bg-bg-primary",
                         isActive
-                          ? /*
-                                                      Active: subtle left accent + light bg.
-                                                      Light: bg-bg-light-blue, brand-text color, green left border
-                                                      Dark:  same tokens resolve to dark equivalents
-                                                    */
-                            "bg-bg-light-blue border-l-[3px] border-l-accent-green"
-                          : "bg-bg-card hover:bg-bg-light-blue",
+                          ? "bg-bg-primary text-brand-text"
+                          : "hover:bg-brand-primary/5 text-brand-text",
                       ].join(" ")}
                     >
-                      {/* Icon — brand-primary color in 1xBet image */}
+                      {/* Icon */}
                       <span
                         className={[
                           "flex-shrink-0 flex items-center justify-center w-5",
-                          isActive ? "text-accent-green" : "text-brand-primary",
+                          isActive ? "text-accent-green" : "text-brand-text-70",
                         ].join(" ")}
                       >
                         {item.icon}
@@ -344,29 +331,23 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                       {/* Label */}
                       <span
                         className={[
-                          "flex-1 text-sm font-medium leading-none",
-                          /*
-                                                  text-brand-text: dark navy in light mode ✅,
-                                                  white in dark mode ✅ — always readable on bg-bg-card
-                                                */
-                          isActive
-                            ? "text-brand-text font-semibold"
-                            : "text-brand-text",
+                          "flex-1 text-sm font-medium",
+                          isActive ? "text-brand-text font-semibold" : "text-brand-text-60",
                         ].join(" ")}
                       >
                         {item.label}
                       </span>
 
-                      {/* Badge e.g. "TOP" */}
+                      {/* Badge */}
                       {item.badge && (
-                        <span className="text-[9px] font-bold bg-accent-green text-white px-1.5 py-0.5 rounded uppercase leading-none">
+                        <span className="text-xs font-bold bg-accent-green text-black px-2 py-0.5 leading-none">
                           {item.badge}
                         </span>
                       )}
 
                       {/* Expand chevron */}
                       {item.expandable && (
-                        <span className="text-neutral-gray-500 flex-shrink-0">
+                        <span className="text-brand-text-70 flex-shrink-0">
                           {isExpanded ? (
                             <FiChevronUp className="w-4 h-4" />
                           ) : (
@@ -376,20 +357,19 @@ const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                       )}
                     </button>
 
-                    {/* Expanded sub-items — navigate on click */}
+                    {/* View all link for expandable items */}
                     {item.expandable && isExpanded && (
                       <button
                         onClick={() => handleNav(item.href)}
-                        className="w-full flex items-center gap-3 px-6 py-3 border-b border-stroke-light bg-bg-secondary hover:bg-bg-light-blue transition-colors text-left"
+                        className="w-full flex items-center gap-3 px-6 py-2 text-xs text-brand-text-60 hover:text-brand-text transition-colors ml-1"
                       >
-                        <span className="text-xs text-brand-text">
-                          View all
-                        </span>
+                        View all →
                       </button>
                     )}
                   </div>
                 );
               })}
+              </div>
             </div>
           ))}
 
