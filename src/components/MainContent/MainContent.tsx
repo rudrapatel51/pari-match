@@ -80,87 +80,6 @@ export const LIVE_CARD = {
 
 // LiveMatchCard replaced by shared EventMatchCard — imported above
 
-/* MOCK DATA COMMENTED OUT — Using real API instead
-const MOCK_SPORTS = [
-  { sportId: "cricket", name: "Cricket", customPath: "/cricket" },
-  { sportId: "1", name: "Football", customPath: "/football" },
-  { sportId: "1-soccer", name: "Soccer", customPath: "/soccer" },
-  { sportId: "2", name: "Tennis", customPath: "/tennis" },
-  { sportId: "7522", name: "Hockey", customPath: "/hockey" },
-  { sportId: "2378961", name: "Election", customPath: "/election" },
-];
-
-const MOCK_EVENTS = [
-  {
-    eventId: "101",
-    name: "India vs Australia",
-    matchStatus: "LIVE",
-    league: "T20 World Cup",
-    matchOdds: {
-      runners: [
-        { back: 1.5, lay: 1.55 },
-        { back: 3.2, lay: 3.3 },
-        { back: 5.0, lay: 5.1 },
-      ],
-    },
-    hasBookmaker: true,
-  },
-  {
-    eventId: "102",
-    name: "FC Barcelona vs Real Madrid",
-    startTime: new Date().toISOString(),
-    league: "La Liga",
-    matchOdds: {
-      runners: [
-        { back: 2.1, lay: 2.2 },
-        { back: 3.5, lay: 3.6 },
-        { back: 2.8, lay: 2.9 },
-      ],
-    },
-    hasBookmaker: false,
-  },
-  {
-    eventId: "103",
-    name: "Rafael Nadal vs Roger Federer",
-    startTime: new Date(Date.now() + 86400000).toISOString(),
-    league: "Wimbledon",
-    matchOdds: {
-      runners: [
-        { back: 1.8, lay: 1.85 },
-        { back: "", lay: "" },
-        { back: 2.0, lay: 2.1 },
-      ],
-    },
-    hasBookmaker: true,
-  },
-];
-
-const MOCK_GAMES: CasinoRawGame[] = Array.from({ length: 12 }).map((_, i) => ({
-  id: `mock-game-${i}`,
-  title: `Casino Game ${i + 1}`,
-  image: `https://picsum.photos/seed/casino${i}/300/300`,
-  provider: "MockProvider",
-  game_name: `Casino Game ${i + 1}`,
-  provider_name: "MockProvider",
-  url_thumb: `https://picsum.photos/seed/game${i}/300/400`,
-}));
-
-const MOCK_BANNERS = [
-  {
-    id: "banner1",
-    title: "Welcome Bonus",
-    image_url: "https://picsum.photos/seed/banner1/1200/400",
-    url_link: "/promo",
-  },
-  {
-    id: "banner2",
-    title: "Weekly Cashback",
-    image_url: "https://picsum.photos/seed/banner2/1200/400",
-    url_link: "/promo",
-  },
-];
-*/
-
 const MainContent: React.FC = () => {
   const navigate = useNavigate();
   // Betting sports section state — sports from shared store
@@ -237,17 +156,6 @@ const MainContent: React.FC = () => {
           setNewGames(flattenGames(cats(newItem.value)));
         if (all.status === "fulfilled")
           setAllGames(flattenGames(cats(all.value)));
-
-        /* MOCK DATA COMMENTED OUT
-        setTimeout(() => {
-          setTrendingGames(MOCK_GAMES);
-          setTopGames(MOCK_GAMES);
-          setRecommendedGames(MOCK_GAMES);
-          setNewGames(MOCK_GAMES);
-          setAllGames(MOCK_GAMES);
-          setLoadingGames(false);
-        }, 300); // 300ms delay to show brief skeleton
-        */
       } catch (error) {
         console.error("[MainContent] games fetch failed:", error);
         setLoadingGames(false);
@@ -260,12 +168,6 @@ const MainContent: React.FC = () => {
         const res: any = await bannerApi.getBannersByType("general");
         const b = res?.data?.banners || res?.data || [];
         if (Array.isArray(b)) setGeneralBanners(b);
-        /* MOCK DATA COMMENTED OUT
-        setTimeout(() => {
-          setGeneralBanners(MOCK_BANNERS);
-          setLoadingGeneralBanners(false);
-        }, 300);
-        */
       } catch (error) {
         console.error("[MainContent] banners fetch failed:", error);
         setLoadingGeneralBanners(false);

@@ -27,24 +27,17 @@ const ProviderList: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // setLoading(true);
-        // MOCK DATA OVERRIDE
-        /*
-        // casinoApi.getFranchiseProviders()
-        //     .then((res: any) => {
-        //         const data = res?.data?.data || res?.data || [];
-        //         const providerList = Array.isArray(data?.providers) ? data.providers : (Array.isArray(data) ? data : []);
-        //         if (providerList.length > 0) {
-        //             setProviders(providerList.slice(0, 18));
-        //         }
-        //     })
-        //     .catch((err) => console.error('[ProviderList] fetch failed:', err))
-        //     .finally(() => setLoading(false));
-        */
-        // setTimeout(() => {
-        //     setProviders(MOCK_PROVIDERS);
-        //     setLoading(false);
-        // }, 300);
+        setLoading(true);
+        casinoApi.getFranchiseProviders()
+            .then((res: any) => {
+                const data = res?.data?.data || res?.data || [];
+                const providerList = Array.isArray(data?.providers) ? data.providers : (Array.isArray(data) ? data : []);
+                if (providerList.length > 0) {
+                    setProviders(providerList.slice(0, 18));
+                }
+            })
+            .catch((err) => console.error('[ProviderList] fetch failed:', err))
+            .finally(() => setLoading(false));
     }, []);
 
     if (loading) {

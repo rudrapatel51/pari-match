@@ -8,17 +8,6 @@ const PopularSports: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const bettingSports = useBettingStore((s) => s.sports);
   const liveEvents = useBettingStore((s) => s.liveEvents);
-
-  /* MOCK DATA COMMENTED OUT — Using real API instead
-  const MOCK_SPORTS = [
-    { sportId: 'cricket', name: 'Cricket', customPath: '/cricket' },
-    { sportId: '1', name: 'Football', customPath: '/football' },
-    { sportId: '1-soccer', name: 'Soccer', customPath: '/soccer' },
-    { sportId: '2', name: 'Tennis', customPath: '/tennis' },
-    { sportId: '7522', name: 'Hockey', customPath: '/hockey' },
-    { sportId: '2378961', name: 'Election', customPath: '/election' },
-  ];
-  */
   const displaySports = bettingSports;
 
   const scroll = (dir: "left" | "right") => {

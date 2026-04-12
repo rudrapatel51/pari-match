@@ -18,81 +18,6 @@ import { useToastStore } from "../../store/toastStore";
 import { bettingApi } from "../../api/bettingClient";
 import type { PlacedBet } from "../../types/domain";
 
-// ── MOCK DATA COMMENTED OUT — Using real API instead ──────
-/* MOCK DATA
-const MOCK_BETSLIP_ITEMS = [
-  {
-    id: "bet-1",
-    eventId: "evt-1",
-    marketId: "mkt-1",
-    marketName: "Match Winner",
-    marketType: "bookmaker",
-    runnerId: "run-1",
-    runnerName: "India",
-    betType: "BACK" as const,
-    odds: 1.95,
-    stake: 500,
-    line: undefined,
-    oddsChanged: false,
-  },
-  {
-    id: "bet-2",
-    eventId: "evt-1",
-    marketId: "mkt-2",
-    marketName: "Total Runs",
-    marketType: "session",
-    runnerId: "run-2",
-    runnerName: "Over 230.5",
-    betType: "LAY" as const,
-    odds: 2.5,
-    stake: 300,
-    line: 230.5,
-    oddsChanged: false,
-  },
-];
-
-const MOCK_ACTIVE_BETS: PlacedBet[] = [
-  {
-    betId: "placed-1",
-    runnerName: "India",
-    marketType: "bookmaker",
-    betType: "BACK",
-    odds: 1.95,
-    stake: 500,
-    status: "MATCHED",
-  },
-  {
-    betId: "placed-2",
-    runnerName: "Wickets Falls",
-    marketType: "session",
-    betType: "BACK",
-    odds: 1.5,
-    stake: 1000,
-    status: "PENDING",
-  },
-];
-
-const MOCK_SETTLED_BETS: PlacedBet[] = [
-  {
-    betId: "settled-1",
-    runnerName: "Pakistan",
-    marketType: "bookmaker",
-    betType: "LAY",
-    odds: 2.1,
-    stake: 250,
-    status: "WON",
-  },
-  {
-    betId: "settled-2",
-    runnerName: "Sixes",
-    marketType: "fancy",
-    betType: "LAY",
-    odds: 3.5,
-    stake: 200,
-    status: "LOST",
-  },
-];
-*/
 const QUICK_STAKES = [100, 500, 1000, 5000];
 const SESSION_MARKET_TYPES = [
   "session",
@@ -202,28 +127,10 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
 
   const bets: PlacedBet[] = myBetsFilter === "open" ? activeBets : settledBets;
 
-  // Initialize mock data on mount — COMMENTED OUT
+  // Initialize bet tracking on mount
   useEffect(() => {
-    /* MOCK DATA INITIALIZATION COMMENTED OUT
-    if (activeBets.length === 0) setActiveBets(MOCK_ACTIVE_BETS);
-    if (settledBets.length === 0) setSettledBets(MOCK_SETTLED_BETS);
-    // Add mock betslip items if store is empty and user is authenticated
-    if (betItems.length === 0 && isAuthenticated) {
-      const { addToBetSlip, updateStake } = useBettingStore.getState();
-      MOCK_BETSLIP_ITEMS.forEach((item) => {
-        const { id, stake, ...rest } = item;
-        addToBetSlip(rest);
-      });
-      // Update stakes after items are added
-      setTimeout(() => {
-        const { betItems: newBetItems } = useBettingStore.getState();
-        MOCK_BETSLIP_ITEMS.forEach((mockItem, idx) => {
-          if (newBetItems[idx]) updateStake(newBetItems[idx].id, mockItem.stake);
-        });
-      }, 0);
-    }
-    */
-  }, [isAuthenticated, betItems.length]);
+    if (mainTab === "mybets") fetchMyBets(myBetsFilter);
+  }, [mainTab, myBetsFilter]);
 
   const handlePlaceBets = async () => {
     if (!canSubmit) return;
@@ -256,12 +163,6 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
           return bettingApi.placeBet(payload);
         }),
       );
-      /* MOCK RESPONSE COMMENTED OUT
-      const results = betItems.map((bet, idx) => ({
-        betId: `mock-placed-${Date.now()}-${idx}`,
-        status: "MATCHED",
-      }));
-      */
       setLastResult(results);
       useBettingStore.getState().clearBetSlip();
       useToastStore
@@ -291,14 +192,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
       })
       .catch(() => useToastStore.getState().error("Failed to load bets"))
       .finally(() => setMyBetsLoading(false));
-    /* MOCK DATA CALLS COMMENTED OUT
-    // Using mock data instead
-    */
   };
-
-  useEffect(() => {
-    if (mainTab === "mybets") fetchMyBets(myBetsFilter);
-  }, [mainTab, myBetsFilter]);
 
   // ── Floating open button (desktop only — on mobile the bet slip
   //    opens as a bottom sheet so there's no floating button needed) ──────────
