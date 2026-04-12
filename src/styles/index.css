@@ -320,7 +320,156 @@ html.dark .swiper-button-prev:hover {
     filter: brightness(1.12);
   }
 
-  /* ── Cards ── */
+  /* ── Main Content Odds Button (Events List) ── */
+  .odds-btn-responsive {
+    @apply flex-1 sm:flex-none flex flex-col items-center justify-center bg-bg-light-blue hover:bg-neutral-gray-100 transition-colors rounded-md border border-stroke-light;
+  }
+
+  /* Responsive widths per breakpoint */
+  .odds-btn-responsive {
+    width: 100%; /* mobile: flex-1 stretches */
+    height: 56px; /* h-14 - mobile */
+  }
+
+  @media (min-width: 640px) {
+    .odds-btn-responsive {
+      width: 135px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .odds-btn-responsive {
+      width: 155px;
+      height: 64px; /* h-16 */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .odds-btn-responsive {
+      width: 175px;
+    }
+  }
+
+  /* Odds value text - responsive sizes */
+  .odds-value {
+    @apply font-bold text-sky-400 transition-colors;
+    font-size: 16px;
+  }
+
+  .odds-btn-responsive:hover .odds-value {
+    @apply text-brand-text;
+  }
+
+  @media (min-width: 768px) {
+    .odds-value {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .odds-value {
+      font-size: 20px;
+    }
+  }
+
+  /* Odds label (1, X, 2) */
+  .odds-label {
+    @apply text-[11px] md:text-[12px] font-semibold text-neutral-gray-500 transition-colors pt-0.5;
+  }
+
+  .odds-btn-responsive:hover .odds-label {
+    @apply text-brand-text;
+  }
+
+  /* ── Betting Sport Page: Back/Lay Odds Pair Container ── */
+  .odds-pair-container {
+    @apply flex flex-col gap-2;
+  }
+
+  @media (min-width: 768px) {
+    .odds-pair-container {
+      @apply flex-row gap-2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .odds-pair-container {
+      @apply gap-3;
+    }
+  }
+
+  /* ── Betting Sport Page: Back/Lay Stack (vertical) ── */
+  .odds-pair-stack {
+    @apply flex flex-col gap-1.5;
+  }
+
+  @media (min-width: 1024px) {
+    .odds-pair-stack {
+      @apply gap-2;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .odds-pair-stack {
+      @apply gap-2.5;
+    }
+  }
+
+  /* ── Betting Sport Page: Back/Lay Odds Pair ── */
+  .odds-pair-box {
+    @apply text-sm font-mono font-bold bg-bg-light-blue text-sky-400 px-4 py-1 text-center border border-stroke-light transition-colors hover:bg-neutral-gray-100 hover:text-brand-text;
+    min-width: 125px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45px;
+  }
+
+  /* Odds value inside box */
+  .odds-pair-value {
+    @apply text-sky-400 font-bold leading-tight;
+  }
+
+  .odds-pair-box:hover .odds-pair-value {
+    @apply text-brand-text;
+  }
+
+  /* Odds label inside back box (1, X, 2) */
+  .odds-pair-label {
+    @apply text-xs font-semibold text-neutral-gray-500 font-sans mt-1;
+  }
+
+  .odds-pair-box:hover .odds-pair-label {
+    @apply text-brand-text;
+  }
+
+  /* Desktop: Larger odds boxes */
+  @media (min-width: 1024px) {
+    .odds-pair-box {
+      @apply text-base px-6 py-1;
+      min-width: 170px;
+      min-height: 52px;
+    }
+
+    .odds-pair-label {
+      @apply mt-1;
+    }
+  }
+
+  /* Extra large screens */
+  @media (min-width: 1280px) {
+    .odds-pair-box {
+      @apply text-lg px-8 py-1.5;
+      min-width: 200px;
+      min-height: 60px;
+    }
+
+    .odds-pair-label {
+      @apply mt-1;
+    }
+  }
+
+  /* Cards ── */
   .card {
     @apply bg-bg-card rounded-lg shadow-betting-card p-4;
     /* Cards transition smoothly when admin changes theme live */

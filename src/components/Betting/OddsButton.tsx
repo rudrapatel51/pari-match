@@ -84,10 +84,10 @@ export default function OddsButton({
         "relative flex flex-col items-center justify-center rounded transition-all duration-150 font-mono select-none",
         // Size
         size === "sm"
-          ? "px-5 py-3 min-w-[110px] text-[13px]"
+          ? "px-3 py-2 min-w-[72px] text-xs sm:px-3 sm:py-2 sm:min-w-[80px] sm:text-xs md:px-3.5 md:py-2.5 md:min-w-[96px] md:text-[13px]"
           : size === "lg"
-            ? "px-10 py-3 min-w-[240px] text-base"
-            : "px-6 py-3 min-w-[128px] text-base",
+            ? "px-4 py-2 min-w-[132px] text-sm sm:px-5 sm:py-2.5 sm:min-w-[160px] sm:text-sm md:px-6 md:py-3 md:min-w-[220px] md:text-base"
+            : "px-3.5 py-2 min-w-[80px] text-sm sm:px-4 sm:py-2 sm:min-w-[92px] sm:text-sm md:px-4.5 md:py-2.5 md:min-w-[110px] md:text-sm lg:px-5 lg:py-3 lg:min-w-[128px] lg:text-base",
         // Colour
         isBullish
           ? "bg-odds-back text-sky-400 hover:bg-neutral-gray-100 hover:text-brand-text"
@@ -107,7 +107,7 @@ export default function OddsButton({
         {hasOdds ? numOdds.toFixed(2) : "—"}
       </span>
       {hasOdds && volume != null && volume !== "" && formatVolume(volume) && (
-        <span className="text-[10px] leading-none opacity-70 mt-0.5">
+        <span className="text-[9px] sm:text-[9px] md:text-[10px] leading-none opacity-70 mt-0.5">
           {formatVolume(volume)}
         </span>
       )}

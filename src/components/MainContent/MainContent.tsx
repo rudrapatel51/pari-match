@@ -257,11 +257,31 @@ const MainContent: React.FC = () => {
     return (
       <div
         key={event.eventId}
-        className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-bg-card cursor-pointer"
+        className="relative flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-bg-card cursor-pointer gap-2"
         onClick={() => navigate(`/betting/event/${event.eventId}`)}
       >
+        {/* Star button - positioned absolutely on mobile */}
+        <button
+          className="absolute top-3 right-3 sm:relative sm:top-auto sm:right-auto sm:ml-2 p-2 text-neutral-gray-400 hover:text-accent-yellow transition-colors shrink-0"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </button>
+
         {/* Left Side: Time, Teams */}
-        <div className="flex-1 flex flex-col gap-1.5 mb-4 sm:mb-0">
+        <div className="flex-1 flex flex-col gap-1.5 mb-0 pr-6 sm:pr-0">
           <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-gray-500 uppercase tracking-wide">
             {isLive ? (
               <span className="flex items-center gap-1 text-accent-red font-bold">
@@ -299,46 +319,26 @@ const MainContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Side: Odds and Star */}
-        <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+        {/* Right Side: Odds */}
+        <div className="flex items-center gap-1.5 w-full sm:w-auto sm:shrink-0 sm:self-auto">
           {runners.slice(0, 3).map((runner: any, idx: number) => {
             const label =
               idx === 0 ? "1" : idx === 1 && runners.length === 3 ? "X" : "2";
             return (
               <button
                 key={idx}
-                className="flex flex-col items-center justify-center w-[105px] sm:w-[135px] h-14 bg-neutral-gray-50 hover:bg-neutral-gray-200 transition-colors rounded-md border border-neutral-gray-300 hover:border-neutral-gray-300 group"
+                className="odds-btn-responsive"
                 onClick={(e) => {
                   e.stopPropagation(); /* handle bet */
                 }}
               >
-                <span className="text-[16px] font-bold text-accent-blue group-hover:text-brand-text transition-colors">
+                <span className="odds-value">
                   {runner?.back ? Number(runner.back).toFixed(2) : "-"}
                 </span>
-                <span className="text-[11px] font-semibold text-neutral-gray-500 group-hover:text-brand-text transition-colors pt-0.5">
-                  {label}
-                </span>
+                <span className="odds-label">{label}</span>
               </button>
             );
           })}
-          <button
-            className="p-2 text-neutral-gray-400 hover:text-accent-yellow transition-colors ml-2 shrink-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-            </svg>
-          </button>
         </div>
       </div>
     );
@@ -350,6 +350,20 @@ const MainContent: React.FC = () => {
     acc[league].push(event);
     return acc;
   }, {});
+
+  // Filter out leagues with no events that have runners/odds data
+  const filteredGroupedEvents = Object.entries(groupedEvents).reduce(
+    (acc: any, [league, events]: any) => {
+      const eventsWithRunners = events.filter(
+        (e: any) => e.matchOdds?.runners && e.matchOdds.runners.length > 0,
+      );
+      if (eventsWithRunners.length > 0) {
+        acc[league] = eventsWithRunners;
+      }
+      return acc;
+    },
+    {},
+  );
 
   return (
     <div className="w-full max-w-[1920px] mx-auto">
@@ -422,24 +436,28 @@ const MainContent: React.FC = () => {
                 </p>
               </div>
             ) : (
-              Object.entries(groupedEvents).map(([leagueName, events]: any) => (
-                <div
-                  key={leagueName}
-                  className="mb-0 last:border-0 object-cover"
-                >
-                  {/* League Header */}
-                  <div className="px-4 py-3 text-[12px] font-medium text-neutral-gray-600 bg-bg-secondary">
-                    {leagueName}{" "}
-                    {displaySports.find(
-                      (s: any) => String(s.sportId) === String(activeSportId),
-                    )?.name || ""}
+              Object.entries(filteredGroupedEvents).map(
+                ([leagueName, events]: any) => (
+                  <div
+                    key={leagueName}
+                    className="mb-0 last:border-0 object-cover"
+                  >
+                    {/* League Header */}
+                    <div className="px-4 py-3 text-[12px] font-medium text-neutral-gray-600 bg-bg-secondary">
+                      {leagueName}{" "}
+                      {displaySports.find(
+                        (s: any) => String(s.sportId) === String(activeSportId),
+                      )?.name || ""}
+                    </div>
+                    {/* Events mapped inside this league */}
+                    <div className="flex flex-col">
+                      {events
+                        .map((event: any) => renderPariMatchCard(event))
+                        .filter(Boolean)}
+                    </div>
                   </div>
-                  {/* Events mapped inside this league */}
-                  <div className="flex flex-col">
-                    {events.map((event: any) => renderPariMatchCard(event))}
-                  </div>
-                </div>
-              ))
+                ),
+              )
             )}
           </div>
         </div>

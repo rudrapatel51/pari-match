@@ -153,7 +153,7 @@ const EventCardGrid: React.FC<EventCardGridProps> = ({
                   {/* Bottom row: Teams left, odds right */}
                   <div className="flex items-center gap-3">
                     {/* Teams */}
-                    <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                    <div className="hidden sm:flex flex-1 min-w-0 flex flex-col gap-1.5">
                       {runners.length >= 1 && (
                         <>
                           {runners
@@ -172,7 +172,7 @@ const EventCardGrid: React.FC<EventCardGridProps> = ({
 
                     {/* Odds Boxes - Back & Lay for each runner with labels */}
                     {runners.length > 0 && (
-                      <div className={`flex gap-1.5 flex-shrink-0`}>
+                      <div className={`flex gap-2 sm:gap-2.5 flex-shrink-0`}>
                         {runners
                           .slice(0, Math.min(runners.length, 2))
                           .map((runner, runnerIdx) => (
@@ -188,7 +188,7 @@ const EventCardGrid: React.FC<EventCardGridProps> = ({
                               </div>
 
                               {/* Back & Lay buttons */}
-                              <div className="flex gap-1.5">
+                              <div className="flex gap-1">
                                 {/* Back Odds */}
                                 <button
                                   onClick={(clickEvent) => {
@@ -197,19 +197,19 @@ const EventCardGrid: React.FC<EventCardGridProps> = ({
                                   }}
                                   className={`bg-bg-light-blue border border-stroke-primary hover:bg-brand-blue-600 transition-all rounded flex flex-col items-center justify-center group ${
                                     runners.length === 2
-                                      ? "py-3 px-4 sm:py-4 sm:px-5 min-w-[85px] sm:min-w-[110px]"
+                                      ? "py-2 px-2.5 sm:py-3 sm:px-4 min-w-[70px] sm:min-w-[95px]"
                                       : runners.length === 3
-                                        ? "py-2.5 px-3 sm:py-3 sm:px-4 min-w-[75px] sm:min-w-[95px]"
-                                        : "py-2 px-2.5 sm:py-2.5 sm:px-3 min-w-[70px] sm:min-w-[85px]"
+                                        ? "py-1.5 px-2 sm:py-2.5 sm:px-3 min-w-[65px] sm:min-w-[85px]"
+                                        : "py-1 px-1.5 sm:py-2 sm:px-2.5 min-w-[60px] sm:min-w-[80px]"
                                   }`}
                                 >
                                   <span
                                     className={`font-bold text-cyan-400 group-hover:text-brand-text leading-none transition-colors ${
                                       runners.length === 2
-                                        ? "text-xl sm:text-2xl"
+                                        ? "text-lg sm:text-xl"
                                         : runners.length === 3
-                                          ? "text-lg sm:text-xl"
-                                          : "text-base sm:text-lg"
+                                          ? "text-base sm:text-lg"
+                                          : "text-sm sm:text-base"
                                     }`}
                                   >
                                     {runner.back}
@@ -224,19 +224,19 @@ const EventCardGrid: React.FC<EventCardGridProps> = ({
                                   }}
                                   className={`bg-bg-light-blue border border-stroke-primary hover:bg-brand-blue-600 transition-all rounded flex flex-col items-center justify-center group ${
                                     runners.length === 2
-                                      ? "py-3 px-4 sm:py-4 sm:px-5 min-w-[85px] sm:min-w-[110px]"
+                                      ? "py-2 px-2.5 sm:py-3 sm:px-4 min-w-[70px] sm:min-w-[95px]"
                                       : runners.length === 3
-                                        ? "py-2.5 px-3 sm:py-3 sm:px-4 min-w-[75px] sm:min-w-[95px]"
-                                        : "py-2 px-2.5 sm:py-2.5 sm:px-3 min-w-[70px] sm:min-w-[85px]"
+                                        ? "py-1.5 px-2 sm:py-2.5 sm:px-3 min-w-[65px] sm:min-w-[85px]"
+                                        : "py-1 px-1.5 sm:py-2 sm:px-2.5 min-w-[60px] sm:min-w-[80px]"
                                   }`}
                                 >
                                   <span
                                     className={`font-bold text-pink-300 group-hover:text-brand-text leading-none transition-colors ${
                                       runners.length === 2
-                                        ? "text-xl sm:text-2xl"
+                                        ? "text-lg sm:text-xl"
                                         : runners.length === 3
-                                          ? "text-lg sm:text-xl"
-                                          : "text-base sm:text-lg"
+                                          ? "text-base sm:text-lg"
+                                          : "text-sm sm:text-base"
                                     }`}
                                   >
                                     {runner.lay}

@@ -374,11 +374,11 @@ function BetfairMarket({
                 <span className="text-sm font-medium text-brand-text">
                   {runner.name || `Runner ${runner.runnerId}`}
                 </span>
-                {/* Odds cells below - stretch full width */}
-                <div className="relative flex gap-2 shrink-0 w-full">
+                {/* Odds cells below - 3x2 on mobile, horizontal on larger screens */}
+                <div className="relative w-full grid grid-cols-3 gap-1 sm:flex sm:flex-nowrap sm:gap-2 shrink-0">
                   {overlay ? (
                     /* ── Full-width suspension bar across all 6 cells ── */
-                    <div className="relative flex gap-1 w-full">
+                    <div className="relative w-full grid grid-cols-3 gap-1 sm:flex sm:flex-nowrap sm:gap-1">
                       {[ro.b3, ro.b2, ro.b1].map((o, i) => (
                         <div key={`b${i}`} className="flex-1 min-w-0">
                           <OddsButton
@@ -497,16 +497,16 @@ function LineMarket({
           return (
             <div
               key={runner.runnerId}
-              className="flex items-center px-2 py-2 gap-1.5"
+              className="flex flex-col sm:flex-row sm:items-center px-2 py-2 gap-2 sm:gap-1.5"
             >
               <div className="flex-1 flex items-center min-w-0">
                 <span className="text-sm font-medium text-brand-text truncate">
                   {market.name || `Runner ${runner.runnerId}`}
                 </span>
               </div>
-              <div className="relative flex gap-0.5 shrink-0">
+              <div className="relative w-full grid grid-cols-3 gap-1 sm:flex sm:flex-nowrap sm:gap-0.5 sm:shrink-0 sm:w-auto">
                 {overlay ? (
-                  <div className="relative flex gap-0.5">
+                  <div className="relative w-full grid grid-cols-3 gap-1 sm:flex sm:flex-nowrap sm:gap-0.5">
                     {[ro.b3, ro.b2, ro.b1].map((o, i) => (
                       <OddsButton
                         key={`b${i}`}
